@@ -206,6 +206,53 @@ h1 {
   opacity: 0.72;
 }
 
+.zone-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 2px 12px;
+  margin-top: -4px;
+  scrollbar-width: none;
+}
+
+.zone-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.zone-bar button {
+  min-height: 42px;
+  display: inline-grid;
+  grid-template-columns: auto max-content auto;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  box-shadow: 0 8px 22px rgba(60, 42, 90, 0.06);
+}
+
+.zone-bar button.active {
+  border-color: transparent;
+  background: var(--plum);
+  color: white;
+}
+
+.zone-bar span {
+  font-size: 0.78rem;
+  font-weight: 780;
+  white-space: nowrap;
+}
+
+.zone-bar small {
+  color: currentColor;
+  font-size: 0.68rem;
+  font-weight: 760;
+  opacity: 0.78;
+}
+
 .content {
   display: grid;
   gap: 12px;

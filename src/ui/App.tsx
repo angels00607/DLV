@@ -4,9 +4,9 @@ import {
   ChevronDown,
   Download,
   Edit3,
-  Filter,
   Github,
   Home,
+  MapPin,
   Plus,
   Save,
   Search,
@@ -20,7 +20,7 @@ import type { CategoryId, FilterState, GameItem, SavePayload } from '../domain/t
 import { fetchDefaultData } from '../data/defaultData';
 import { downloadSave, readImportedFile } from '../data/manualImport';
 import { buildPortableData, getNextId, loadSave, mergeImportedSave, persistSave } from '../data/saveSystem';
-import { normalizeText, uniqueSorted } from '../lib/text';
+import { normalizeText } from '../lib/text';
 
 const initialFilters: FilterState = {
   query: '',
@@ -30,19 +30,22 @@ const initialFilters: FilterState = {
 };
 
 type ActiveView = 'home' | CategoryId;
+type ActiveZone = 'all' | 'DREAMLIGHT VALLEY' | 'ETERNITY ISLE' | 'STORYBOOK VALE' | 'WISHBLOSSOM MOUNTAINS';
 const DIRECT_RENDER_LIMIT = 6;
 const GH_STORAGE_KEY = 'dlv_gh_config';
-const ZONE_OPTIONS = [
-  '',
-  'DREAMLIGHT VALLEY',
-  'ETERNITY ISLE',
-  'STORYBOOK VALE',
-  'WISHBLOSSOM MOUNTAINS',
+const ZONES: Array<{ value: ActiveZone; label: string }> = [
+  { value: 'all', label: 'All zones' },
+  { value: 'DREAMLIGHT VALLEY', label: 'Dreamlight Valley' },
+  { value: 'ETERNITY ISLE', label: 'Eternity Isle' },
+  { value: 'WISHBLOSSOM MOUNTAINS', label: 'Wishblossom Mountains' },
+  { value: 'STORYBOOK VALE', label: 'Storybook Vale' },
 ];
+const ZONE_OPTIONS = ZONES.filter((zone) => zone.value !== 'all').map((zone) => zone.value);
 
 export function App() {
   const [save, setSave] = useState<SavePayload | null>(null);
   const [activeView, setActiveView] = useState<ActiveView>('home');
+  const [activeZone, setActiveZone] = useState<ActiveZone>('all');
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [editingItem, setEditingItem] = useState<GameItem | null>(null);
@@ -61,17 +64,17 @@ export function App() {
   const categoryId = activeView === 'home' ? 'clothing' : activeView;
   const currentCategory = categoryById[categoryId];
   const items = activeView === 'home' ? [] : save?.data[categoryId] ?? [];
-  const categoryFilters = useMemo(() => buildFilterOptions(items), [items]);
+  const zoneItems = useMemo(() => filterByZone(items, activeZone), [items, activeZone]);
   const filteredItems = useMemo(
-    () => filterItems(items, filters, save, categoryId),
-    [items, filters, save, categoryId],
+    () => filterItems(zoneItems, filters, save, categoryId),
+    [zoneItems, filters, save, categoryId],
   );
   const groupedItems = useMemo(
     () => groupItems(filteredItems, currentCategory.groupBy[0] ?? 'meta'),
     [filteredItems, currentCategory.groupBy],
   );
-  const progress = useMemo(() => getProgress(items, save, categoryId), [items, save, categoryId]);
-  const totalProgress = useMemo(() => getTotalProgress(save), [save]);
+  const progress = useMemo(() => getProgress(zoneItems, save, categoryId), [zoneItems, save, categoryId]);
+  const totalProgress = useMemo(() => getTotalProgress(save, activeZone), [save, activeZone]);
 
   if (!save) {
     return (
@@ -176,7 +179,7 @@ export function App() {
           <small>{Math.round(totalProgress.percent)}%</small>
         </button>
         {CATEGORIES.map((category) => {
-          const categoryProgress = getProgress(save.data[category.id] ?? [], save, category.id);
+          const categoryProgress = getProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id);
           return (
             <button
               key={category.id}
@@ -194,8 +197,25 @@ export function App() {
         })}
       </nav>
 
+      <nav className="zone-bar" aria-label="Zones">
+        {ZONES.map((zone) => {
+          const zoneProgress = getTotalProgress(save, zone.value);
+          return (
+            <button
+              key={zone.value}
+              className={activeZone === zone.value ? 'active' : ''}
+              onClick={() => setActiveZone(zone.value)}
+            >
+              <MapPin size={15} />
+              <span>{zone.label}</span>
+              <small>{zoneProgress.done}/{zoneProgress.total}</small>
+            </button>
+          );
+        })}
+      </nav>
+
       {activeView === 'home' ? (
-        <HomeView save={save} totalProgress={totalProgress} onOpenCategory={setActiveView} />
+        <HomeView save={save} activeZone={activeZone} totalProgress={totalProgress} onOpenCategory={setActiveView} />
       ) : (
         <main className="content">
           <div className="section-title">
@@ -221,14 +241,8 @@ export function App() {
               <Chip active={filters.status === 'all'} onClick={() => setFilters({ ...filters, status: 'all' })}>All</Chip>
               <Chip active={filters.status === 'owned'} onClick={() => setFilters({ ...filters, status: 'owned' })}>Collected</Chip>
               <Chip active={filters.status === 'missing'} onClick={() => setFilters({ ...filters, status: 'missing' })}>Missing</Chip>
-              <MenuChip
-                icon={<Filter size={15} />}
-                value={filters.universe}
-                options={categoryFilters.universes}
-                onChange={(value) => setFilters({ ...filters, universe: value })}
-              />
             </div>
-            <AddItemRow category={currentCategory.label} onAdd={addItem} />
+            <AddItemRow category={currentCategory.label} activeZone={activeZone} onAdd={addItem} />
           </div>
 
           <div className="group-list">
@@ -429,14 +443,20 @@ function NestedAccordions({
 
 function AddItemRow({
   category,
+  activeZone,
   onAdd,
 }: {
   category: string;
+  activeZone: ActiveZone;
   onAdd: (item: Omit<GameItem, 'id'>) => void;
 }) {
   const [name, setName] = useState('');
   const [meta, setMeta] = useState('');
-  const [meta2, setMeta2] = useState('');
+  const [meta2, setMeta2] = useState(activeZone === 'all' ? '' : activeZone);
+
+  useEffect(() => {
+    if (activeZone !== 'all') setMeta2(activeZone);
+  }, [activeZone]);
 
   function submit() {
     if (!name.trim()) return;
@@ -464,12 +484,10 @@ function AddItemRow({
         placeholder="Tag 1"
       />
       <select value={meta2} onChange={(event) => setMeta2(event.target.value)}>
-        <option value="">— No zone —</option>
-        {ZONE_OPTIONS.filter(Boolean).map((zone) => (
+        <option value="">-- No zone --</option>
+        {ZONE_OPTIONS.map((zone) => (
           <option key={zone} value={zone}>
-            {zone
-              .toLowerCase()
-              .replace(/\b\w/g, (letter) => letter.toUpperCase())}
+            {formatZoneLabel(zone)}
           </option>
         ))}
       </select>
@@ -666,25 +684,28 @@ function ItemCard({
 
 function HomeView({
   save,
+  activeZone,
   totalProgress,
   onOpenCategory,
 }: {
   save: SavePayload;
+  activeZone: ActiveZone;
   totalProgress: { done: number; total: number; percent: number };
   onOpenCategory: (categoryId: CategoryId) => void;
 }) {
   const missing = totalProgress.total - totalProgress.done;
   const missingMarked = CATEGORIES.reduce(
     (count, category) =>
-      count + Object.values(save.owned[category.id] ?? {}).filter((state) => state === 'missing').length,
+      count + getMarkedMissing(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id),
     0,
   );
+  const zoneLabel = formatZoneLabel(activeZone);
 
   return (
     <main className="content">
       <section className="home-hero">
         <div>
-          <p className="eyebrow">Overview</p>
+          <p className="eyebrow">{activeZone === 'all' ? 'Overview' : zoneLabel}</p>
           <h2>{Math.round(totalProgress.percent)}% complete</h2>
           <p>{totalProgress.done} collected out of {totalProgress.total} tracked items.</p>
         </div>
@@ -712,7 +733,7 @@ function HomeView({
         <div className="home-section-title">Categories</div>
         <div className="home-category-list">
           {CATEGORIES.map((category) => {
-            const progress = getProgress(save.data[category.id] ?? [], save, category.id);
+            const progress = getProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id);
             return (
               <button key={category.id} className="home-category-row" onClick={() => onOpenCategory(category.id)}>
                 <img src={category.icon} alt="" onError={(event) => (event.currentTarget.style.display = 'none')} />
@@ -792,37 +813,6 @@ function Chip({ active, children, onClick }: { active: boolean; children: React.
   );
 }
 
-function MenuChip({
-  icon,
-  value,
-  options,
-  onChange,
-}: {
-  icon: React.ReactNode;
-  value: string;
-  options: string[];
-  onChange: (value: string) => void;
-}) {
-  return (
-    <label className="select-chip">
-      {icon}
-      <select value={value} onChange={(event) => onChange(event.target.value)}>
-        <option value="all">Universe</option>
-        {options.map((option) => (
-          <option key={option} value={option}>{option}</option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function buildFilterOptions(items: GameItem[]) {
-  return {
-    universes: uniqueSorted(items.map((item) => item.meta2 ?? '')),
-    groups: uniqueSorted(items.map((item) => item.meta ?? '')),
-  };
-}
-
 function filterItems(items: GameItem[], filters: FilterState, save: SavePayload | null, categoryId: CategoryId) {
   const query = normalizeText(filters.query);
   return items.filter((item) => {
@@ -837,6 +827,20 @@ function filterItems(items: GameItem[], filters: FilterState, save: SavePayload 
     if (filters.group !== 'all' && item.meta !== filters.group) return false;
     return true;
   });
+}
+
+function filterByZone(items: GameItem[], zone: ActiveZone): GameItem[] {
+  if (zone === 'all') return items;
+  return items.filter((item) => normalizeZone(item.meta2) === zone);
+}
+
+function normalizeZone(value?: string): ActiveZone | string {
+  return (value ?? '').trim().toUpperCase();
+}
+
+function formatZoneLabel(zone: ActiveZone | string): string {
+  if (zone === 'all') return 'All zones';
+  return zone.toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function groupItems(items: GameItem[], field: keyof GameItem): Array<[string, GameItem[]]> {
@@ -969,11 +973,18 @@ function getProgress(items: GameItem[], save: SavePayload | null, categoryId: Ca
   return { done, total, percent: total ? (done / total) * 100 : 0 };
 }
 
-function getTotalProgress(save: SavePayload | null) {
-  const entries = CATEGORIES.flatMap((category) => save?.data[category.id] ?? []);
+function getMarkedMissing(items: GameItem[], save: SavePayload | null, categoryId: CategoryId) {
+  return items.filter((item) => save?.owned[categoryId]?.[item.id] === 'missing').length;
+}
+
+function getTotalProgress(save: SavePayload | null, zone: ActiveZone = 'all') {
+  const entries = CATEGORIES.flatMap((category) => filterByZone(save?.data[category.id] ?? [], zone));
   const done = CATEGORIES.reduce(
     (count, category) =>
-      count + (save?.data[category.id] ?? []).filter((item) => save?.owned[category.id]?.[item.id] === 'owned').length,
+      count +
+      filterByZone(save?.data[category.id] ?? [], zone).filter(
+        (item) => save?.owned[category.id]?.[item.id] === 'owned',
+      ).length,
     0,
   );
   const total = entries.length;
