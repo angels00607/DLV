@@ -4,22 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#fbf9ff" />
-    <link rel="icon" href="/DLV/docs/icon.jpg" />
-    <link rel="apple-touch-icon" href="/DLV/docs/icon.jpg" />
+    <link rel="icon" href="/DLV/icon.jpg" />
+    <link rel="apple-touch-icon" href="/DLV/icon.jpg" />
     <title>DLV Guide</title>
-    <script>
-      const dlvFetch = window.fetch.bind(window);
-      window.fetch = (input, init) => {
-        if (input === '/DLV/data.json') {
-          return dlvFetch('/DLV/docs/data.json', init);
-        }
-        return dlvFetch(input, init);
-      };
-    </script>
-    <script type="module" crossorigin src="/DLV/docs/assets/index-rj1MN6LB.js"></script>
-    <link rel="stylesheet" crossorigin href="/DLV/docs/assets/index-DLZJY_fI.css">
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

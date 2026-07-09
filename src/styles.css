@@ -906,20 +906,102 @@ h1 {
   .app-shell {
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: max(126px, calc(env(safe-area-inset-bottom) + 94px));
   }
 
   .overview div {
     padding: 12px 9px;
   }
 
+  h1 {
+    font-size: 2rem;
+  }
+
+  .top-panel {
+    padding-bottom: 12px;
+  }
+
+  .zone-bar {
+    gap: 7px;
+    padding-bottom: 10px;
+    scroll-snap-type: x proximity;
+  }
+
+  .zone-bar button {
+    min-height: 40px;
+    grid-template-columns: auto minmax(0, max-content) auto;
+    gap: 6px;
+    padding: 0 10px;
+    scroll-snap-align: start;
+  }
+
+  .zone-bar span {
+    max-width: 162px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.74rem;
+  }
+
   .tab-bar {
     left: 8px;
     right: 8px;
     grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 6px;
+    border-radius: 24px;
   }
 
   .tab-bar button {
-    min-height: 54px;
+    min-height: 52px;
+    border-radius: 18px;
+    padding: 5px 1px;
+  }
+
+  .tab-bar img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .tab-bar span {
+    font-size: 0.62rem;
+  }
+
+  .tab-bar small {
+    font-size: 0.52rem;
+  }
+
+  .home-hero,
+  .section-title {
+    border-radius: 18px;
+  }
+
+  .section-title {
+    padding: 15px;
+  }
+
+  .section-title h2 {
+    font-size: 1.22rem;
+    overflow-wrap: anywhere;
+  }
+
+  .progress-ring {
+    width: 52px;
+    height: 52px;
+    font-size: 0.72rem;
+  }
+
+  .control-stack {
+    padding-top: 8px;
+  }
+
+  .filter-row {
+    gap: 6px;
+  }
+
+  .chip,
+  .select-chip {
+    height: 34px;
+    padding: 0 11px;
+    font-size: 0.78rem;
   }
 
   .item-card {
@@ -946,8 +1028,42 @@ h1 {
     grid-template-columns: 1fr;
   }
 
+  .add-item-row button {
+    width: 100%;
+  }
+
+  .sheet {
+    padding: 12px 10px max(22px, env(safe-area-inset-bottom));
+  }
+
+  .sheet-card {
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+  }
+
   .github-card {
     width: min(100%, 340px);
     padding: 22px;
+  }
+}
+
+@media (max-width: 393px) {
+  .zone-bar span {
+    max-width: 146px;
+  }
+
+  .home-category-row {
+    grid-template-columns: 28px minmax(0, 1fr) max-content;
+    column-gap: 8px;
+    padding: 9px;
+  }
+
+  .home-category-row img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .home-category-row span {
+    font-size: 0.9rem;
   }
 }
