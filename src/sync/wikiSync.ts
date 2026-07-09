@@ -1,9 +1,10 @@
 import { CATEGORIES } from '../domain/categories';
-import type { CategoryId, GameItem, SyncReport } from '../domain/types';
+import type { CategoryId, GameItem, SavePayload, SyncReport } from '../domain/types';
 import { normalizeText, titleFromPageName } from '../lib/text';
 
 const API = 'https://dreamlightvalleywiki.com/w/api.php';
 const PAGE_BASE = 'https://dreamlightvalleywiki.com/';
+const REFERENCE_DATA_URL = 'https://angels00607.github.io/DLV-Guide/data.json';
 
 interface WikiSearchResult {
   title: string;
@@ -13,7 +14,13 @@ export async function fetchCategoryItems(categoryId: CategoryId): Promise<GameIt
   const category = CATEGORIES.find((entry) => entry.id === categoryId);
   if (!category) return [];
 
-  const pages = await searchWiki(category.wikiPage);
+  let pages: WikiSearchResult[];
+  try {
+    pages = await searchWiki(category.wikiPage);
+  } catch {
+    return fetchReferenceCategoryItems(categoryId);
+  }
+
   const seen = new Set<string>();
   return pages
     .map((page, index) => {
@@ -50,4 +57,11 @@ async function searchWiki(query: string): Promise<WikiSearchResult[]> {
   if (!response.ok) throw new Error(`Wiki request failed with ${response.status}`);
   const payload = (await response.json()) as { query?: { search?: WikiSearchResult[] } };
   return payload.query?.search ?? [];
+}
+
+async function fetchReferenceCategoryItems(categoryId: CategoryId): Promise<GameItem[]> {
+  const response = await fetch(REFERENCE_DATA_URL, { cache: 'no-cache' });
+  if (!response.ok) throw new Error(`Reference data request failed with ${response.status}`);
+  const payload = (await response.json()) as Partial<SavePayload>;
+  return (payload.data?.[categoryId] ?? []).map((item) => ({ ...item }));
 }
