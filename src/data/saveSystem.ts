@@ -1,5 +1,5 @@
 import { CATEGORIES } from '../domain/categories';
-import type { CategoryId, GameDatabase, GameItem, SavePayload } from '../domain/types';
+import type { CategoryId, GameItem, SavePayload } from '../domain/types';
 
 export const STORAGE_KEY = 'dlv_guide_v6';
 const EMPTY_SAVE: SavePayload = {
@@ -15,8 +15,12 @@ function cloneSave(payload: SavePayload): SavePayload {
   return JSON.parse(JSON.stringify(payload)) as SavePayload;
 }
 
-function ensureCategoryShape(save: SavePayload, defaults: GameDatabase): SavePayload {
+function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>): SavePayload {
   const next = cloneSave(save);
+  const defaultData = defaults.data ?? {};
+  const defaultOwned = defaults.owned ?? {};
+  const defaultChecked = defaults.checked ?? {};
+  const defaultIngredients = defaults.ingredients ?? {};
 
   CATEGORIES.forEach(({ id }) => {
     next.data[id] ??= [];
@@ -28,7 +32,7 @@ function ensureCategoryShape(save: SavePayload, defaults: GameDatabase): SavePay
     const localItems = next.data[id] ?? [];
     const localById = new Map(localItems.map((item) => [item.id, item]));
 
-    for (const item of defaults[id] ?? []) {
+    for (const item of defaultData[id] ?? []) {
       if (!localById.has(item.id) && !next.deletedIds[id]?.[item.id]) {
         localItems.push({ ...item });
       } else {
@@ -37,14 +41,26 @@ function ensureCategoryShape(save: SavePayload, defaults: GameDatabase): SavePay
       }
     }
 
-    next.data[id] = localItems.sort(sortItems);
+    for (const [itemId, value] of Object.entries(defaultOwned[id] ?? {})) {
+      if (next.owned[id]?.[itemId] === undefined) next.owned[id]![itemId] = value;
+    }
+
+    for (const [itemId, value] of Object.entries(defaultChecked[id] ?? {})) {
+      if (next.checked[id]?.[itemId] === undefined) next.checked[id]![itemId] = value;
+    }
+
+    for (const [itemId, value] of Object.entries(defaultIngredients[id] ?? {})) {
+      if (!next.ingredients[id]?.[itemId]) next.ingredients[id]![itemId] = value;
+    }
+
+    next.data[id] = sortCatItems(id, localItems);
     next.nextId[id] = getNextId(localItems);
   });
 
   return next;
 }
 
-export function loadSave(defaults: GameDatabase): SavePayload {
+export function loadSave(defaults: Partial<SavePayload>): SavePayload {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return ensureCategoryShape(EMPTY_SAVE, defaults);
@@ -57,7 +73,6 @@ export function loadSave(defaults: GameDatabase): SavePayload {
         ingredients: parsed.ingredients ?? {},
         owned: parsed.owned ?? {},
         deletedIds: parsed.deletedIds ?? {},
-        savedAt: parsed.savedAt,
       },
       defaults,
     );
@@ -67,22 +82,27 @@ export function loadSave(defaults: GameDatabase): SavePayload {
 }
 
 export function persistSave(save: SavePayload): void {
-  const payload: SavePayload = {
-    data: save.data,
-    checked: save.checked,
-    nextId: save.nextId,
-    ingredients: save.ingredients,
-    owned: save.owned,
-    deletedIds: save.deletedIds,
-    savedAt: new Date().toISOString(),
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        data: save.data,
+        checked: save.checked,
+        nextId: save.nextId,
+        ingredients: save.ingredients,
+        owned: save.owned,
+        deletedIds: save.deletedIds,
+      }),
+    );
+  } catch {
+    // Same behavior as the reference app: failed local saves are ignored.
+  }
 }
 
 export function buildPortableData(save: SavePayload): string {
   return JSON.stringify(
     {
-      data: save.data,
+      data: Object.fromEntries(CATEGORIES.map((category) => [category.id, save.data[category.id] ?? []])),
       owned: save.owned,
       checked: save.checked,
       nextId: save.nextId,
@@ -104,7 +124,6 @@ export function mergeImportedSave(current: SavePayload, imported: Partial<SavePa
       ingredients: imported.ingredients ?? current.ingredients,
       owned: imported.owned ?? current.owned,
       deletedIds: imported.deletedIds ?? current.deletedIds,
-      savedAt: imported.savedAt ?? current.savedAt,
     },
     {},
   );
@@ -130,7 +149,7 @@ export function upsertSyncedItems(save: SavePayload, categoryId: CategoryId, inc
     existing.updatedAt = item.updatedAt;
   }
 
-  next.data[categoryId] = items.sort(sortItems);
+  next.data[categoryId] = sortCatItems(categoryId, items);
   next.nextId[categoryId] = getNextId(next.data[categoryId] ?? []);
   return next;
 }
@@ -139,10 +158,20 @@ export function getNextId(items: GameItem[]): number {
   return items.length ? Math.max(...items.map((item) => item.id)) + 1 : 1;
 }
 
-export function sortItems(a: GameItem, b: GameItem): number {
-  return (
-    (a.meta ?? '').localeCompare(b.meta ?? '') ||
-    (a.meta2 ?? '').localeCompare(b.meta2 ?? '') ||
-    a.name.localeCompare(b.name)
-  );
+export function sortCatItems(categoryId: CategoryId, items: GameItem[]): GameItem[] {
+  return [...items].sort((a, b) => {
+    const nameCompare = a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    const metaCompare = (a.meta ?? '').toLowerCase().localeCompare((b.meta ?? '').toLowerCase());
+    const meta2Compare = (a.meta2 ?? '').toLowerCase().localeCompare((b.meta2 ?? '').toLowerCase());
+
+    if (categoryId === 'clothing' || categoryId === 'furniture') {
+      return metaCompare || nameCompare;
+    }
+
+    if (categoryId === 'meals') {
+      return meta2Compare || metaCompare || nameCompare;
+    }
+
+    return metaCompare || meta2Compare || nameCompare;
+  });
 }

@@ -1,8 +1,7 @@
-import type { GameDatabase, SavePayload } from '../domain/types';
+import type { SavePayload } from '../domain/types';
 
-export async function fetchDefaultData(): Promise<GameDatabase> {
+export async function fetchDefaultData(): Promise<Partial<SavePayload>> {
   const response = await fetch('/DLV/data.json', { cache: 'no-cache' });
   if (!response.ok) return {};
-  const payload = (await response.json()) as Partial<SavePayload>;
-  return payload.data ?? {};
+  return (await response.json()) as Partial<SavePayload>;
 }
