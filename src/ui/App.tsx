@@ -5,8 +5,9 @@ import {
   Download,
   Edit3,
   Filter,
+  Github,
   Home,
-  RefreshCw,
+  Plus,
   Save,
   Search,
   Settings,
@@ -15,11 +16,10 @@ import {
   X,
 } from 'lucide-react';
 import { CATEGORIES, categoryById } from '../domain/categories';
-import type { CategoryId, FilterState, GameItem, SavePayload, SyncReport } from '../domain/types';
+import type { CategoryId, FilterState, GameItem, SavePayload } from '../domain/types';
 import { fetchDefaultData } from '../data/defaultData';
 import { downloadSave, readImportedFile } from '../data/manualImport';
-import { loadSave, mergeImportedSave, persistSave, upsertSyncedItems } from '../data/saveSystem';
-import { createEmptySyncReport, fetchCategoryItems } from '../sync/wikiSync';
+import { buildPortableData, getNextId, loadSave, mergeImportedSave, persistSave } from '../data/saveSystem';
 import { normalizeText, uniqueSorted } from '../lib/text';
 
 const initialFilters: FilterState = {
@@ -31,6 +31,14 @@ const initialFilters: FilterState = {
 
 type ActiveView = 'home' | CategoryId;
 const DIRECT_RENDER_LIMIT = 6;
+const GH_STORAGE_KEY = 'dlv_gh_config';
+const ZONE_OPTIONS = [
+  '',
+  'DREAMLIGHT VALLEY',
+  'ETERNITY ISLE',
+  'STORYBOOK VALE',
+  'WISHBLOSSOM MOUNTAINS',
+];
 
 export function App() {
   const [save, setSave] = useState<SavePayload | null>(null);
@@ -39,8 +47,7 @@ export function App() {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [editingItem, setEditingItem] = useState<GameItem | null>(null);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
-  const [syncReport, setSyncReport] = useState<SyncReport>(createEmptySyncReport());
-  const [isSyncing, setSyncing] = useState(false);
+  const [isGithubOpen, setGithubOpen] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -120,37 +127,28 @@ export function App() {
     updateSave(next);
   }
 
+  function addItem(item: Omit<GameItem, 'id'>) {
+    if (!save || activeView === 'home' || !item.name.trim()) return;
+    const next = structuredClone(save);
+    const nextId = next.nextId[activeView] ?? getNextId(next.data[activeView] ?? []);
+    next.data[activeView] = [
+      ...(next.data[activeView] ?? []),
+      {
+        id: nextId,
+        name: item.name.trim(),
+        meta: item.meta?.trim() ?? '',
+        meta2: item.meta2?.trim() ?? '',
+      },
+    ];
+    next.nextId[activeView] = nextId + 1;
+    updateSave(next);
+  }
+
   async function importFile(event: ChangeEvent<HTMLInputElement>) {
     if (!save || !event.target.files?.[0]) return;
     const imported = await readImportedFile(event.target.files[0]);
     updateSave(mergeImportedSave(save, imported));
     event.target.value = '';
-  }
-
-  async function synchronize() {
-    if (!save) return;
-    setSyncing(true);
-    const report = createEmptySyncReport();
-    let next = save;
-
-    for (const category of CATEGORIES) {
-      try {
-        const before = next.data[category.id]?.length ?? 0;
-        const remoteItems = await fetchCategoryItems(category.id);
-        next = upsertSyncedItems(next, category.id, remoteItems);
-        const after = next.data[category.id]?.length ?? 0;
-        report.added += Math.max(0, after - before);
-        report.updated += Math.min(before, remoteItems.length);
-        report.skipped += Math.max(0, remoteItems.length - report.updated);
-      } catch (error) {
-        report.errors.push(`${category.label}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      }
-    }
-
-    report.syncedAt = new Date().toISOString();
-    setSyncReport(report);
-    setSave(next);
-    setSyncing(false);
   }
 
   return (
@@ -230,6 +228,7 @@ export function App() {
                 onChange={(value) => setFilters({ ...filters, universe: value })}
               />
             </div>
+            <AddItemRow category={currentCategory.label} onAdd={addItem} />
           </div>
 
           <div className="group-list">
@@ -277,9 +276,15 @@ export function App() {
                 <X size={20} />
               </button>
             </div>
-            <button className="action-button primary" onClick={synchronize} disabled={isSyncing}>
-              <RefreshCw size={18} className={isSyncing ? 'spin' : ''} />
-              {isSyncing ? 'Synchronizing' : 'Synchronize'}
+            <button
+              className="action-button primary"
+              onClick={() => {
+                setSettingsOpen(false);
+                setGithubOpen(true);
+              }}
+            >
+              <Github size={18} />
+              Save on GitHub
             </button>
             <button className="action-button" onClick={() => downloadSave(save)}>
               <Download size={18} />
@@ -290,15 +295,10 @@ export function App() {
               Import manual save
             </button>
             <input ref={fileInput} className="hidden" type="file" accept="application/json" onChange={importFile} />
-            <div className="sync-report">
-              <p>Last sync</p>
-              <strong>{syncReport.syncedAt ? new Date(syncReport.syncedAt).toLocaleString() : 'Not yet'}</strong>
-              <span>{syncReport.added} added, {syncReport.updated} updated</span>
-              {syncReport.errors.map((error) => <small key={error}>{error}</small>)}
-            </div>
           </div>
         </aside>
       )}
+      {isGithubOpen && <GithubSaveSheet save={save} onClose={() => setGithubOpen(false)} />}
       {editingItem && activeView !== 'home' && (
         <EditSheet
           item={editingItem}
@@ -424,6 +424,170 @@ function NestedAccordions({
         );
       })}
     </div>
+  );
+}
+
+function AddItemRow({
+  category,
+  onAdd,
+}: {
+  category: string;
+  onAdd: (item: Omit<GameItem, 'id'>) => void;
+}) {
+  const [name, setName] = useState('');
+  const [meta, setMeta] = useState('');
+  const [meta2, setMeta2] = useState('');
+
+  function submit() {
+    if (!name.trim()) return;
+    onAdd({ name, meta, meta2 });
+    setName('');
+    setMeta('');
+  }
+
+  return (
+    <div className="add-item-row">
+      <input
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') submit();
+        }}
+        placeholder={`Add ${category.toLowerCase()}...`}
+      />
+      <input
+        value={meta}
+        onChange={(event) => setMeta(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') submit();
+        }}
+        placeholder="Tag 1"
+      />
+      <select value={meta2} onChange={(event) => setMeta2(event.target.value)}>
+        <option value="">— No zone —</option>
+        {ZONE_OPTIONS.filter(Boolean).map((zone) => (
+          <option key={zone} value={zone}>
+            {zone
+              .toLowerCase()
+              .replace(/\b\w/g, (letter) => letter.toUpperCase())}
+          </option>
+        ))}
+      </select>
+      <button onClick={submit}>
+        <Plus size={17} />
+        Add
+      </button>
+    </div>
+  );
+}
+
+function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => void }) {
+  const [user, setUser] = useState('angels00607');
+  const [repo, setRepo] = useState('DLV');
+  const [filename, setFilename] = useState('index.html');
+  const [token, setToken] = useState('');
+  const [status, setStatus] = useState('');
+  const [isError, setError] = useState(false);
+  const [isSaving, setSaving] = useState(false);
+
+  useEffect(() => {
+    try {
+      const cfg = JSON.parse(localStorage.getItem(GH_STORAGE_KEY) || '{}') as Partial<{
+        user: string;
+        repo: string;
+        filename: string;
+        token: string;
+      }>;
+      setUser(cfg.user || 'angels00607');
+      setRepo(cfg.repo || 'DLV');
+      setFilename(cfg.filename || 'index.html');
+      setToken(cfg.token || '');
+    } catch {
+      // Keep defaults.
+    }
+  }, []);
+
+  async function submit() {
+    if (!user.trim() || !repo.trim() || !token.trim()) {
+      setError(true);
+      setStatus('Fill in all required fields.');
+      return;
+    }
+
+    setSaving(true);
+    setError(false);
+    setStatus('Preparing data...');
+    localStorage.setItem(GH_STORAGE_KEY, JSON.stringify({ user, repo, filename, token }));
+
+    try {
+      const repository = `${user.trim()}/${repo.trim()}`;
+      const sourceDataPath = getDataPathFromFilename(filename.trim() || 'index.html');
+      const payload = buildPortableData(save);
+      const stamp = new Date().toLocaleString();
+
+      setStatus('Sending public/data.json...');
+      await uploadGithubFile(repository, 'public/data.json', token.trim(), payload, `Save DLV data - ${stamp}`);
+
+      setStatus('Sending docs/data.json...');
+      await uploadGithubFile(repository, 'docs/data.json', token.trim(), payload, `Deploy DLV data - ${stamp}`);
+
+      if (sourceDataPath !== 'public/data.json' && sourceDataPath !== 'docs/data.json') {
+        setStatus('Sending data.json...');
+        await uploadGithubFile(repository, sourceDataPath, token.trim(), payload, `Save DLV data - ${stamp}`);
+      }
+
+      setStatus('Saved on GitHub.');
+      setTimeout(onClose, 900);
+    } catch (error) {
+      setError(true);
+      setStatus(error instanceof Error ? error.message : 'GitHub save failed.');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <aside className="sheet github-sheet" role="dialog" aria-modal="true" aria-label="Save on GitHub">
+      <div className="sheet-card github-card">
+        <div className="sheet-head">
+          <h2>
+            <Github size={19} />
+            Save on GitHub
+          </h2>
+          <button type="button" className="icon-button" aria-label="Close GitHub save" onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
+        <p className="github-help">
+          data.json will be sent to GitHub with your checks, crosses, edits, and deletions.
+        </p>
+        <label>
+          <span>GitHub user</span>
+          <input value={user} onChange={(event) => setUser(event.target.value)} />
+        </label>
+        <label>
+          <span>Repository name</span>
+          <input value={repo} onChange={(event) => setRepo(event.target.value)} />
+        </label>
+        <label>
+          <span>File name</span>
+          <input value={filename} onChange={(event) => setFilename(event.target.value)} />
+        </label>
+        <label>
+          <span>GitHub token</span>
+          <input type="password" value={token} onChange={(event) => setToken(event.target.value)} />
+        </label>
+        {status && <p className={`github-status ${isError ? 'error' : ''}`}>{status}</p>}
+        <div className="github-actions">
+          <button className="action-button" onClick={onClose} disabled={isSaving}>
+            Cancel
+          </button>
+          <button className="action-button primary" onClick={submit} disabled={isSaving}>
+            {isSaving ? 'Sending...' : 'Send'}
+          </button>
+        </div>
+      </div>
+    </aside>
   );
 }
 
@@ -726,6 +890,59 @@ function getSimilarWord(name: string): string {
 
 function titleCase(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function getDataPathFromFilename(filename: string): string {
+  if (!filename || filename === 'index.html') return 'public/data.json';
+  if (filename.endsWith('/data.json') || filename === 'data.json') return filename;
+  if (filename.includes('/')) return filename.replace(/[^/]+$/, 'data.json');
+  return 'public/data.json';
+}
+
+function encodeGithubContent(content: string): string {
+  return btoa(unescape(encodeURIComponent(content)));
+}
+
+async function getGithubFileSha(repository: string, path: string, token: string): Promise<string | null> {
+  const response = await fetch(`https://api.github.com/repos/${repository}/contents/${path}`, {
+    headers: {
+      Authorization: `token ${token}`,
+      Accept: 'application/vnd.github.v3+json',
+    },
+  });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`GitHub error ${response.status} while reading ${path}.`);
+  const payload = (await response.json()) as { sha?: string };
+  return payload.sha ?? null;
+}
+
+async function uploadGithubFile(repository: string, path: string, token: string, content: string, message: string) {
+  const sha = await getGithubFileSha(repository, path, token);
+  const body: { message: string; content: string; sha?: string } = {
+    message,
+    content: encodeGithubContent(content),
+  };
+  if (sha) body.sha = sha;
+
+  const response = await fetch(`https://api.github.com/repos/${repository}/contents/${path}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `token ${token}`,
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    let detail = '';
+    try {
+      detail = ((await response.json()) as { message?: string }).message ?? '';
+    } catch {
+      // Ignore JSON parsing errors and fall through to generic message.
+    }
+    throw new Error(detail || `GitHub error ${response.status} while writing ${path}.`);
+  }
 }
 
 function toggleExclusive(

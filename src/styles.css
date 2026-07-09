@@ -431,6 +431,46 @@ h1 {
   font-weight: inherit;
 }
 
+.add-item-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(92px, 160px) minmax(136px, 180px) auto;
+  gap: 8px;
+  padding: 8px;
+  border: 1px dashed rgba(139, 99, 206, 0.36);
+  border-radius: 14px;
+  background: rgba(241, 237, 249, 0.68);
+}
+
+.add-item-row input,
+.add-item-row select {
+  min-width: 0;
+  height: 38px;
+  border: 0;
+  outline: 0;
+  border-radius: 11px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ink);
+}
+
+.add-item-row input::placeholder {
+  color: rgba(123, 113, 139, 0.62);
+}
+
+.add-item-row button {
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 11px;
+  padding: 0 14px;
+  background: var(--plum);
+  color: white;
+  font-weight: 820;
+}
+
 .group-list {
   display: grid;
   gap: 10px;
@@ -704,28 +744,6 @@ h1 {
   opacity: 0.7;
 }
 
-.spin {
-  animation: spin 0.9s linear infinite;
-}
-
-.sync-report {
-  display: grid;
-  gap: 4px;
-  padding: 14px;
-  border-radius: 17px;
-  background: var(--ice);
-  color: var(--muted);
-  font-size: 0.84rem;
-}
-
-.sync-report strong {
-  color: var(--ink);
-}
-
-.sync-report small {
-  color: var(--danger);
-}
-
 .edit-form label {
   display: grid;
   gap: 7px;
@@ -748,6 +766,77 @@ h1 {
 .edit-form input:focus {
   border-color: rgba(109, 79, 143, 0.5);
   background: white;
+}
+
+.github-sheet {
+  align-items: center;
+  background: rgba(74, 57, 94, 0.66);
+}
+
+.github-card {
+  width: min(100%, 360px);
+  gap: 14px;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.github-card .sheet-head h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.08rem;
+}
+
+.github-help {
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.github-card label {
+  display: grid;
+  gap: 6px;
+}
+
+.github-card label span {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 840;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.github-card input {
+  width: 100%;
+  height: 38px;
+  border: 1px solid rgba(139, 99, 206, 0.42);
+  border-radius: 9px;
+  outline: 0;
+  padding: 0 11px;
+  background: rgba(241, 237, 249, 0.8);
+  color: var(--ink);
+}
+
+.github-card input:focus {
+  border-color: var(--plum);
+  background: white;
+}
+
+.github-status {
+  min-height: 18px;
+  color: var(--success);
+  font-size: 0.82rem;
+}
+
+.github-status.error {
+  color: var(--danger);
+}
+
+.github-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 @keyframes spin {
@@ -804,5 +893,14 @@ h1 {
     width: 68px;
     height: 68px;
     font-size: 0.82rem;
+  }
+
+  .add-item-row {
+    grid-template-columns: 1fr;
+  }
+
+  .github-card {
+    width: min(100%, 340px);
+    padding: 22px;
   }
 }
