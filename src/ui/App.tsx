@@ -236,14 +236,25 @@ export function App() {
           </div>
 
           <div className="control-stack">
-            <label className="search-field">
+            <div className="search-field">
               <Search size={18} />
               <input
+                aria-label="Search everything"
                 value={filters.query}
                 onChange={(event) => setFilters({ ...filters, query: event.target.value })}
                 placeholder="Search everything"
               />
-            </label>
+              {filters.query && (
+                <button
+                  type="button"
+                  className="search-clear"
+                  aria-label="Clear search"
+                  onClick={() => setFilters({ ...filters, query: '' })}
+                >
+                  <X size={17} />
+                </button>
+              )}
+            </div>
             <div className="filter-row" aria-label="Filters">
               <Chip active={filters.status === 'all'} onClick={() => setFilters({ ...filters, status: 'all' })}>All</Chip>
               <Chip active={filters.status === 'owned'} onClick={() => setFilters({ ...filters, status: 'owned' })}>Collected</Chip>
@@ -255,13 +266,14 @@ export function App() {
           <div className="group-list">
             {groupedItems.map(([group, groupItems]) => {
               const key = `${categoryId}-${group}`;
-              const open = openGroups[`top:${categoryId}|${key}`] ?? false;
+              const accordionKey = `top:${categoryId}|${key}`;
+              const open = openGroups[accordionKey] ?? false;
               const groupProgress = getProgress(groupItems, save, categoryId);
               return (
                 <section className="collection-group" key={key}>
                   <button
                     className="group-header"
-                    onClick={() => setOpenGroups(toggleExclusive(openGroups, key, `top:${categoryId}`, ['letter:', 'word:']))}
+                    onClick={() => setOpenGroups(toggleAccordion(openGroups, accordionKey))}
                   >
                     <span>{group}</span>
                     <small>{groupProgress.done}/{groupProgress.total}</small>
@@ -271,6 +283,7 @@ export function App() {
                     <NestedAccordions
                       categoryId={categoryId}
                       groupKey={key}
+                      parentKey={accordionKey}
                       items={groupItems}
                       save={save}
                       openGroups={openGroups}
@@ -335,6 +348,7 @@ export function App() {
 function NestedAccordions({
   categoryId,
   groupKey,
+  parentKey,
   items,
   save,
   openGroups,
@@ -346,6 +360,7 @@ function NestedAccordions({
 }: {
   categoryId: CategoryId;
   groupKey: string;
+  parentKey: string;
   items: GameItem[];
   save: SavePayload;
   openGroups: Record<string, boolean>;
@@ -380,7 +395,8 @@ function NestedAccordions({
     <div className="nested-list">
       {letters.map(([letter, letterItems]) => {
         const letterKey = `${groupKey}-letter-${letter}`;
-        const letterOpen = openGroups[`letter:${groupKey}|${letterKey}`] ?? false;
+        const accordionKey = `letter:${groupKey}|${letterKey}`;
+        const letterOpen = openGroups[accordionKey] ?? false;
         const letterProgress = getProgress(letterItems, save, categoryId);
         const wordGroups = buildWordGroups(letterItems);
 
@@ -388,7 +404,7 @@ function NestedAccordions({
           <section className="nested-group letter-group" key={letterKey}>
             <button
               className="nested-header"
-              onClick={() => setOpenGroups(toggleExclusive(openGroups, letterKey, `letter:${groupKey}`))}
+              onClick={() => setOpenGroups(toggleAccordion(openGroups, accordionKey, [parentKey]))}
             >
               <span>{letter}</span>
               <small>{letterProgress.done}/{letterProgress.total}</small>
@@ -410,14 +426,17 @@ function NestedAccordions({
                 <div className="word-list">
                   {wordGroups.map(([word, wordItems]) => {
                     const wordKey = `${letterKey}-word-${word}`;
-                    const wordOpen = openGroups[`word:${letterKey}|${wordKey}`] ?? false;
+                    const wordAccordionKey = `word:${letterKey}|${wordKey}`;
+                    const wordOpen = openGroups[wordAccordionKey] ?? false;
                     const wordProgress = getProgress(wordItems, save, categoryId);
 
                     return (
                       <section className="nested-group word-group" key={wordKey}>
                         <button
                           className="nested-header word-header"
-                          onClick={() => setOpenGroups(toggleExclusive(openGroups, wordKey, `word:${letterKey}`))}
+                          onClick={() =>
+                            setOpenGroups(toggleAccordion(openGroups, wordAccordionKey, [parentKey, accordionKey]))
+                          }
                         >
                           <span>{word}</span>
                           <small>{wordProgress.done}/{wordProgress.total}</small>
@@ -956,21 +975,14 @@ async function uploadGithubFile(repository: string, path: string, token: string,
   }
 }
 
-function toggleExclusive(
+function toggleAccordion(
   openGroups: Record<string, boolean>,
   key: string,
-  scope: string,
-  clearPrefixes: string[] = [],
+  parentKeys: string[] = [],
 ): Record<string, boolean> {
-  const scopePrefix = `${scope}|`;
-  const scopedKey = `${scopePrefix}${key}`;
-  const isOpen = !!openGroups[scopedKey];
-  const next = Object.fromEntries(
-    Object.entries(openGroups).filter(
-      ([entryKey]) => !entryKey.startsWith(scopePrefix) && !clearPrefixes.some((prefix) => entryKey.startsWith(prefix)),
-    ),
-  );
-  if (!isOpen) next[scopedKey] = true;
+  const isOpen = !!openGroups[key];
+  const next = Object.fromEntries(parentKeys.map((parentKey) => [parentKey, true]));
+  if (!isOpen) next[key] = true;
   return next;
 }
 

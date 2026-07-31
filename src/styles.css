@@ -435,6 +435,24 @@ h1 {
   color: var(--ink);
 }
 
+.search-clear {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(98, 74, 139, 0.1);
+  color: var(--muted);
+}
+
+.search-clear:hover {
+  background: rgba(98, 74, 139, 0.18);
+  color: var(--ink);
+}
+
 .filter-row {
   display: flex;
   gap: 8px;
