@@ -30,13 +30,20 @@ const initialFilters: FilterState = {
 };
 
 type ActiveView = 'home' | CategoryId;
-type ActiveZone = 'all' | 'DREAMLIGHT VALLEY' | 'ETERNITY ISLE' | 'STORYBOOK VALE' | 'WISHBLOSSOM MOUNTAINS';
+type ActiveZone =
+  | 'all'
+  | 'DREAMLIGHT VALLEY'
+  | 'ETERNITY ISLE'
+  | 'HONEYGLOW WOODS'
+  | 'STORYBOOK VALE'
+  | 'WISHBLOSSOM MOUNTAINS';
 const DIRECT_RENDER_LIMIT = 6;
 const GH_STORAGE_KEY = 'dlv_gh_config';
 const ZONES: Array<{ value: ActiveZone; label: string }> = [
   { value: 'all', label: 'All zones' },
   { value: 'DREAMLIGHT VALLEY', label: 'Dreamlight Valley' },
   { value: 'ETERNITY ISLE', label: 'Eternity Isle' },
+  { value: 'HONEYGLOW WOODS', label: 'Honeyglow Woods' },
   { value: 'WISHBLOSSOM MOUNTAINS', label: 'Wishblossom Mountains' },
   { value: 'STORYBOOK VALE', label: 'Storybook Vale' },
 ];
