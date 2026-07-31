@@ -899,10 +899,7 @@ function buildWordGroups(items: GameItem[]): Array<[string, GameItem[]]> {
     const word = getSimilarWord(item.name);
     map.set(word, [...(map.get(word) ?? []), item]);
   }
-  return Array.from(map.entries()).sort(([wordA, itemsA], [wordB, itemsB]) => {
-    if (itemsA.length !== itemsB.length) return itemsB.length - itemsA.length;
-    return wordA.localeCompare(wordB);
-  });
+  return Array.from(map.entries()).sort(([wordA], [wordB]) => wordA.localeCompare(wordB));
 }
 
 function getLetterKey(name: string): string {
