@@ -37,7 +37,10 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
         localItems.push({ ...item });
       } else {
         const existing = localById.get(item.id);
-        if (existing) existing.meta2 = item.meta2 ?? existing.meta2 ?? '';
+        if (existing) {
+          existing.meta2 = item.meta2 ?? existing.meta2 ?? '';
+          existing.stars = item.stars ?? existing.stars;
+        }
       }
     }
 
@@ -144,6 +147,7 @@ export function upsertSyncedItems(save: SavePayload, categoryId: CategoryId, inc
     }
     existing.meta = item.meta ?? existing.meta;
     existing.meta2 = item.meta2 ?? existing.meta2;
+    existing.stars = item.stars ?? existing.stars;
     existing.image = item.image ?? existing.image;
     existing.sourceUrl = item.sourceUrl ?? existing.sourceUrl;
     existing.updatedAt = item.updatedAt;
