@@ -388,6 +388,7 @@ function NestedAccordions({
             owned={save.owned[categoryId]?.[item.id]}
             checked={!!save.checked[categoryId]?.[item.id]}
             ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
+            stars={categoryId === 'meals' ? item.stars : undefined}
             onOwned={() => onOwned(item)}
             onChecked={() => onChecked(item)}
             onEdit={() => onEdit(item)}
@@ -670,6 +671,7 @@ function ItemCards({
           owned={save.owned[categoryId]?.[item.id]}
           checked={!!save.checked[categoryId]?.[item.id]}
           ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
+          stars={categoryId === 'meals' ? item.stars : undefined}
           onOwned={() => onOwned(item)}
           onChecked={() => onChecked(item)}
           onEdit={() => onEdit(item)}
@@ -685,6 +687,7 @@ function ItemCard({
   owned,
   checked,
   ingredients,
+  stars,
   onOwned,
   onChecked,
   onEdit,
@@ -694,6 +697,7 @@ function ItemCard({
   owned?: 'owned' | 'missing';
   checked: boolean;
   ingredients: string[];
+  stars?: number;
   onOwned: () => void;
   onChecked: () => void;
   onEdit: () => void;
@@ -706,7 +710,16 @@ function ItemCard({
       </button>
       <button className="item-body" onClick={onChecked}>
         <strong>{item.name}</strong>
-        <span>{item.meta2 || item.meta || 'Dreamlight Valley'}</span>
+        <span className="item-meta-row">
+          <span>{item.meta2 || item.meta || 'Dreamlight Valley'}</span>
+          {stars !== undefined && (
+            <span className="meal-stars" role="img" aria-label={`${stars} out of 5 stars`}>
+              {Array.from({ length: 5 }, (_, index) => (
+                <i key={index} className={index < stars ? 'filled' : ''} aria-hidden="true">★</i>
+              ))}
+            </span>
+          )}
+        </span>
         {ingredients.length > 0 && (
           <span className="ingredient-preview" aria-label={`Recipe: ${ingredients.join(', ')}`}>
             {ingredients.map((ingredient, index) => (
