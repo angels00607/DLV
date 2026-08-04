@@ -40287,6 +40287,180 @@
         "name": "Yellow Frog Snippet",
         "meta": "MATERIALS",
         "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 1506,
+        "name": "Acorn Lantern",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1507,
+        "name": "Babbling Pond",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1508,
+        "name": "Chime Arch",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1509,
+        "name": "Christopher Robin's Swing",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1510,
+        "name": "Cozy Frilly-Topped Fireplace",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1511,
+        "name": "Cozy Honeyleaf Rug",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1512,
+        "name": "Floating Umbrella",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1513,
+        "name": "Flowery Cupboard",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1514,
+        "name": "Honey Blossom Topiary",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1515,
+        "name": "Honeycomb Shelves",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1516,
+        "name": "Honeyglow Firefly Arch",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1517,
+        "name": "Honeyglow Tree Gate",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1518,
+        "name": "Honeypot Lamp",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1519,
+        "name": "Little Wins Leaderboard",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1520,
+        "name": "Pink Honeyglow Flower Pot",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1521,
+        "name": "Pooh & Friends Picnic Set",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1522,
+        "name": "Pooh's Thoughtful Spot",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1523,
+        "name": "Purple Honeyglow Flower Pot",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1524,
+        "name": "Red Honeyglow Flower Pot",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1525,
+        "name": "Sticky Honey Tower",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1526,
+        "name": "The Busy Bees' House",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1527,
+        "name": "Woodland Cozy Playground",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1528,
+        "name": "Woodland Patchwork Armchair",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1529,
+        "name": "Woodland Patchwork Table",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1530,
+        "name": "Woodland Pavilion",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1531,
+        "name": "Woodland Pots Fountain",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1532,
+        "name": "Woodland Stump Shelves",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1533,
+        "name": "Woodland Stump Stool",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 1534,
+        "name": "Yellow Honeyglow Flower Pot",
+        "meta": "FURNITURE",
+        "meta2": "HONEYGLOW WOODS"
       }
     ]
   },
@@ -43527,7 +43701,7 @@
   },
   "nextId": {
     "clothing": 1743,
-    "crafting": 1506,
+    "crafting": 1535,
     "furniture": 3591,
     "meals": 480
   },
@@ -46218,6 +46392,186 @@
         "1 Honeycomb Stone",
         "3 Yellow Lily of the Valley",
         "1 Clay"
+      ],
+      "1506": [
+        "2 Honey Agate",
+        "1 Acorn Snail",
+        "1 Golden Honey"
+      ],
+      "1507": [
+        "10 Driftwood",
+        "15 Soft Limestone",
+        "10 Tree Resin",
+        "4 Honey Agate",
+        "10 Oak Leaves"
+      ],
+      "1508": [
+        "5 Sweet Chestnut",
+        "6 Oak Leaves",
+        "5 Soft Limestone",
+        "5 Yellow & Orange Foxglove"
+      ],
+      "1509": [
+        "4 Driftwood",
+        "6 Tree Resin",
+        "4 Honey Agate",
+        "8 Oak Leaves",
+        "4 Acorn Snail"
+      ],
+      "1510": [
+        "5 Soft Limestone",
+        "1 Driftwood",
+        "2 Honey Agate",
+        "2 Red Thistle"
+      ],
+      "1511": [
+        "5 Oak Leaves",
+        "2 Golden Honey",
+        "2 Purple Thistle",
+        "2 Rose & Cream Foxglove",
+        "5 Tree Resin"
+      ],
+      "1512": [
+        "1 Driftwood",
+        "4 Oak Leaves",
+        "2 Tree Resin"
+      ],
+      "1513": [
+        "3 Driftwood",
+        "1 Golden Honey",
+        "2 Purple & White Foxglove",
+        "2 White Thistle"
+      ],
+      "1514": [
+        "10 Golden Honey",
+        "5 Purple & White Foxglove",
+        "6 Yellow & Orange Foxglove",
+        "6 White Thistle",
+        "15 Soft Limestone"
+      ],
+      "1515": [
+        "3 Hardwood",
+        "1 Golden Honey",
+        "2 Tree Resin",
+        "2 Yellow Thistle"
+      ],
+      "1516": [
+        "4 Driftwood",
+        "2 Golden Honey",
+        "3 Honey Agate",
+        "3 Yellow Thistle",
+        "3 White Thistle"
+      ],
+      "1517": [
+        "5 Golden Honey",
+        "5 Acorn Snail",
+        "3 Shiny Honey Agate",
+        "5 Sweet Jelly",
+        "15 Tree Resin"
+      ],
+      "1518": [
+        "1 Honey Agate",
+        "1 Golden Honey",
+        "1 White & Pink Foxglove"
+      ],
+      "1519": [
+        "2 Driftwood",
+        "1 Purple & White Foxglove",
+        "1 Rose & Cream Foxglove",
+        "2 White & Pink Foxglove",
+        "1 Yellow & Orange Foxglove"
+      ],
+      "1520": [
+        "1 White Thistle",
+        "1 White & Pink Foxglove",
+        "1 Golden Honey"
+      ],
+      "1521": [
+        "6 Oak Leaves",
+        "2 Purple Thistle",
+        "2 Red Thistle",
+        "2 White Thistle",
+        "2 Yellow Thistle"
+      ],
+      "1522": [
+        "3 Golden Honey",
+        "15 Tree Resin",
+        "12 Driftwood",
+        "10 Oak Leaves",
+        "15 Soft Limestone"
+      ],
+      "1523": [
+        "1 Purple Thistle",
+        "1 Purple & White Foxglove",
+        "1 Golden Honey"
+      ],
+      "1524": [
+        "1 Red Thistle",
+        "1 Rose & Cream Foxglove",
+        "1 Golden Honey"
+      ],
+      "1525": [
+        "15 Golden Honey",
+        "5 Honey Agate",
+        "5 Driftwood",
+        "5 Purple & White Foxglove",
+        "10 Tree Resin"
+      ],
+      "1526": [
+        "5 Driftwood",
+        "6 Tree Resin",
+        "2 Honey Agate",
+        "6 Oak Leaves",
+        "30 Golden Honey"
+      ],
+      "1527": [
+        "3 Driftwood",
+        "2 Yellow & Orange Foxglove",
+        "4 Tree Resin",
+        "8 Soft Limestone",
+        "5 Hardwood"
+      ],
+      "1528": [
+        "3 Hardwood",
+        "2 Driftwood",
+        "1 Plush Fish",
+        "2 Rose & Cream Foxglove"
+      ],
+      "1529": [
+        "2 Driftwood",
+        "3 Oak Leaves",
+        "3 Hardwood",
+        "2 White & Pink Foxglove"
+      ],
+      "1530": [
+        "5 Golden Honey",
+        "6 Honey Agate",
+        "10 Driftwood",
+        "5 Rose & Cream Foxglove",
+        "15 Soft Limestone"
+      ],
+      "1531": [
+        "10 Soft Limestone",
+        "2 Purple & White Foxglove",
+        "2 Rose & Cream Foxglove",
+        "2 White & Pink Foxglove",
+        "2 Yellow & Orange Foxglove"
+      ],
+      "1532": [
+        "2 Driftwood",
+        "2 Tree Resin",
+        "3 Hardwood",
+        "1 Truffle"
+      ],
+      "1533": [
+        "1 Hardwood",
+        "1 Yellow & Orange Foxglove",
+        "1 Golden Honey"
+      ],
+      "1534": [
+        "1 Yellow Thistle",
+        "1 Yellow & Orange Foxglove",
+        "1 Golden Honey"
       ]
     },
     "furniture": {},
