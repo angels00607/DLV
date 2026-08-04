@@ -45916,6 +45916,508 @@
         "Tomato",
         "Cheese",
         "Wheat"
+      ],
+      "129": [
+        "Potato",
+        "Carrot",
+        "Onion"
+      ],
+      "130": [
+        "Corn",
+        "Chili Pepper",
+        "Cheese",
+        "Any Vegetable"
+      ],
+      "131": [
+        "Any Vegetable",
+        "Any Vegetable",
+        "Cheese",
+        "Any Spice"
+      ],
+      "132": [
+        "Tomato",
+        "Wheat",
+        "Any Vegetable"
+      ],
+      "133": [
+        "Any Vegetable",
+        "Butter",
+        "Wheat"
+      ],
+      "134": [
+        "Mushroom",
+        "Zucchini",
+        "Onion",
+        "Bell Pepper"
+      ],
+      "135": [
+        "Walleye",
+        "Basil",
+        "Oregano",
+        "Any Vegetable"
+      ],
+      "136": [
+        "Milk",
+        "Wheat"
+      ],
+      "137": [
+        "Milk",
+        "Wheat",
+        "Any Fruit"
+      ],
+      "138": [
+        "Egg",
+        "Shrimp",
+        "Wheat",
+        "Onion"
+      ],
+      "139": [
+        "Wheat",
+        "Butter",
+        "Any Sweet"
+      ],
+      "140": [
+        "Apple",
+        "Wheat",
+        "Butter"
+      ],
+      "141": [
+        "Slush Ice",
+        "Apple",
+        "Sugarcane"
+      ],
+      "142": [
+        "Wheat",
+        "Sugarcane",
+        "Egg",
+        "Any Fruit",
+        "Milk"
+      ],
+      "143": [
+        "Slush Ice",
+        "Banana",
+        "Milk",
+        "Sugarcane"
+      ],
+      "144": [
+        "Banana",
+        "Wheat",
+        "Butter"
+      ],
+      "145": [
+        "Slush Ice",
+        "Banana",
+        "Milk",
+        "Sugarcane",
+        "Any Sweet"
+      ],
+      "146": [
+        "Canola",
+        "Wheat",
+        "Egg",
+        "Sugarcane"
+      ],
+      "147": [
+        "Raspberry",
+        "Blueberry",
+        "Gooseberry"
+      ],
+      "148": [
+        "Cocoa Bean",
+        "Wheat",
+        "Sugarcane",
+        "Egg",
+        "Butter"
+      ],
+      "149": [
+        "Wheat",
+        "Sugarcane",
+        "Butter"
+      ],
+      "150": [
+        "Blueberry",
+        "Wheat",
+        "Butter"
+      ],
+      "151": [
+        "Sugarcane",
+        "Milk"
+      ],
+      "152": [
+        "Any Sweet"
+      ],
+      "153": [
+        "Wheat",
+        "Cheese",
+        "Egg",
+        "Vanilla"
+      ],
+      "154": [
+        "Sugarcane",
+        "Apple"
+      ],
+      "155": [
+        "Carrot",
+        "Wheat",
+        "Egg",
+        "Sugarcane"
+      ],
+      "156": [
+        "Cheese",
+        "Wheat",
+        "Sugarcane",
+        "Any Fruit"
+      ],
+      "157": [
+        "Cherry",
+        "Wheat",
+        "Butter"
+      ],
+      "158": [
+        "Cocoa Bean",
+        "Egg",
+        "Wheat",
+        "Sugarcane"
+      ],
+      "159": [
+        "Cocoa Bean",
+        "Wheat",
+        "Sugarcane",
+        "Butter"
+      ],
+      "160": [
+        "Cocoa Bean",
+        "Sugarcane",
+        "Milk",
+        "Slush Ice"
+      ],
+      "161": [
+        "Cocoa Bean",
+        "Wheat",
+        "Egg",
+        "Milk"
+      ],
+      "162": [
+        "Sugarcane",
+        "Milk",
+        "Coconut"
+      ],
+      "163": [
+        "Coconut",
+        "Wheat",
+        "Egg",
+        "Sugarcane"
+      ],
+      "164": [
+        "Slush Ice",
+        "Milk",
+        "Sugarcane",
+        "Coconut"
+      ],
+      "165": [
+        "Wheat",
+        "Egg",
+        "Milk",
+        "Vanilla"
+      ],
+      "166": [
+        "Dreamlight Fruit",
+        "Milk",
+        "Slush Ice"
+      ],
+      "167": [
+        "Sugarcane",
+        "Milk",
+        "Festive Cocoa Bean",
+        "Blueberry"
+      ],
+      "168": [
+        "Sugarcane",
+        "Milk",
+        "Festive Cocoa Bean",
+        "Cherry"
+      ],
+      "169": [
+        "Sugarcane",
+        "Milk",
+        "Festive Cocoa Bean",
+        "Mint"
+      ],
+      "170": [
+        "Any Fruit",
+        "Wheat",
+        "Butter"
+      ],
+      "171": [
+        "Any Fruit"
+      ],
+      "172": [
+        "Slush Ice",
+        "Any Fruit"
+      ],
+      "173": [
+        "Wheat",
+        "Any Fruit",
+        "Any Fruit",
+        "Any Fruit"
+      ],
+      "174": [
+        "Cheese",
+        "Cocoa Bean",
+        "Garlic",
+        "Egg",
+        "Wheat"
+      ],
+      "175": [
+        "Wheat",
+        "Ginger",
+        "Sugarcane",
+        "Vanilla",
+        "Egg"
+      ],
+      "176": [
+        "Sugarcane",
+        "Milk",
+        "Gooseberry"
+      ],
+      "177": [
+        "Any Dairy or Oil",
+        "Sugarcane",
+        "Cocoa Bean"
+      ],
+      "178": [
+        "Wheat",
+        "Pumpkin",
+        "Ginger"
+      ],
+      "179": [
+        "Sugarcane",
+        "Milk",
+        "Cocoa Bean"
+      ],
+      "180": [
+        "Slush Ice",
+        "Milk",
+        "Sugarcane"
+      ],
+      "181": [
+        "Any Fruit",
+        "Wheat",
+        "Egg",
+        "Milk"
+      ],
+      "182": [
+        "Wheat",
+        "Blueberry",
+        "Raspberry",
+        "Banana"
+      ],
+      "183": [
+        "Slush Ice",
+        "Lemon"
+      ],
+      "184": [
+        "Lemon",
+        "Wheat",
+        "Egg",
+        "Butter"
+      ],
+      "185": [
+        "Butter",
+        "Milk",
+        "Wheat",
+        "Sugarcane",
+        "Scallop"
+      ],
+      "186": [
+        "Butter",
+        "Milk",
+        "Wheat",
+        "Sugarcane",
+        "Apple"
+      ],
+      "187": [
+        "Wheat",
+        "Ginger"
+      ],
+      "188": [
+        "Sugarcane",
+        "Milk",
+        "Mint"
+      ],
+      "189": [
+        "Mint",
+        "Sugarcane"
+      ],
+      "190": [
+        "Mint",
+        "Sugarcane",
+        "Butter",
+        "Cocoa Bean"
+      ],
+      "191": [
+        "Slush Ice",
+        "Mint"
+      ],
+      "192": [
+        "Corn",
+        "Egg",
+        "Milk",
+        "Vanilla"
+      ],
+      "193": [
+        "Any Fruit",
+        "Any Fruit",
+        "Any Fruit",
+        "Milk",
+        "Sugarcane"
+      ],
+      "194": [
+        "Slush Ice",
+        "Sugarcane",
+        "Any Fruit"
+      ],
+      "195": [
+        "Peanut",
+        "Wheat",
+        "Egg",
+        "Milk"
+      ],
+      "196": [
+        "Any Ice"
+      ],
+      "197": [
+        "Butter",
+        "Milk",
+        "Wheat",
+        "Sugarcane",
+        "Raspberry"
+      ],
+      "198": [
+        "Sugarcane",
+        "Milk",
+        "Raspberry"
+      ],
+      "199": [
+        "Slush Ice",
+        "Raspberry",
+        "Gooseberry",
+        "Sugarcane"
+      ],
+      "200": [
+        "Wheat",
+        "Cheese",
+        "Egg",
+        "Cocoa Bean",
+        "Vanilla"
+      ],
+      "201": [
+        "Pink Marshmallow",
+        "Pink Marshmallow",
+        "Blue Marshmallow",
+        "Blue Marshmallow"
+      ],
+      "202": [
+        "Ginger",
+        "Sugarcane",
+        "Vanilla"
+      ],
+      "203": [
+        "Any Dairy or Oil"
+      ],
+      "204": [
+        "Pink Marshmallow",
+        "Blue Marshmallow",
+        "Wheat",
+        "Wheat"
+      ],
+      "205": [
+        "Gooseberry",
+        "Wheat",
+        "Butter"
+      ],
+      "206": [
+        "Slush Ice",
+        "Lemon",
+        "Sugarcane"
+      ],
+      "207": [
+        "Butter",
+        "Milk",
+        "Wheat",
+        "Sugarcane",
+        "Coconut"
+      ],
+      "208": [
+        "Spring V-EGG-etable",
+        "Sugarcane",
+        "Cocoa Bean"
+      ],
+      "209": [
+        "Egg-cellent Fruit",
+        "Spring V-EGG-etable",
+        "Wild Spring Egg",
+        "Cocoa Bean",
+        "Sugarcane"
+      ],
+      "210": [
+        "Spring V-EGG-etable",
+        "Wild Spring Egg",
+        "Egg-cellent Fruit",
+        "Basil"
+      ],
+      "211": [
+        "Butter",
+        "Milk",
+        "Wheat",
+        "Sugarcane",
+        "Blueberry"
+      ],
+      "212": [
+        "Slush Ice",
+        "Any Sweet"
+      ],
+      "213": [
+        "Slush Ice",
+        "Any Fruit",
+        "Sugarcane",
+        "Coconut"
+      ],
+      "214": [
+        "Slush Ice",
+        "Milk",
+        "Sugarcane",
+        "Vanilla"
+      ],
+      "215": [
+        "Wheat",
+        "Milk",
+        "Egg",
+        "Any Sweet (Sugarcane only)"
+      ],
+      "216": [
+        "Butter",
+        "Sugarcane",
+        "Vanilla",
+        "Egg",
+        "Wheat"
+      ],
+      "217": [
+        "Dreamlight Fruit",
+        "Wheat",
+        "Butter"
+      ],
+      "218": [
+        "Butter",
+        "Sugarcane",
+        "Vanilla",
+        "Wheat"
+      ],
+      "219": [
+        "Wheat",
+        "Cocoa Bean",
+        "Vanilla",
+        "Cherry"
       ]
     }
   },
