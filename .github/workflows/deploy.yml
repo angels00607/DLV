@@ -41,6 +41,11 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      # The repository still has the legacy docs-folder Pages deployment enabled.
+      # Let that older deployment finish first so this fresh Vite build remains live.
+      - name: Wait for legacy Pages deployment
+        run: sleep 75
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
