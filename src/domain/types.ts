@@ -14,6 +14,7 @@ export interface GameItem {
   name: string;
   meta?: string;
   meta2?: string;
+  stars?: number;
   image?: string;
   sourceUrl?: string;
   updatedAt?: string;
