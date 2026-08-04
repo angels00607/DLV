@@ -47031,6 +47031,501 @@
         "Almonds",
         "Egg",
         "Vanilla"
+      ],
+      "337": [
+        "Plain Yogurt",
+        "Ambrosia"
+      ],
+      "338": [
+        "Flyleaf Feta",
+        "Olives"
+      ],
+      "339": [
+        "Plain Yogurt",
+        "Cape Gooseberry"
+      ],
+      "340": [
+        "Faerie Rye"
+      ],
+      "341": [
+        "Plain Yogurt",
+        "Golden Apple"
+      ],
+      "342": [
+        "Potato",
+        "Any Fruit",
+        "Garlic",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "343": [
+        "Plain Yogurt",
+        "Honeydew Melon"
+      ],
+      "344": [
+        "Stygian Mudskipper",
+        "Lamprey",
+        "Lightning Spice",
+        "Lightning Spice",
+        "Any Sweet"
+      ],
+      "345": [
+        "Elysian Grain",
+        "Olives",
+        "Honeydew Melon",
+        "Any Spice"
+      ],
+      "346": [
+        "Plain Yogurt",
+        "Persimmon"
+      ],
+      "347": [
+        "Cauliflower",
+        "Green Beans",
+        "Radicchio",
+        "Radish"
+      ],
+      "348": [
+        "Porcini Mushrooms",
+        "Garlic"
+      ],
+      "349": [
+        "Chia Seeds"
+      ],
+      "350": [
+        "Lightning Spice",
+        "Ambrosia"
+      ],
+      "351": [
+        "Plain Yogurt",
+        "Spiral Strawberries"
+      ],
+      "352": [
+        "Cucumber",
+        "Plain Yogurt",
+        "Garlic"
+      ],
+      "353": [
+        "Plain Yogurt",
+        "Spiral Strawberries",
+        "Salt Crystal",
+        "Sour Berries"
+      ],
+      "354": [
+        "Trumpet Snail",
+        "Garlic",
+        "Salt Crystal"
+      ],
+      "355": [
+        "Sorcerer Hat Hermit Crab",
+        "Garlic",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "356": [
+        "Elysian Grain",
+        "Onion",
+        "Any Vegetable",
+        "Flyleaf Feta",
+        "Olives"
+      ],
+      "357": [
+        "Barley",
+        "Cauliflower",
+        "Radish",
+        "Any Spice"
+      ],
+      "358": [
+        "Elysian Grain",
+        "Flyleaf Feta",
+        "Black Pepper"
+      ],
+      "359": [
+        "Wheat",
+        "Chia Seeds",
+        "Shovel Bird Eggs",
+        "Cape Gooseberry"
+      ],
+      "360": [
+        "Any Vegetable",
+        "Flyleaf Feta",
+        "Olives",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "361": [
+        "Cauliflower"
+      ],
+      "362": [
+        "Chia Seeds",
+        "Rhubarb",
+        "Cinnamon",
+        "Any Sweet"
+      ],
+      "363": [
+        "Wheat",
+        "Chia Seeds",
+        "Shovel Bird Eggs"
+      ],
+      "364": [
+        "Hippocampus",
+        "Trumpet Snail",
+        "Flying Fish",
+        "Any Fish",
+        "Brussels Sprout"
+      ],
+      "365": [
+        "Radicchio",
+        "Persimmon",
+        "Lightning Spice"
+      ],
+      "366": [
+        "Flying Fish",
+        "Porcini Mushrooms",
+        "Any Vegetable",
+        "Flyleaf Feta",
+        "Any Dairy or Oil"
+      ],
+      "367": [
+        "Mussel",
+        "Onion",
+        "Garlic"
+      ],
+      "368": [
+        "Stygian Mudskipper",
+        "Elysian Grain",
+        "Olives",
+        "Salt Crystal",
+        "Ambrosia"
+      ],
+      "369": [
+        "Cucumber",
+        "Radish",
+        "Any Vegetable",
+        "Flyleaf Feta",
+        "Olives"
+      ],
+      "370": [
+        "Green Beans",
+        "Onion",
+        "Porcini Mushrooms"
+      ],
+      "371": [
+        "Koi",
+        "Wheat",
+        "Cucumber",
+        "Olives",
+        "Any Spice"
+      ],
+      "372": [
+        "Sorcerer Hat Hermit Crab",
+        "Wheat",
+        "Any Spice"
+      ],
+      "373": [
+        "Hippocampus",
+        "Onion",
+        "Potato",
+        "Spiral Strawberries",
+        "Black Pepper"
+      ],
+      "374": [
+        "Koi"
+      ],
+      "375": [
+        "Lamprey"
+      ],
+      "376": [
+        "Oats",
+        "Plain Yogurt",
+        "Spiral Strawberries",
+        "Ambrosia"
+      ],
+      "377": [
+        "Oats",
+        "Oats",
+        "Golden Apple",
+        "Ambrosia"
+      ],
+      "378": [
+        "Oats",
+        "Oats",
+        "Honeydew Melon",
+        "Ambrosia"
+      ],
+      "379": [
+        "Oats",
+        "Oats",
+        "Persimmon",
+        "Ambrosia"
+      ],
+      "380": [
+        "Oats",
+        "Oats",
+        "Rhubarb",
+        "Ambrosia"
+      ],
+      "381": [
+        "Oats",
+        "Oats",
+        "Sea Grapes",
+        "Ambrosia"
+      ],
+      "382": [
+        "Sea Wolf",
+        "Onion",
+        "Potato",
+        "Plain Yogurt"
+      ],
+      "383": [
+        "Mussel",
+        "Rice",
+        "Olives",
+        "Garlic",
+        "Any Spice"
+      ],
+      "384": [
+        "Oats"
+      ],
+      "385": [
+        "Olives"
+      ],
+      "386": [
+        "Wheat",
+        "Chia Seeds",
+        "Shovel Bird Eggs",
+        "Persimmon"
+      ],
+      "387": [
+        "Porcini Mushrooms",
+        "Radicchio",
+        "Black Pepper"
+      ],
+      "388": [
+        "Barley",
+        "Brussels Sprout",
+        "Onion",
+        "Any Vegetable",
+        "Flyleaf Feta"
+      ],
+      "389": [
+        "Brussels Sprout",
+        "Garlic"
+      ],
+      "390": [
+        "Green Beans",
+        "Garlic"
+      ],
+      "391": [
+        "Sea Wolf",
+        "Salt Crystal"
+      ],
+      "392": [
+        "Cauliflower",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "393": [
+        "Garlic",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "394": [
+        "Green Beans",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "395": [
+        "Radicchio",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "396": [
+        "Radish",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "397": [
+        "Sea Grapes",
+        "Salt Crystal",
+        "Any Spice"
+      ],
+      "398": [
+        "Oats",
+        "Any Fruit"
+      ],
+      "399": [
+        "Wheat",
+        "Chia Seeds",
+        "Shovel Bird Eggs",
+        "Sea Grapes"
+      ],
+      "400": [
+        "Radish",
+        "Any Vegetable",
+        "Sea Grapes",
+        "Black Pepper"
+      ],
+      "401": [
+        "Elysian Grain",
+        "Shovel Bird Eggs",
+        "Spiral Strawberries",
+        "Salt Crystal"
+      ],
+      "402": [
+        "Wheat",
+        "Flyleaf Feta",
+        "Salt Crystal"
+      ],
+      "403": [
+        "Onion",
+        "Spinach",
+        "Flyleaf Feta",
+        "Garlic",
+        "Any Spice"
+      ],
+      "404": [
+        "Wheat",
+        "Chia Seeds",
+        "Shovel Bird Eggs",
+        "Spiral Strawberries"
+      ],
+      "405": [
+        "Brussels Sprout",
+        "Porcini Mushrooms",
+        "Black Pepper"
+      ],
+      "406": [
+        "Porcini Mushrooms",
+        "Ring Squash",
+        "Black Pepper"
+      ],
+      "407": [
+        "Squid"
+      ],
+      "408": [
+        "Mussel"
+      ],
+      "409": [
+        "Ring Squash",
+        "Garlic",
+        "Ambrosia"
+      ],
+      "410": [
+        "Tuna"
+      ],
+      "411": [
+        "Golden Apple",
+        "Ambrosia"
+      ],
+      "412": [
+        "Cape Gooseberry",
+        "Sour Berries"
+      ],
+      "413": [
+        "Wheat",
+        "Shovel Bird Eggs",
+        "Plain Yogurt",
+        "Cinnamon"
+      ],
+      "414": [
+        "Wheat",
+        "Plain Yogurt",
+        "Cinnamon",
+        "Any Sweet"
+      ],
+      "415": [
+        "Wheat",
+        "Shovel Bird Eggs",
+        "Golden Apple"
+      ],
+      "416": [
+        "Honeydew Melon",
+        "Sour Berries"
+      ],
+      "417": [
+        "Wheat",
+        "Shovel Bird Eggs",
+        "Plain Yogurt",
+        "Lightning Spice"
+      ],
+      "418": [
+        "Wheat",
+        "Plain Yogurt",
+        "Any Sweet",
+        "Lightning Spice"
+      ],
+      "419": [
+        "Faerie Rye",
+        "Shovel Bird Eggs",
+        "Ginger",
+        "Nutmeg",
+        "Sour Berries"
+      ],
+      "420": [
+        "Wheat",
+        "Shovel Bird Eggs",
+        "Plain Yogurt",
+        "Nutmeg"
+      ],
+      "421": [
+        "Wheat",
+        "Plain Yogurt",
+        "Nutmeg",
+        "Any Sweet"
+      ],
+      "422": [
+        "Wheat",
+        "Shovel Bird Eggs",
+        "Persimmon"
+      ],
+      "423": [
+        "Persimmon",
+        "Sour Berries"
+      ],
+      "424": [
+        "Oats",
+        "Rice",
+        "Vanilla"
+      ],
+      "425": [
+        "Ambrosia",
+        "Sour Berries"
+      ],
+      "426": [
+        "Wheat",
+        "Shovel Bird Eggs",
+        "Sour Berries"
+      ],
+      "427": [
+        "Plain Yogurt",
+        "Any Spice"
+      ],
+      "428": [
+        "Wheat",
+        "Shovel Bird Eggs",
+        "Spiral Strawberries"
+      ],
+      "429": [
+        "Spiral Strawberries",
+        "Sour Berries"
+      ],
+      "430": [
+        "Wheat",
+        "Plain Yogurt",
+        "Rhubarb",
+        "Spiral Strawberries"
+      ],
+      "431": [
+        "Faerie Rye",
+        "Shovel Bird Eggs",
+        "Plain Yogurt",
+        "Nutmeg",
+        "Ambrosia"
+      ],
+      "432": [
+        "Plain Yogurt",
+        "Vanilla"
       ]
     }
   },
