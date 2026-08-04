@@ -279,7 +279,7 @@ export function App() {
               return (
                 <section className="collection-group" key={key}>
                   <button
-                    className="group-header"
+                    className={`group-header ${categoryId === 'crafting' ? 'uppercase' : ''}`}
                     onClick={() => setOpenGroups(toggleAccordion(openGroups, accordionKey))}
                   >
                     <span>{group}</span>
