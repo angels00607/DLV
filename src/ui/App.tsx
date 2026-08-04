@@ -246,6 +246,7 @@ export function App() {
               <Search size={18} />
               <input
                 aria-label="Search everything"
+                autoCapitalize="words"
                 value={filters.query}
                 onChange={(event) => setFilters({ ...filters, query: event.target.value })}
                 placeholder="Search everything"
@@ -504,6 +505,7 @@ function AddItemRow({
   return (
     <div className="add-item-row">
       <input
+        autoCapitalize="words"
         value={name}
         onChange={(event) => setName(event.target.value)}
         onKeyDown={(event) => {
@@ -512,6 +514,7 @@ function AddItemRow({
         placeholder={`Add ${category.toLowerCase()}...`}
       />
       <input
+        autoCapitalize="words"
         value={meta}
         onChange={(event) => setMeta(event.target.value)}
         onKeyDown={(event) => {
@@ -617,19 +620,19 @@ function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => 
         </p>
         <label>
           <span>GitHub user</span>
-          <input value={user} onChange={(event) => setUser(event.target.value)} />
+          <input autoCapitalize="none" autoCorrect="off" spellCheck={false} value={user} onChange={(event) => setUser(event.target.value)} />
         </label>
         <label>
           <span>Repository name</span>
-          <input value={repo} onChange={(event) => setRepo(event.target.value)} />
+          <input autoCapitalize="none" autoCorrect="off" spellCheck={false} value={repo} onChange={(event) => setRepo(event.target.value)} />
         </label>
         <label>
           <span>File name</span>
-          <input value={filename} onChange={(event) => setFilename(event.target.value)} />
+          <input autoCapitalize="none" autoCorrect="off" spellCheck={false} value={filename} onChange={(event) => setFilename(event.target.value)} />
         </label>
         <label>
           <span>GitHub token</span>
-          <input type="password" value={token} onChange={(event) => setToken(event.target.value)} />
+          <input type="password" autoCapitalize="none" autoCorrect="off" spellCheck={false} value={token} onChange={(event) => setToken(event.target.value)} />
         </label>
         {status && <p className={`github-status ${isError ? 'error' : ''}`}>{status}</p>}
         <div className="github-actions">
@@ -860,15 +863,15 @@ function EditSheet({
         </div>
         <label>
           <span>Name</span>
-          <input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} />
+          <input autoCapitalize="words" value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} />
         </label>
         <label>
           <span>Group</span>
-          <input value={draft.meta ?? ''} onChange={(event) => setDraft({ ...draft, meta: event.target.value })} />
+          <input autoCapitalize="words" value={draft.meta ?? ''} onChange={(event) => setDraft({ ...draft, meta: event.target.value })} />
         </label>
         <label>
           <span>Universe / zone</span>
-          <input value={draft.meta2 ?? ''} onChange={(event) => setDraft({ ...draft, meta2: event.target.value })} />
+          <input autoCapitalize="words" value={draft.meta2 ?? ''} onChange={(event) => setDraft({ ...draft, meta2: event.target.value })} />
         </label>
         {supportsRecipe && (
           <fieldset className="recipe-editor">
@@ -902,6 +905,7 @@ function EditSheet({
                   <span>{index + 1}</span>
                   <input
                     aria-label={`Ingredient ${index + 1}`}
+                    autoCapitalize="words"
                     value={ingredient}
                     onChange={(event) => updateIngredient(index, event.target.value)}
                     onKeyDown={(event) => {
