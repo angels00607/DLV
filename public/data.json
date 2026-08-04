@@ -33872,6 +33872,72 @@
         "name": "Vintage Peach Trifle",
         "meta": "Entrées",
         "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 469,
+        "name": "Honeycrunch Bar",
+        "meta": "Appetizers",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 470,
+        "name": "Sweet Acorn Porridge",
+        "meta": "Appetizers",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 471,
+        "name": "Warm Milk & Honey",
+        "meta": "Appetizers",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 472,
+        "name": "Foresty Quiche",
+        "meta": "Entrées",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 473,
+        "name": "Honey-Glazed Plush Fish",
+        "meta": "Entrées",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 474,
+        "name": "Rabbit's Garden Pie",
+        "meta": "Entrées",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 475,
+        "name": "Toasted Picnic Sandwich",
+        "meta": "Entrées",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 476,
+        "name": "Brunchfast",
+        "meta": "Desserts",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 477,
+        "name": "Honey Macarons",
+        "meta": "Desserts",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 478,
+        "name": "Honey Triffle",
+        "meta": "Desserts",
+        "meta2": "HONEYGLOW WOODS"
+      },
+      {
+        "id": 479,
+        "name": "Pooh's Birthday Cake",
+        "meta": "Desserts",
+        "meta2": "HONEYGLOW WOODS"
       }
     ],
     "crafting": [
@@ -42984,7 +43050,7 @@
     "clothing": 1743,
     "crafting": 1506,
     "furniture": 3591,
-    "meals": 469
+    "meals": 480
   },
   "ingredients": {
     "clothing": {},
@@ -47710,6 +47776,70 @@
       "468": [
         "Lollipop Fruit",
         "Fairy Sprinkles"
+      ],
+      "469": [
+        "Sweet Chestnut",
+        "Golden Honey"
+      ],
+      "470": [
+        "Acorn Snail",
+        "Any Fruit",
+        "Any Grain"
+      ],
+      "471": [
+        "Milk",
+        "Golden Honey"
+      ],
+      "472": [
+        "Any Fish",
+        "Any Dairy or Oil",
+        "Juniper Berry",
+        "Truffle",
+        "Golden Pattypan"
+      ],
+      "473": [
+        "Plush Fish",
+        "Any Vegetable",
+        "Golden Honey"
+      ],
+      "474": [
+        "Golden Pattypan",
+        "Parsnip",
+        "Pufflebud Pods",
+        "Carrot",
+        "Any Grain"
+      ],
+      "475": [
+        "Golden Honey",
+        "Parsnip",
+        "Any Dairy or Oil",
+        "Tree Resin",
+        "Any Spice"
+      ],
+      "476": [
+        "Sweet Jelly",
+        "Butter",
+        "Egg",
+        "Any Fruit"
+      ],
+      "477": [
+        "Golden Honey",
+        "Sweet Jelly",
+        "Any Grain",
+        "Sweet Chestnut"
+      ],
+      "478": [
+        "Pufflebud Pods",
+        "Golden Honey",
+        "Tree Resin",
+        "Juniper Berry"
+      ],
+      "479": [
+        "Golden Honey",
+        "Any Sweet",
+        "Any Dairy or Oil",
+        "Any Fruit",
+        "Any Grain"
       ]
     }
   },
