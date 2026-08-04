@@ -758,6 +758,44 @@ h1 {
   font-size: 0.76rem;
 }
 
+.item-body .item-meta-row {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: visible;
+}
+
+.item-meta-row > span:first-child {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-body .meal-stars {
+  flex: 0 0 auto;
+  display: inline-flex;
+  gap: 1px;
+  overflow: visible;
+  color: rgba(119, 98, 143, 0.24);
+  font-size: 0.72rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.meal-stars i {
+  color: inherit;
+  font-style: normal;
+}
+
+.meal-stars i.filled {
+  color: #d99a20;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
 .item-body .ingredient-preview {
   display: flex;
   flex-wrap: wrap;
