@@ -569,6 +569,10 @@ h1 {
   font-weight: 820;
 }
 
+.group-header.uppercase span {
+  text-transform: uppercase;
+}
+
 .group-header small {
   color: var(--muted);
   font-weight: 760;
