@@ -46418,6 +46418,619 @@
         "Cocoa Bean",
         "Vanilla",
         "Cherry"
+      ],
+      "220": [
+        "Corn",
+        "Cheese",
+        "Agave"
+      ],
+      "221": [
+        "Pork",
+        "Wheat",
+        "Soya",
+        "Any Spice"
+      ],
+      "222": [
+        "Brilliant Blue Starfish",
+        "Mint"
+      ],
+      "223": [
+        "Pretty Pink Starfish",
+        "Paprika"
+      ],
+      "224": [
+        "Wheat",
+        "Cucumber",
+        "Tomato",
+        "Mint",
+        "Any Spice"
+      ],
+      "225": [
+        "Clam",
+        "Tomato"
+      ],
+      "226": [
+        "Cabbage",
+        "Carrot"
+      ],
+      "227": [
+        "Sea Snail",
+        "Onion",
+        "Tomato",
+        "Lemon"
+      ],
+      "228": [
+        "Crab",
+        "Cheese"
+      ],
+      "229": [
+        "Any Meat",
+        "Wheat",
+        "Any Vegetable",
+        "Soya"
+      ],
+      "230": [
+        "Beans",
+        "Cumin",
+        "Garlic"
+      ],
+      "231": [
+        "Robot Fish",
+        "Almonds"
+      ],
+      "232": [
+        "Almonds",
+        "Agave"
+      ],
+      "233": [
+        "Slush Ice",
+        "Majestea"
+      ],
+      "234": [
+        "Milk",
+        "Majestea"
+      ],
+      "235": [
+        "Majestea"
+      ],
+      "236": [
+        "Sand Worm",
+        "Melon"
+      ],
+      "237": [
+        "Shad",
+        "Onion",
+        "Tomato",
+        "Lemon"
+      ],
+      "238": [
+        "Scorpion",
+        "Paprika"
+      ],
+      "239": [
+        "Octopus",
+        "Seaweed",
+        "Egg",
+        "Soya"
+      ],
+      "240": [
+        "Brilliant Blue Starfish",
+        "Pretty Pink Starfish",
+        "Cactoberries"
+      ],
+      "241": [
+        "Tomato",
+        "Basil"
+      ],
+      "242": [
+        "Wheat",
+        "Any Vegetables",
+        "Soya"
+      ],
+      "243": [
+        "Corn",
+        "Potato",
+        "Poultry"
+      ],
+      "244": [
+        "Beans",
+        "Pork"
+      ],
+      "245": [
+        "Sea Snail",
+        "Robot Fish",
+        "Celery",
+        "Cumin"
+      ],
+      "246": [
+        "Poultry",
+        "Rice",
+        "Cinnamon",
+        "Cumin",
+        "Mint"
+      ],
+      "247": [
+        "Prisma Shrimp",
+        "Rice",
+        "Celery",
+        "Butter",
+        "Any Spice"
+      ],
+      "248": [
+        "Skeleton Fish",
+        "Celery",
+        "Any Vegetable",
+        "Grapes"
+      ],
+      "249": [
+        "Oyster",
+        "Sea Snail",
+        "Mushroom",
+        "Garlic"
+      ],
+      "250": [
+        "Bamboo",
+        "Canola",
+        "Soya",
+        "Ginger"
+      ],
+      "251": [
+        "Any Meat",
+        "Wheat",
+        "Beans",
+        "Cumin"
+      ],
+      "252": [
+        "Poultry",
+        "Tomato",
+        "Butter",
+        "Lemon",
+        "Cumin"
+      ],
+      "253": [
+        "Venison",
+        "Wheat",
+        "Any Vegetable",
+        "Cheese"
+      ],
+      "254": [
+        "Poultry",
+        "Lemon",
+        "Mint",
+        "Paprika"
+      ],
+      "255": [
+        "Pork",
+        "Poultry",
+        "Venison",
+        "Wheat"
+      ],
+      "256": [
+        "Wheat",
+        "Cheese"
+      ],
+      "257": [
+        "Pork",
+        "Poultry",
+        "Wheat",
+        "Tomato"
+      ],
+      "258": [
+        "Poultry",
+        "Onion",
+        "Any Vegetable",
+        "Grapes"
+      ],
+      "259": [
+        "Wheat",
+        "Cheese",
+        "Any Sweet"
+      ],
+      "260": [
+        "Wheat",
+        "Any Vegetable",
+        "Ruby Lentils"
+      ],
+      "261": [
+        "Electric Eel",
+        "Rice",
+        "Seaweed",
+        "Any Vegetable"
+      ],
+      "262": [
+        "Poultry",
+        "Wheat",
+        "Any Vegetable",
+        "Any Vegetable",
+        "Cumin"
+      ],
+      "263": [
+        "Venison",
+        "Wheat",
+        "Lettuce"
+      ],
+      "264": [
+        "Venison",
+        "Potato",
+        "Any Vegetable",
+        "Beans"
+      ],
+      "265": [
+        "Pork",
+        "Wheat",
+        "Tomato",
+        "Cheese",
+        "Pineapple"
+      ],
+      "266": [
+        "Poultry",
+        "Onion",
+        "Garlic",
+        "Any Spice"
+      ],
+      "267": [
+        "Flute Root",
+        "Yam",
+        "Canola"
+      ],
+      "268": [
+        "Any Meat",
+        "Wheat",
+        "Butter"
+      ],
+      "269": [
+        "Venison",
+        "Chili Pepper",
+        "Corn",
+        "Any Vegetable",
+        "Cumin"
+      ],
+      "270": [
+        "Rainbow Trout",
+        "Milk",
+        "Turnip",
+        "Cosmic Figs"
+      ],
+      "271": [
+        "Pirarucu",
+        "Any Vegetable",
+        "Any Vegetable",
+        "Coconut"
+      ],
+      "272": [
+        "Wheat",
+        "Butter",
+        "Any Spice"
+      ],
+      "273": [
+        "Chili Pepper",
+        "Bamboo",
+        "Piranha"
+      ],
+      "274": [
+        "Pork",
+        "Onion",
+        "Tomato",
+        "Oregano"
+      ],
+      "275": [
+        "Poultry",
+        "Corn",
+        "Beans"
+      ],
+      "276": [
+        "Prisma Shrimp",
+        "Any Seafood",
+        "Rainbow Trout",
+        "Tomato",
+        "Any Vegetable"
+      ],
+      "277": [
+        "Pork",
+        "Wheat",
+        "Egg"
+      ],
+      "278": [
+        "Rice",
+        "Flute Root",
+        "Seaweed",
+        "Any Vegetable"
+      ],
+      "279": [
+        "Any Meat"
+      ],
+      "280": [
+        "Pork",
+        "Venison",
+        "Wheat",
+        "Any Vegetable",
+        "Cheese"
+      ],
+      "281": [
+        "Chili Pepper",
+        "Tomato",
+        "Ruby Lentils"
+      ],
+      "282": [
+        "Dunebopper",
+        "Sand Fish",
+        "Any Vegetable",
+        "Sand Worm",
+        "Any Spice"
+      ],
+      "283": [
+        "Pork",
+        "Cabbage",
+        "Potato"
+      ],
+      "284": [
+        "Poultry",
+        "Wheat",
+        "Canola"
+      ],
+      "285": [
+        "Wheat",
+        "Any Sweet"
+      ],
+      "286": [
+        "Venison",
+        "Rice",
+        "Lemon",
+        "Cinnamon",
+        "Garlic"
+      ],
+      "287": [
+        "Poultry",
+        "Rice",
+        "Lemon",
+        "Garlic",
+        "Oregano"
+      ],
+      "288": [
+        "Poultry",
+        "Broccoli",
+        "Canola",
+        "Dreamango",
+        "Pineapple"
+      ],
+      "289": [
+        "Chili Pepper",
+        "Poultry",
+        "Cumin",
+        "Paprika"
+      ],
+      "290": [
+        "Soya"
+      ],
+      "291": [
+        "Venison",
+        "Wheat",
+        "Potato",
+        "Any Vegetable"
+      ],
+      "292": [
+        "Poultry",
+        "Cumin",
+        "Paprika",
+        "Agave"
+      ],
+      "293": [
+        "Pork",
+        "Turnip",
+        "Cheese"
+      ],
+      "294": [
+        "Mushroom",
+        "Turnip",
+        "Soya"
+      ],
+      "295": [
+        "Pork",
+        "Wheat",
+        "Cabbage"
+      ],
+      "296": [
+        "Apple",
+        "Cinnamon"
+      ],
+      "297": [
+        "Blueberry",
+        "Basil",
+        "Strawberry"
+      ],
+      "298": [
+        "Almonds",
+        "Egg",
+        "Agave"
+      ],
+      "299": [
+        "Wheat",
+        "Strawberry",
+        "Agave"
+      ],
+      "300": [
+        "Almonds",
+        "Egg",
+        "Cocoa Bean"
+      ],
+      "301": [
+        "Wheat",
+        "Egg",
+        "Cinnamon",
+        "Any Sweet"
+      ],
+      "302": [
+        "Agave",
+        "Sugarcane"
+      ],
+      "303": [
+        "Wheat",
+        "Butter"
+      ],
+      "304": [
+        "Wheat",
+        "Egg",
+        "Cherry",
+        "Agave"
+      ],
+      "305": [
+        "Wheat",
+        "Butter",
+        "Any Fruit",
+        "Any Fruit"
+      ],
+      "306": [
+        "Milk",
+        "Dreamango",
+        "Sugarcane"
+      ],
+      "307": [
+        "Almonds",
+        "Egg"
+      ],
+      "308": [
+        "Slush Ice",
+        "Milk",
+        "Any Fruit"
+      ],
+      "309": [
+        "Wheat",
+        "Egg",
+        "Any Sweet"
+      ],
+      "310": [
+        "Sea Snail",
+        "Sand Worm",
+        "Scorpion"
+      ],
+      "311": [
+        "Almonds",
+        "Egg",
+        "Any Fruit"
+      ],
+      "312": [
+        "Wheat",
+        "Butter",
+        "Egg",
+        "Cinnamon"
+      ],
+      "313": [
+        "Wheat",
+        "Butter",
+        "Butter",
+        "Agave"
+      ],
+      "314": [
+        "Wheat",
+        "Almonds",
+        "Dates"
+      ],
+      "315": [
+        "Wheat",
+        "Canola",
+        "Dates",
+        "Cinnamon"
+      ],
+      "316": [
+        "Milk",
+        "Melon",
+        "Sugarcane"
+      ],
+      "317": [
+        "Wheat",
+        "Canola",
+        "Beans",
+        "Agave"
+      ],
+      "318": [
+        "Wheat",
+        "Egg",
+        "Milk",
+        "Nestling Pear"
+      ],
+      "319": [
+        "Wheat",
+        "Egg",
+        "Nestling Pear"
+      ],
+      "320": [
+        "Slush Ice",
+        "Pineapple"
+      ],
+      "321": [
+        "Corn",
+        "Canola"
+      ],
+      "322": [
+        "Wheat",
+        "Raspberry"
+      ],
+      "323": [
+        "Chili Pepper",
+        "Almonds",
+        "Egg"
+      ],
+      "324": [
+        "Wheat",
+        "Butter",
+        "Cactoberries",
+        "Strawberry",
+        "Any Spice"
+      ],
+      "325": [
+        "Slush Ice",
+        "Milk",
+        "Cosmic Figs"
+      ],
+      "326": [
+        "Wheat",
+        "Butter",
+        "Strawberry"
+      ],
+      "327": [
+        "Wheat",
+        "Egg",
+        "Strawberry"
+      ],
+      "328": [
+        "Almonds",
+        "Dates"
+      ],
+      "329": [
+        "Wheat",
+        "Banana"
+      ],
+      "330": [
+        "Wheat",
+        "Blueberry"
+      ],
+      "331": [
+        "Wheat",
+        "Any Fruit",
+        "Any Fruit",
+        "Agave"
+      ],
+      "332": [
+        "Wheat",
+        "Any Fruit"
+      ],
+      "333": [
+        "Corn",
+        "Canola",
+        "Agave"
+      ],
+      "334": [
+        "Soya",
+        "Any Fruit"
+      ],
+      "335": [
+        "Sand Fish",
+        "Beans"
+      ],
+      "336": [
+        "Almonds",
+        "Egg",
+        "Vanilla"
       ]
     }
   },
