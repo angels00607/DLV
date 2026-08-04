@@ -342,7 +342,7 @@ export function App() {
       {editingItem && activeView !== 'home' && (
         <EditSheet
           item={editingItem}
-          categoryId={activeView}
+          supportsRecipe={categoryById[activeView].supportsIngredients === true}
           categoryLabel={categoryById[activeView].label}
           initialIngredients={save.ingredients[activeView]?.[editingItem.id] ?? []}
           onClose={() => setEditingItem(null)}
@@ -796,14 +796,14 @@ function HomeView({
 
 function EditSheet({
   item,
-  categoryId,
+  supportsRecipe,
   categoryLabel,
   initialIngredients,
   onClose,
   onSave,
 }: {
   item: GameItem;
-  categoryId: CategoryId;
+  supportsRecipe: boolean;
   categoryLabel: string;
   initialIngredients: string[];
   onClose: () => void;
@@ -811,7 +811,6 @@ function EditSheet({
 }) {
   const [draft, setDraft] = useState<GameItem>(item);
   const [ingredients, setIngredients] = useState<string[]>(initialIngredients);
-  const supportsRecipe = categoryId === 'crafting' || categoryId === 'meals';
 
   useEffect(() => {
     setDraft(item);
