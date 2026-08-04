@@ -7,10 +7,12 @@ import {
   Github,
   Home,
   MapPin,
+  MoreHorizontal,
   Plus,
   Save,
   Search,
   Settings,
+  SlidersHorizontal,
   Trash2,
   Upload,
   X,
@@ -39,6 +41,8 @@ type ActiveZone =
   | 'WISHBLOSSOM MOUNTAINS';
 const DIRECT_RENDER_LIMIT = 6;
 const GH_STORAGE_KEY = 'dlv_gh_config';
+const NAV_STORAGE_KEY = 'dlv_iphone_nav_v1';
+type StarFilter = 'all' | 1 | 2 | 3 | 4 | 5;
 const ZONES: Array<{ value: ActiveZone; label: string }> = [
   { value: 'all', label: 'All zones' },
   { value: 'DREAMLIGHT VALLEY', label: 'Dreamlight Valley' },
@@ -51,13 +55,18 @@ const ZONE_OPTIONS = ZONES.filter((zone) => zone.value !== 'all').map((zone) => 
 
 export function App() {
   const [save, setSave] = useState<SavePayload | null>(null);
-  const [activeView, setActiveView] = useState<ActiveView>('home');
-  const [activeZone, setActiveZone] = useState<ActiveZone>('all');
+  const initialNav = readNavigationState();
+  const [activeView, setActiveView] = useState<ActiveView>(initialNav.activeView);
+  const [activeZone, setActiveZone] = useState<ActiveZone>(initialNav.activeZone);
+  const [activeGroup, setActiveGroup] = useState(initialNav.activeGroup);
+  const [starFilter, setStarFilter] = useState<StarFilter>('all');
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [editingItem, setEditingItem] = useState<GameItem | null>(null);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [isGithubOpen, setGithubOpen] = useState(false);
+  const [isZoneOpen, setZoneOpen] = useState(false);
+  const [isFilterOpen, setFilterOpen] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -68,17 +77,37 @@ export function App() {
     if (save) persistSave(save);
   }, [save]);
 
+  useEffect(() => {
+    localStorage.setItem(NAV_STORAGE_KEY, JSON.stringify({ activeView, activeZone, activeGroup }));
+    const scrollKey = `${activeView}:${activeZone}:${activeGroup}`;
+    const positions = readScrollPositions();
+    requestAnimationFrame(() => window.scrollTo({ top: positions[scrollKey] ?? 0 }));
+    const rememberScroll = () => {
+      positions[scrollKey] = window.scrollY;
+      sessionStorage.setItem(`${NAV_STORAGE_KEY}:scroll`, JSON.stringify(positions));
+    };
+    window.addEventListener('scroll', rememberScroll, { passive: true });
+    return () => window.removeEventListener('scroll', rememberScroll);
+  }, [activeView, activeZone, activeGroup]);
+
   const categoryId = activeView === 'home' ? 'clothing' : activeView;
   const currentCategory = categoryById[categoryId];
   const items = activeView === 'home' ? [] : save?.data[categoryId] ?? [];
   const zoneItems = useMemo(() => filterByZone(items, activeZone), [items, activeZone]);
-  const filteredItems = useMemo(
+  const baseFilteredItems = useMemo(
     () => filterItems(zoneItems, filters, save, categoryId),
     [zoneItems, filters, save, categoryId],
   );
   const groupedItems = useMemo(
-    () => groupItems(filteredItems, currentCategory.groupBy[0] ?? 'meta'),
-    [filteredItems, currentCategory.groupBy],
+    () => groupItems(baseFilteredItems, currentCategory.groupBy[0] ?? 'meta'),
+    [baseFilteredItems, currentCategory.groupBy],
+  );
+  const visibleItems = useMemo(
+    () => baseFilteredItems.filter((item) =>
+      (activeGroup === 'all' || (item.meta || 'Other') === activeGroup) &&
+      (starFilter === 'all' || (categoryId === 'meals' && item.stars === starFilter)),
+    ),
+    [baseFilteredItems, activeGroup, starFilter, categoryId],
   );
   const progress = useMemo(() => getProgress(zoneItems, save, categoryId), [zoneItems, save, categoryId]);
   const totalProgress = useMemo(() => getTotalProgress(save, activeZone), [save, activeZone]);
@@ -184,6 +213,7 @@ export function App() {
           className={activeView === 'home' ? 'active' : ''}
           onClick={() => {
             setActiveView('home');
+            setActiveGroup('all');
             setFilters(initialFilters);
           }}
         >
@@ -199,6 +229,8 @@ export function App() {
               className={category.id === activeView ? 'active' : ''}
               onClick={() => {
                 setActiveView(category.id);
+                setActiveGroup('all');
+                setStarFilter('all');
                 setFilters(initialFilters);
               }}
             >
@@ -210,25 +242,29 @@ export function App() {
         })}
       </nav>
 
-      <nav className="zone-bar" aria-label="Zones">
-        {ZONES.map((zone) => {
-          const zoneProgress = getTotalProgress(save, zone.value);
-          return (
-            <button
-              key={zone.value}
-              className={activeZone === zone.value ? 'active' : ''}
-              onClick={() => setActiveZone(zone.value)}
-            >
-              <MapPin size={15} />
-              <span>{zone.label}</span>
-              <small>{zoneProgress.done}/{zoneProgress.total}</small>
-            </button>
-          );
-        })}
-      </nav>
+      <button className="zone-trigger" onClick={() => setZoneOpen(true)} aria-haspopup="dialog">
+        <MapPin size={16} />
+        <span>{formatZoneLabel(activeZone)}</span>
+        <small>{totalProgress.done}/{totalProgress.total}</small>
+        <ChevronDown size={17} />
+      </button>
 
       {activeView === 'home' ? (
-        <HomeView save={save} activeZone={activeZone} totalProgress={totalProgress} onOpenCategory={setActiveView} />
+        <HomeView
+          save={save}
+          activeZone={activeZone}
+          totalProgress={totalProgress}
+          onOpenCategory={(category) => {
+            setActiveView(category);
+            setActiveGroup('all');
+          }}
+          onQuickOpen={(category, status, rating = 'all') => {
+            setActiveView(category);
+            setActiveGroup('all');
+            setFilters({ ...initialFilters, status });
+            setStarFilter(rating);
+          }}
+        />
       ) : (
         <main className="content">
           <div className="section-title">
@@ -241,7 +277,7 @@ export function App() {
             </div>
           </div>
 
-          <div className="control-stack">
+          <div className="collection-tools">
             <div className="search-field">
               <Search size={18} />
               <input
@@ -262,50 +298,79 @@ export function App() {
                 </button>
               )}
             </div>
-            <div className="filter-row" aria-label="Filters">
+            <button className="filter-trigger" onClick={() => setFilterOpen(true)}>
+              <SlidersHorizontal size={17} />
+              Filters{filters.status !== 'all' || starFilter !== 'all' ? ' •' : ''}
+            </button>
+          </div>
+
+          <SubcategoryNavigator
+            groups={groupedItems}
+            activeGroup={activeGroup}
+            save={save}
+            categoryId={categoryId}
+            onSelect={setActiveGroup}
+          />
+
+          {activeGroup === 'all' && !filters.query ? (
+            <SubcategoryGrid groups={groupedItems} save={save} categoryId={categoryId} onSelect={setActiveGroup} />
+          ) : (
+            <AlphabeticalCollection
+              categoryId={categoryId}
+              items={visibleItems}
+              save={save}
+              onOwned={toggleOwned}
+              onChecked={toggleChecked}
+              onEdit={setEditingItem}
+              onDelete={deleteItem}
+            />
+          )}
+        </main>
+      )}
+
+      {isZoneOpen && (
+        <ChoiceSheet title="Choose a zone" onClose={() => setZoneOpen(false)}>
+          {ZONES.map((zone) => {
+            const zoneProgress = getTotalProgress(save, zone.value);
+            return (
+              <button className={`choice-row ${zone.value === activeZone ? 'active' : ''}`} key={zone.value} onClick={() => {
+                setActiveZone(zone.value);
+                setActiveGroup('all');
+                setZoneOpen(false);
+              }}>
+                <MapPin size={17} />
+                <span>{zone.label}</span>
+                <small>{zoneProgress.done}/{zoneProgress.total}</small>
+                {zone.value === activeZone && <Check size={17} />}
+              </button>
+            );
+          })}
+        </ChoiceSheet>
+      )}
+
+      {isFilterOpen && (
+        <ChoiceSheet title="Filters" onClose={() => setFilterOpen(false)}>
+          <div className="sheet-filter-group">
+            <p>Status</p>
+            <div className="filter-row">
               <Chip active={filters.status === 'all'} onClick={() => setFilters({ ...filters, status: 'all' })}>All</Chip>
               <Chip active={filters.status === 'owned'} onClick={() => setFilters({ ...filters, status: 'owned' })}>Collected</Chip>
               <Chip active={filters.status === 'missing'} onClick={() => setFilters({ ...filters, status: 'missing' })}>Missing</Chip>
             </div>
-            <AddItemRow category={currentCategory.label} activeZone={activeZone} onAdd={addItem} />
           </div>
-
-          <div className="group-list">
-            {groupedItems.map(([group, groupItems]) => {
-              const key = `${categoryId}-${group}`;
-              const accordionKey = `top:${categoryId}|${key}`;
-              const open = openGroups[accordionKey] ?? false;
-              const groupProgress = getProgress(groupItems, save, categoryId);
-              return (
-                <section className="collection-group" key={key}>
-                  <button
-                    className="group-header"
-                    onClick={() => setOpenGroups(toggleAccordion(openGroups, accordionKey))}
-                  >
-                    <span>{group}</span>
-                    <small>{groupProgress.done}/{groupProgress.total}</small>
-                    <ChevronDown className={open ? 'rotate' : ''} size={18} />
-                  </button>
-                  {open && (
-                    <NestedAccordions
-                      categoryId={categoryId}
-                      groupKey={key}
-                      parentKey={accordionKey}
-                      items={groupItems}
-                      save={save}
-                      openGroups={openGroups}
-                      setOpenGroups={setOpenGroups}
-                      onOwned={toggleOwned}
-                      onChecked={toggleChecked}
-                      onEdit={setEditingItem}
-                      onDelete={deleteItem}
-                    />
-                  )}
-                </section>
-              );
-            })}
-          </div>
-        </main>
+          {categoryId === 'meals' && (
+            <div className="sheet-filter-group">
+              <p>Recipe stars</p>
+              <div className="filter-row star-filter-row">
+                <Chip active={starFilter === 'all'} onClick={() => setStarFilter('all')}>All</Chip>
+                {([1, 2, 3, 4, 5] as const).map((stars) => (
+                  <Chip key={stars} active={starFilter === stars} onClick={() => setStarFilter(stars)}>{stars}★</Chip>
+                ))}
+              </div>
+            </div>
+          )}
+          <AddItemRow category={currentCategory.label} activeZone={activeZone} onAdd={addItem} />
+        </ChoiceSheet>
       )}
 
       {isSettingsOpen && (
@@ -474,6 +539,143 @@ function NestedAccordions({
           </section>
         );
       })}
+    </div>
+  );
+}
+
+function ChoiceSheet({
+  title,
+  children,
+  onClose,
+}: {
+  title: string;
+  children: React.ReactNode;
+  onClose: () => void;
+}) {
+  return (
+    <aside className="sheet choice-sheet" role="dialog" aria-modal="true" aria-label={title}>
+      <div className="sheet-card">
+        <div className="sheet-head">
+          <h2>{title}</h2>
+          <button className="icon-button" aria-label={`Close ${title}`} onClick={onClose}><X size={20} /></button>
+        </div>
+        {children}
+      </div>
+    </aside>
+  );
+}
+
+function SubcategoryNavigator({
+  groups,
+  activeGroup,
+  save,
+  categoryId,
+  onSelect,
+}: {
+  groups: Array<[string, GameItem[]]>;
+  activeGroup: string;
+  save: SavePayload;
+  categoryId: CategoryId;
+  onSelect: (group: string) => void;
+}) {
+  const total = groups.reduce((count, [, items]) => count + items.length, 0);
+  return (
+    <nav className="subcategory-strip" aria-label="Subcategories">
+      <button className={activeGroup === 'all' ? 'active' : ''} onClick={() => onSelect('all')}>
+        <span>All groups</span><small>{total}</small>
+      </button>
+      {groups.map(([group, items]) => {
+        const progress = getProgress(items, save, categoryId);
+        return (
+          <button key={group} className={activeGroup === group ? 'active' : ''} onClick={() => onSelect(group)}>
+            <span>{group}</span><small>{progress.done}/{progress.total}</small>
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
+function SubcategoryGrid({
+  groups,
+  save,
+  categoryId,
+  onSelect,
+}: {
+  groups: Array<[string, GameItem[]]>;
+  save: SavePayload;
+  categoryId: CategoryId;
+  onSelect: (group: string) => void;
+}) {
+  if (!groups.length) return <div className="empty-collection">No subcategories match these filters.</div>;
+  return (
+    <section className="subcategory-grid" aria-label="Choose a subcategory">
+      {groups.map(([group, items]) => {
+        const progress = getProgress(items, save, categoryId);
+        return (
+          <button key={group} onClick={() => onSelect(group)}>
+            <strong>{group}</strong>
+            <span>{progress.total} items</span>
+            <small>{progress.done} collected · {progress.total - progress.done} remaining</small>
+            <i><b style={{ width: `${progress.percent}%` }} /></i>
+          </button>
+        );
+      })}
+    </section>
+  );
+}
+
+function AlphabeticalCollection({
+  categoryId,
+  items,
+  save,
+  onOwned,
+  onChecked,
+  onEdit,
+  onDelete,
+}: {
+  categoryId: CategoryId;
+  items: GameItem[];
+  save: SavePayload;
+  onOwned: (item: GameItem) => void;
+  onChecked: (item: GameItem) => void;
+  onEdit: (item: GameItem) => void;
+  onDelete: (item: GameItem) => void;
+}) {
+  const letters = buildLetterGroups(items);
+  if (!letters.length) return <div className="empty-collection">No items match these filters.</div>;
+  return (
+    <div className="alphabetical-browser">
+      <div className="alphabetical-list">
+        {letters.map(([letter, letterItems]) => (
+          <section className="alphabet-section" id={`letter-${categoryId}-${letter}`} key={letter}>
+            <header><span>{letter}</span><small>{letterItems.length} items</small></header>
+            <div className="item-grid">
+              {letterItems.map((item) => (
+                <ItemCard
+                  key={item.id}
+                  item={item}
+                  owned={save.owned[categoryId]?.[item.id]}
+                  checked={!!save.checked[categoryId]?.[item.id]}
+                  ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
+                  stars={categoryId === 'meals' ? item.stars : undefined}
+                  onOwned={() => onOwned(item)}
+                  onChecked={() => onChecked(item)}
+                  onEdit={() => onEdit(item)}
+                  onDelete={() => onDelete(item)}
+                />
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+      <nav className="alphabet-rail" aria-label="Alphabetical index">
+        {letters.map(([letter]) => (
+          <button key={letter} onClick={() => document.getElementById(`letter-${categoryId}-${letter}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+            {letter}
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
@@ -706,12 +908,16 @@ function ItemCard({
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const [expanded, setExpanded] = useState(false);
+  const [actionsOpen, setActionsOpen] = useState(false);
+
   return (
     <article className={`item-card ${owned ?? ''} ${checked ? 'checked' : ''}`}>
       <button className="state-button" aria-label={`Change status for ${item.name}`} onClick={onOwned}>
         {owned === 'owned' ? <Check size={17} /> : owned === 'missing' ? <X size={17} /> : null}
       </button>
-      <button className="item-body" onClick={onChecked}>
+      <div className="item-body">
+        <button className="item-title-button" onClick={onChecked}>
         <strong>{item.name}</strong>
         <span className="item-meta-row">
           <span>{item.meta2 || item.meta || 'Dreamlight Valley'}</span>
@@ -723,21 +929,38 @@ function ItemCard({
             </span>
           )}
         </span>
-        {ingredients.length > 0 && (
+        </button>
+        {ingredients.length > 0 && !expanded && (
+          <button className="ingredient-summary" onClick={() => setExpanded(true)}>
+            {ingredients.length} ingredient{ingredients.length === 1 ? '' : 's'}
+            <ChevronDown size={15} />
+          </button>
+        )}
+        {ingredients.length > 0 && expanded && (
           <span className="ingredient-preview" aria-label={`Recipe: ${ingredients.join(', ')}`}>
             {ingredients.map((ingredient, index) => (
               <i key={`${ingredient}-${index}`}>{ingredient}</i>
             ))}
+            <button className="ingredient-collapse" aria-label="Collapse ingredients" onClick={() => setExpanded(false)}>
+              <ChevronDown className="rotate" size={15} />
+            </button>
           </span>
         )}
-      </button>
-      <div className="item-actions">
-        <button className="mini-button" aria-label={`Edit ${item.name}`} onClick={onEdit}>
-          <Edit3 size={16} />
+      </div>
+      <div className={`item-actions ${actionsOpen ? 'open' : ''}`}>
+        <button className="mini-button item-menu-button" aria-label={`Actions for ${item.name}`} onClick={() => setActionsOpen(!actionsOpen)}>
+          <MoreHorizontal size={17} />
         </button>
-        <button className="mini-button danger" aria-label={`Delete ${item.name}`} onClick={onDelete}>
-          <Trash2 size={16} />
-        </button>
+        {actionsOpen && (
+          <>
+            <button className="mini-button" aria-label={`Edit ${item.name}`} onClick={onEdit}>
+              <Edit3 size={16} />
+            </button>
+            <button className="mini-button danger" aria-label={`Delete ${item.name}`} onClick={onDelete}>
+              <Trash2 size={16} />
+            </button>
+          </>
+        )}
       </div>
     </article>
   );
@@ -748,11 +971,13 @@ function HomeView({
   activeZone,
   totalProgress,
   onOpenCategory,
+  onQuickOpen,
 }: {
   save: SavePayload;
   activeZone: ActiveZone;
   totalProgress: { done: number; total: number; percent: number };
   onOpenCategory: (categoryId: CategoryId) => void;
+  onQuickOpen: (categoryId: CategoryId, status: FilterState['status'], rating?: StarFilter) => void;
 }) {
   const missing = totalProgress.total - totalProgress.done;
   const missingMarked = CATEGORIES.reduce(
@@ -788,6 +1013,24 @@ function HomeView({
           <span>{missingMarked}</span>
           <p>Marked missing</p>
         </div>
+      </section>
+
+      <section className="quick-access" aria-label="Quick access">
+        <button onClick={() => onQuickOpen('meals', 'all', 5)}>
+          <span>★</span>
+          <strong>5-star meals</strong>
+          <small>Open the best recipes</small>
+        </button>
+        <button onClick={() => onQuickOpen('furniture', 'missing')}>
+          <X size={18} />
+          <strong>Missing furniture</strong>
+          <small>Continue your collection</small>
+        </button>
+        <button onClick={() => onQuickOpen('crafting', 'all')}>
+          <ChevronDown size={18} />
+          <strong>Crafting categories</strong>
+          <small>Jump to a TAG 1 group</small>
+        </button>
       </section>
 
       <section className="collection-group">
@@ -1033,6 +1276,37 @@ function getDataPathFromFilename(filename: string): string {
   return 'public/data.json';
 }
 
+function readNavigationState(): { activeView: ActiveView; activeZone: ActiveZone; activeGroup: string } {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(NAV_STORAGE_KEY) ?? '{}') as Partial<{
+      activeView: ActiveView;
+      activeZone: ActiveZone;
+      activeGroup: string;
+    }>;
+    const requestedView = parsed.activeView;
+    const requestedZone = parsed.activeZone;
+    const activeView: ActiveView = requestedView && (
+      requestedView === 'home' || CATEGORIES.some(({ id }) => id === requestedView)
+    )
+      ? requestedView
+      : 'home';
+    const activeZone: ActiveZone = requestedZone && ZONES.some(({ value }) => value === requestedZone)
+      ? requestedZone
+      : 'all';
+    return { activeView, activeZone, activeGroup: parsed.activeGroup || 'all' };
+  } catch {
+    return { activeView: 'home', activeZone: 'all', activeGroup: 'all' };
+  }
+}
+
+function readScrollPositions(): Record<string, number> {
+  try {
+    return JSON.parse(sessionStorage.getItem(`${NAV_STORAGE_KEY}:scroll`) ?? '{}') as Record<string, number>;
+  } catch {
+    return {};
+  }
+}
+
 function encodeGithubContent(content: string): string {
   return btoa(unescape(encodeURIComponent(content)));
 }
@@ -1113,4 +1387,5 @@ function getTotalProgress(save: SavePayload | null, zone: ActiveZone = 'all') {
   const total = entries.length;
   return { done, total, percent: total ? (done / total) * 100 : 0 };
 }
+
 
