@@ -115,12 +115,18 @@ export function App() {
     updateSave(next);
   }
 
-  function updateItem(updatedItem: GameItem) {
+  function updateItem(updatedItem: GameItem, ingredients?: string[]) {
     if (!save || activeView === 'home') return;
     const next = structuredClone(save);
     next.data[activeView] = (next.data[activeView] ?? []).map((item) =>
       item.id === updatedItem.id ? { ...item, ...updatedItem } : item,
     );
+    if (activeView === 'crafting' || activeView === 'meals') {
+      next.ingredients[activeView] ??= {};
+      const cleanedIngredients = (ingredients ?? []).map((ingredient) => ingredient.trim()).filter(Boolean);
+      if (cleanedIngredients.length) next.ingredients[activeView]![updatedItem.id] = cleanedIngredients;
+      else delete next.ingredients[activeView]![updatedItem.id];
+    }
     updateSave(next);
     setEditingItem(null);
   }
@@ -336,7 +342,9 @@ export function App() {
       {editingItem && activeView !== 'home' && (
         <EditSheet
           item={editingItem}
+          categoryId={activeView}
           categoryLabel={categoryById[activeView].label}
+          initialIngredients={save.ingredients[activeView]?.[editingItem.id] ?? []}
           onClose={() => setEditingItem(null)}
           onSave={updateItem}
         />
@@ -379,6 +387,7 @@ function NestedAccordions({
             item={item}
             owned={save.owned[categoryId]?.[item.id]}
             checked={!!save.checked[categoryId]?.[item.id]}
+            ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
             onOwned={() => onOwned(item)}
             onChecked={() => onChecked(item)}
             onEdit={() => onEdit(item)}
@@ -660,6 +669,7 @@ function ItemCards({
           item={item}
           owned={save.owned[categoryId]?.[item.id]}
           checked={!!save.checked[categoryId]?.[item.id]}
+          ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
           onOwned={() => onOwned(item)}
           onChecked={() => onChecked(item)}
           onEdit={() => onEdit(item)}
@@ -674,6 +684,7 @@ function ItemCard({
   item,
   owned,
   checked,
+  ingredients,
   onOwned,
   onChecked,
   onEdit,
@@ -682,6 +693,7 @@ function ItemCard({
   item: GameItem;
   owned?: 'owned' | 'missing';
   checked: boolean;
+  ingredients: string[];
   onOwned: () => void;
   onChecked: () => void;
   onEdit: () => void;
@@ -695,6 +707,13 @@ function ItemCard({
       <button className="item-body" onClick={onChecked}>
         <strong>{item.name}</strong>
         <span>{item.meta2 || item.meta || 'Dreamlight Valley'}</span>
+        {ingredients.length > 0 && (
+          <span className="ingredient-preview" aria-label={`Recipe: ${ingredients.join(', ')}`}>
+            {ingredients.map((ingredient, index) => (
+              <i key={`${ingredient}-${index}`}>{ingredient}</i>
+            ))}
+          </span>
+        )}
       </button>
       <div className="item-actions">
         <button className="mini-button" aria-label={`Edit ${item.name}`} onClick={onEdit}>
@@ -777,20 +796,37 @@ function HomeView({
 
 function EditSheet({
   item,
+  categoryId,
   categoryLabel,
+  initialIngredients,
   onClose,
   onSave,
 }: {
   item: GameItem;
+  categoryId: CategoryId;
   categoryLabel: string;
+  initialIngredients: string[];
   onClose: () => void;
-  onSave: (item: GameItem) => void;
+  onSave: (item: GameItem, ingredients?: string[]) => void;
 }) {
   const [draft, setDraft] = useState<GameItem>(item);
+  const [ingredients, setIngredients] = useState<string[]>(initialIngredients);
+  const supportsRecipe = categoryId === 'crafting' || categoryId === 'meals';
 
   useEffect(() => {
     setDraft(item);
-  }, [item]);
+    setIngredients(initialIngredients);
+  }, [item, initialIngredients]);
+
+  function updateIngredient(index: number, value: string) {
+    setIngredients((current) => current.map((ingredient, ingredientIndex) =>
+      ingredientIndex === index ? value : ingredient,
+    ));
+  }
+
+  function removeIngredient(index: number) {
+    setIngredients((current) => current.filter((_, ingredientIndex) => ingredientIndex !== index));
+  }
 
   return (
     <aside className="sheet" role="dialog" aria-modal="true" aria-label={`Edit ${item.name}`}>
@@ -798,7 +834,7 @@ function EditSheet({
         className="sheet-card edit-form"
         onSubmit={(event) => {
           event.preventDefault();
-          if (draft.name.trim()) onSave({ ...draft, name: draft.name.trim() });
+          if (draft.name.trim()) onSave({ ...draft, name: draft.name.trim() }, supportsRecipe ? ingredients : undefined);
         }}
       >
         <div className="sheet-head">
@@ -822,6 +858,61 @@ function EditSheet({
           <span>Universe / zone</span>
           <input value={draft.meta2 ?? ''} onChange={(event) => setDraft({ ...draft, meta2: event.target.value })} />
         </label>
+        {supportsRecipe && (
+          <fieldset className="recipe-editor">
+            <div className="recipe-editor-head">
+              <div>
+                <legend>Recipe ingredients</legend>
+                <small>Add one ingredient per line.</small>
+              </div>
+              <button
+                type="button"
+                className="ingredient-add-button"
+                onClick={() => setIngredients((current) => [...current, ''])}
+              >
+                <Plus size={16} />
+                Add ingredient
+              </button>
+            </div>
+            <div className="ingredient-fields">
+              {ingredients.length === 0 && (
+                <button
+                  type="button"
+                  className="recipe-empty-state"
+                  onClick={() => setIngredients([''])}
+                >
+                  <Plus size={18} />
+                  Add the first ingredient
+                </button>
+              )}
+              {ingredients.map((ingredient, index) => (
+                <div className="ingredient-field" key={index}>
+                  <span>{index + 1}</span>
+                  <input
+                    aria-label={`Ingredient ${index + 1}`}
+                    value={ingredient}
+                    onChange={(event) => updateIngredient(index, event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        event.preventDefault();
+                        setIngredients((current) => [...current, '']);
+                      }
+                    }}
+                    placeholder="Ingredient name"
+                    autoFocus={index === ingredients.length - 1 && !ingredient}
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Remove ingredient ${index + 1}`}
+                    onClick={() => removeIngredient(index)}
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </fieldset>
+        )}
         <button className="action-button primary" type="submit">
           <Save size={18} />
           Save changes
@@ -1006,3 +1097,4 @@ function getTotalProgress(save: SavePayload | null, zone: ActiveZone = 'all') {
   const total = entries.length;
   return { done, total, percent: total ? (done / total) * 100 : 0 };
 }
+
