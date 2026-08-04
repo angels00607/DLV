@@ -673,6 +673,10 @@ h1 {
   background: var(--surface-strong);
 }
 
+.item-card:has(.ingredient-preview) {
+  align-items: start;
+}
+
 .item-actions {
   display: flex;
   gap: 5px;
@@ -754,6 +758,30 @@ h1 {
   font-size: 0.76rem;
 }
 
+.item-body .ingredient-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  overflow: visible;
+  white-space: normal;
+  margin-top: 3px;
+}
+
+.ingredient-preview i {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 4px 8px;
+  border: 1px solid rgba(109, 79, 143, 0.14);
+  border-radius: 999px;
+  background: rgba(185, 165, 239, 0.14);
+  color: var(--plum);
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 720;
+  line-height: 1.2;
+}
+
 .sheet {
   position: fixed;
   inset: 0;
@@ -831,6 +859,106 @@ h1 {
 .edit-form input:focus {
   border-color: rgba(109, 79, 143, 0.5);
   background: white;
+}
+
+.recipe-editor {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+  margin: 4px 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(185, 165, 239, 0.12), rgba(255, 255, 255, 0.75));
+}
+
+.recipe-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.recipe-editor legend {
+  padding: 0;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 830;
+}
+
+.recipe-editor small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.ingredient-add-button,
+.recipe-empty-state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid rgba(109, 79, 143, 0.2);
+  color: var(--plum);
+  font-weight: 780;
+}
+
+.ingredient-add-button {
+  min-height: 38px;
+  flex: 0 0 auto;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: white;
+}
+
+.ingredient-fields {
+  display: grid;
+  gap: 8px;
+}
+
+.ingredient-field {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 7px;
+}
+
+.ingredient-field > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(109, 79, 143, 0.12);
+  color: var(--plum);
+  font-size: 0.72rem;
+  font-weight: 820;
+}
+
+.edit-form .ingredient-field input {
+  height: 42px;
+  border-radius: 13px;
+  background: white;
+}
+
+.ingredient-field > button {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(206, 93, 113, 0.1);
+  color: var(--danger);
+}
+
+.recipe-empty-state {
+  width: 100%;
+  min-height: 48px;
+  border-style: dashed;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.65);
 }
 
 .github-sheet {
@@ -1031,6 +1159,15 @@ h1 {
     justify-content: flex-end;
   }
 
+  .recipe-editor-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ingredient-add-button {
+    width: 100%;
+  }
+
   .home-hero {
     align-items: flex-start;
     padding: 18px;
@@ -1085,3 +1222,4 @@ h1 {
     font-size: 0.9rem;
   }
 }
+
