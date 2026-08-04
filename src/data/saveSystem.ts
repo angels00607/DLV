@@ -2,6 +2,8 @@ import { CATEGORIES } from '../domain/categories';
 import type { CategoryId, GameItem, SavePayload } from '../domain/types';
 
 export const STORAGE_KEY = 'dlv_guide_v6';
+const DEFAULT_DATA_REVISION_KEY = 'dlv_default_data_revision';
+const DEFAULT_DATA_REVISION = '2026-08-05-wishblossom-furniture-recipes';
 const EMPTY_SAVE: SavePayload = {
   data: {},
   checked: {},
@@ -15,7 +17,17 @@ function cloneSave(payload: SavePayload): SavePayload {
   return JSON.parse(JSON.stringify(payload)) as SavePayload;
 }
 
-function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>): SavePayload {
+function persistDefaultDataRevision(): void {
+  try {
+    localStorage.setItem(DEFAULT_DATA_REVISION_KEY, DEFAULT_DATA_REVISION);
+  } catch {}
+}
+
+function ensureCategoryShape(
+  save: SavePayload,
+  defaults: Partial<SavePayload>,
+  refreshDefaultData = false,
+): SavePayload {
   const next = cloneSave(save);
   const defaultData = defaults.data ?? {};
   const defaultOwned = defaults.owned ?? {};
@@ -31,13 +43,22 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
 
     const localItems = next.data[id] ?? [];
     const localById = new Map(localItems.map((item) => [item.id, item]));
+    const refreshedIngredientIds = new Set<string>();
 
     for (const item of defaultData[id] ?? []) {
+      const refreshWishblossomFurniture =
+        refreshDefaultData &&
+        id === 'crafting' &&
+        item.meta === 'FURNITURE' &&
+        item.meta2 === 'WISHBLOSSOM MOUNTAINS';
+      if (refreshWishblossomFurniture) refreshedIngredientIds.add(String(item.id));
+
       if (!localById.has(item.id) && !next.deletedIds[id]?.[item.id]) {
         localItems.push({ ...item });
       } else {
         const existing = localById.get(item.id);
         if (existing) {
+          if (refreshWishblossomFurniture) existing.meta = item.meta ?? existing.meta ?? '';
           existing.meta2 = item.meta2 ?? existing.meta2 ?? '';
           existing.stars = item.stars ?? existing.stars;
         }
@@ -53,7 +74,9 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     }
 
     for (const [itemId, value] of Object.entries(defaultIngredients[id] ?? {})) {
-      if (!next.ingredients[id]?.[itemId]) next.ingredients[id]![itemId] = value;
+      if (refreshedIngredientIds.has(itemId) || !next.ingredients[id]?.[itemId]) {
+        next.ingredients[id]![itemId] = value;
+      }
     }
 
     next.data[id] = sortCatItems(id, localItems);
@@ -65,10 +88,15 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
 
 export function loadSave(defaults: Partial<SavePayload>): SavePayload {
   try {
+    const refreshDefaultData = localStorage.getItem(DEFAULT_DATA_REVISION_KEY) !== DEFAULT_DATA_REVISION;
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return ensureCategoryShape(EMPTY_SAVE, defaults);
+    if (!raw) {
+      const save = ensureCategoryShape(EMPTY_SAVE, defaults, refreshDefaultData);
+      persistDefaultDataRevision();
+      return save;
+    }
     const parsed = JSON.parse(raw) as Partial<SavePayload>;
-    return ensureCategoryShape(
+    const save = ensureCategoryShape(
       {
         data: parsed.data ?? {},
         checked: parsed.checked ?? {},
@@ -78,7 +106,10 @@ export function loadSave(defaults: Partial<SavePayload>): SavePayload {
         deletedIds: parsed.deletedIds ?? {},
       },
       defaults,
+      refreshDefaultData,
     );
+    persistDefaultDataRevision();
+    return save;
   } catch {
     return ensureCategoryShape(EMPTY_SAVE, defaults);
   }
