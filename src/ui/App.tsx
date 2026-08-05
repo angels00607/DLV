@@ -312,6 +312,17 @@ export function App() {
             </button>
           </div>
 
+          <section className="add-item-panel" aria-label={`Add an item to ${currentCategory.label}`}>
+            <div className="add-item-panel-heading">
+              <div>
+                <p>Add an item</p>
+                <small>{currentCategory.label} · {formatZoneLabel(activeZone)}</small>
+              </div>
+              <Plus size={18} aria-hidden="true" />
+            </div>
+            <AddItemRow category={currentCategory.label} activeZone={activeZone} onAdd={addItem} />
+          </section>
+
           <SubcategoryGrid
             groups={groupedItems}
             activeGroup={activeGroup}
@@ -388,7 +399,6 @@ export function App() {
               </div>
             </div>
           )}
-          <AddItemRow category={currentCategory.label} activeZone={activeZone} onAdd={addItem} />
         </ChoiceSheet>
       )}
 
