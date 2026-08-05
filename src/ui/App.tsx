@@ -660,22 +660,28 @@ function AlphabeticalCollection({
   const totalPages = Math.max(1, Math.ceil(wordItems.length / PAGE_SIZE));
   const visiblePage = wordItems.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
+  function focusBrowser() {
+    requestAnimationFrame(() =>
+      document.getElementById(`collection-browser-${categoryId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    );
+  }
+
   function chooseLetter(letter: string) {
     setSelectedLetter(letter);
     setSelectedWord(null);
     setPage(0);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    focusBrowser();
   }
 
   function chooseWord(word: string) {
     setSelectedWord(word);
     setPage(0);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    focusBrowser();
   }
 
   if (!selectedLetter) {
     return (
-      <section className="drill-browser" aria-label="Choose a letter">
+      <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label="Choose a letter">
         <div className="drill-heading">
           <div><p>Browse alphabetically</p><h3>Choose a letter</h3></div>
           <small>{items.length} items</small>
@@ -694,7 +700,7 @@ function AlphabeticalCollection({
 
   if (!selectedWord) {
     return (
-      <section className="drill-browser" aria-label={`Words beginning with ${selectedLetter}`}>
+      <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label={`Words beginning with ${selectedLetter}`}>
         <div className="drill-heading">
           <button className="drill-back" onClick={() => setSelectedLetter(null)} aria-label="Back to letters">‹</button>
           <div><p>Letter {selectedLetter}</p><h3>Choose the first word</h3></div>
@@ -714,7 +720,7 @@ function AlphabeticalCollection({
   }
 
   return (
-    <section className="drill-browser" aria-label={`${selectedWord} items`}>
+    <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label={`${selectedWord} items`}>
       <div className="drill-heading">
         <button className="drill-back" onClick={() => { setSelectedWord(null); setPage(0); }} aria-label="Back to first words">‹</button>
         <div><p>{selectedLetter} / First word</p><h3>{selectedWord}</h3></div>
@@ -738,9 +744,9 @@ function AlphabeticalCollection({
       </div>
       {totalPages > 1 && (
         <nav className="pagination" aria-label={`Pages for ${selectedWord}`}>
-          <button disabled={page === 0} onClick={() => { setPage(page - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>‹ Previous</button>
+          <button disabled={page === 0} onClick={() => { setPage(page - 1); focusBrowser(); }}>‹ Previous</button>
           <span>Page {page + 1} of {totalPages}</span>
-          <button disabled={page + 1 >= totalPages} onClick={() => { setPage(page + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Next ›</button>
+          <button disabled={page + 1 >= totalPages} onClick={() => { setPage(page + 1); focusBrowser(); }}>Next ›</button>
         </nav>
       )}
     </section>
