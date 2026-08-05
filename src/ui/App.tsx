@@ -776,11 +776,10 @@ function AlphabeticalCollection({
       {isWordPickerOpen && (
         <ChoiceSheet title={`Groups in ${selectedLetter}`} onClose={() => setWordPickerOpen(false)}>
           {wordGroups.map(([word, groupedItems]) => (
-            <button className={`choice-row ${word === selectedWord ? 'active' : ''}`} key={word} onClick={() => chooseWord(word)}>
+            <button className={`choice-row word-choice-row ${word === selectedWord ? 'active' : ''}`} key={word} onClick={() => chooseWord(word)}>
               <span>{word}</span>
               <small>{groupedItems.length} items</small>
-              <span />
-              {word === selectedWord && <Check size={17} />}
+              {word === selectedWord ? <Check size={17} /> : <span />}
             </button>
           ))}
         </ChoiceSheet>
