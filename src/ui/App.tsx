@@ -20,6 +20,7 @@ import {
 import { CATEGORIES, categoryById } from '../domain/categories';
 import type { CategoryId, FilterState, GameItem, SavePayload } from '../domain/types';
 import { fetchDefaultData } from '../data/defaultData';
+import { INGREDIENT_OPTIONS } from '../data/ingredientOptions';
 import { downloadSave, readImportedFile } from '../data/manualImport';
 import { buildPortableData, getNextId, loadSave, mergeImportedSave, persistSave } from '../data/saveSystem';
 import { normalizeText } from '../lib/text';
@@ -1138,6 +1139,8 @@ function EditSheet({
 }) {
   const [draft, setDraft] = useState<GameItem>(item);
   const [ingredients, setIngredients] = useState<string[]>(initialIngredients);
+  const [focusedIngredient, setFocusedIngredient] = useState<number | null>(null);
+  const [highlightedSuggestion, setHighlightedSuggestion] = useState(0);
 
   useEffect(() => {
     setDraft(item);
@@ -1152,6 +1155,13 @@ function EditSheet({
 
   function removeIngredient(index: number) {
     setIngredients((current) => current.filter((_, ingredientIndex) => ingredientIndex !== index));
+    setFocusedIngredient(null);
+  }
+
+  function selectIngredient(index: number, ingredient: string) {
+    updateIngredient(index, ingredient);
+    setFocusedIngredient(null);
+    setHighlightedSuggestion(0);
   }
 
   return (
@@ -1211,32 +1221,85 @@ function EditSheet({
                   Add the first ingredient
                 </button>
               )}
-              {ingredients.map((ingredient, index) => (
-                <div className="ingredient-field" key={index}>
-                  <span>{index + 1}</span>
-                  <input
-                    aria-label={`Ingredient ${index + 1}`}
-                    autoCapitalize="words"
-                    value={ingredient}
-                    onChange={(event) => updateIngredient(index, event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        event.preventDefault();
-                        setIngredients((current) => [...current, '']);
-                      }
-                    }}
-                    placeholder="Ingredient name"
-                    autoFocus={index === ingredients.length - 1 && !ingredient}
-                  />
-                  <button
-                    type="button"
-                    aria-label={`Remove ingredient ${index + 1}`}
-                    onClick={() => removeIngredient(index)}
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-              ))}
+              {ingredients.map((ingredient, index) => {
+                const suggestions = focusedIngredient === index
+                  ? getIngredientSuggestions(ingredient)
+                  : [];
+                const suggestionListId = `ingredient-suggestions-${index}`;
+                return (
+                  <div className="ingredient-autocomplete" key={index}>
+                    <div className="ingredient-field">
+                      <span>{index + 1}</span>
+                      <input
+                        role="combobox"
+                        aria-label={`Ingredient ${index + 1}`}
+                        aria-autocomplete="list"
+                        aria-expanded={suggestions.length > 0}
+                        aria-controls={suggestions.length > 0 ? suggestionListId : undefined}
+                        autoCapitalize="words"
+                        autoComplete="off"
+                        value={ingredient}
+                        onFocus={() => {
+                          setFocusedIngredient(index);
+                          setHighlightedSuggestion(0);
+                        }}
+                        onBlur={() => window.setTimeout(() => setFocusedIngredient(null), 150)}
+                        onChange={(event) => {
+                          updateIngredient(index, event.target.value);
+                          setFocusedIngredient(index);
+                          setHighlightedSuggestion(0);
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Escape') setFocusedIngredient(null);
+                          if (event.key === 'ArrowDown' && suggestions.length > 0) {
+                            event.preventDefault();
+                            setHighlightedSuggestion((current) => Math.min(current + 1, suggestions.length - 1));
+                          }
+                          if (event.key === 'ArrowUp' && suggestions.length > 0) {
+                            event.preventDefault();
+                            setHighlightedSuggestion((current) => Math.max(current - 1, 0));
+                          }
+                          if (event.key === 'Enter') {
+                            event.preventDefault();
+                            if (suggestions.length > 0) {
+                              selectIngredient(index, suggestions[highlightedSuggestion] ?? suggestions[0]);
+                            } else {
+                              setIngredients((current) => [...current, '']);
+                              setFocusedIngredient(null);
+                            }
+                          }
+                        }}
+                        placeholder="Ingredient name"
+                        autoFocus={index === ingredients.length - 1 && !ingredient}
+                      />
+                      <button
+                        type="button"
+                        aria-label={`Remove ingredient ${index + 1}`}
+                        onClick={() => removeIngredient(index)}
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    {suggestions.length > 0 && (
+                      <div className="ingredient-suggestions" id={suggestionListId} role="listbox">
+                        {suggestions.map((suggestion, suggestionIndex) => (
+                          <button
+                            type="button"
+                            role="option"
+                            className={suggestionIndex === highlightedSuggestion ? 'active' : ''}
+                            aria-selected={suggestionIndex === highlightedSuggestion}
+                            key={suggestion}
+                            onPointerDown={(event) => event.preventDefault()}
+                            onClick={() => selectIngredient(index, suggestion)}
+                          >
+                            {suggestion}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </fieldset>
         )}
@@ -1247,6 +1310,26 @@ function EditSheet({
       </form>
     </aside>
   );
+}
+
+function getIngredientSuggestions(value: string): string[] {
+  const query = normalizeText(value.trim());
+  if (!query) return [];
+
+  return INGREDIENT_OPTIONS
+    .map((ingredient) => ({
+      ingredient,
+      normalized: normalizeText(ingredient),
+    }))
+    .filter(({ normalized }) => normalized.includes(query))
+    .sort((optionA, optionB) => {
+      const startsA = optionA.normalized.startsWith(query);
+      const startsB = optionB.normalized.startsWith(query);
+      if (startsA !== startsB) return startsA ? -1 : 1;
+      return optionA.ingredient.localeCompare(optionB.ingredient);
+    })
+    .slice(0, 8)
+    .map(({ ingredient }) => ingredient);
 }
 
 function Chip({ active, children, onClick }: { active: boolean; children: React.ReactNode; onClick: () => void }) {
