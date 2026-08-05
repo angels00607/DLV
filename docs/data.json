@@ -14993,7 +14993,7 @@
       },
       {
         "id": 3373,
-        "name": "BallOOn Family BOuquet",
+        "name": "Balloon Family BOuquet",
         "meta": "GENERAL",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -38060,13 +38060,13 @@
       },
       {
         "id": 1071,
-        "name": "Blue, Yellow and Pink Balloon Arch",
+        "name": "Blue Yellow and Pink Balloon Arch",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 1072,
-        "name": "Blue, Yellow and Pink Balloon Cluster",
+        "name": "Blue Yellow and Pink Balloon Cluster",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -38414,13 +38414,13 @@
       },
       {
         "id": 1346,
-        "name": "Green, Yellow and White Balloon Arch",
+        "name": "Green Yellow and White Balloon Arch",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 1347,
-        "name": "Green, Yellow and White Balloon Cluster",
+        "name": "Green Yellow and White Balloon Cluster",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -43347,6 +43347,7 @@
       "1068": "owned",
       "1069": "owned",
       "1070": "owned",
+      "1071": "owned",
       "1077": "owned",
       "1078": "owned",
       "1079": "owned",
@@ -48346,9 +48347,7 @@
     "clothing": {},
     "furniture": {},
     "meals": {},
-    "crafting": {
-      "1497": true
-    }
+    "crafting": {}
   },
-  "savedAt": "2026-08-05T08:46:53.117Z"
+  "savedAt": "2026-08-05T10:30:20.225Z"
 }
