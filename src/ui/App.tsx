@@ -40,6 +40,7 @@ type ActiveZone =
   | 'STORYBOOK VALE'
   | 'WISHBLOSSOM MOUNTAINS';
 const DIRECT_RENDER_LIMIT = 6;
+const ALPHABETICAL_NAV_LIMIT = 25;
 const GH_STORAGE_KEY = 'dlv_gh_config';
 const NAV_STORAGE_KEY = 'dlv_iphone_nav_v1';
 type StarFilter = 'all' | 1 | 2 | 3 | 4 | 5;
@@ -651,6 +652,20 @@ function AlphabeticalCollection({
   }, [items]);
 
   if (!letters.length) return <div className="empty-collection">No items match these filters.</div>;
+
+  if (items.length <= ALPHABETICAL_NAV_LIMIT) {
+    return (
+      <ItemCards
+        categoryId={categoryId}
+        items={items}
+        save={save}
+        onOwned={onOwned}
+        onChecked={onChecked}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+    );
+  }
 
   const letterItems = selectedLetter
     ? letters.find(([letter]) => letter === selectedLetter)?.[1] ?? []
