@@ -636,42 +636,130 @@ function AlphabeticalCollection({
   onEdit: (item: GameItem) => void;
   onDelete: (item: GameItem) => void;
 }) {
+  const PAGE_SIZE = 12;
   const letters = buildLetterGroups(items);
+  const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
+  const [selectedWord, setSelectedWord] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    setSelectedLetter(null);
+    setSelectedWord(null);
+    setPage(0);
+  }, [items]);
+
   if (!letters.length) return <div className="empty-collection">No items match these filters.</div>;
+
+  const letterItems = selectedLetter
+    ? letters.find(([letter]) => letter === selectedLetter)?.[1] ?? []
+    : [];
+  const wordGroups = buildFirstWordGroups(letterItems);
+  const wordItems = selectedWord
+    ? wordGroups.find(([word]) => word === selectedWord)?.[1] ?? []
+    : [];
+  const totalPages = Math.max(1, Math.ceil(wordItems.length / PAGE_SIZE));
+  const visiblePage = wordItems.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+
+  function focusBrowser() {
+    requestAnimationFrame(() =>
+      document.getElementById(`collection-browser-${categoryId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    );
+  }
+
+  function chooseLetter(letter: string) {
+    setSelectedLetter(letter);
+    setSelectedWord(null);
+    setPage(0);
+    focusBrowser();
+  }
+
+  function chooseWord(word: string) {
+    setSelectedWord(word);
+    setPage(0);
+    focusBrowser();
+  }
+
+  if (!selectedLetter) {
+    return (
+      <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label="Choose a letter">
+        <div className="drill-heading">
+          <div><p>Browse alphabetically</p><h3>Choose a letter</h3></div>
+          <small>{items.length} items</small>
+        </div>
+        <div className="letter-tile-grid">
+          {letters.map(([letter, letterGroup]) => (
+            <button key={letter} onClick={() => chooseLetter(letter)}>
+              <strong>{letter}</strong>
+              <span>{letterGroup.length}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (!selectedWord) {
+    return (
+      <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label={`Words beginning with ${selectedLetter}`}>
+        <div className="drill-heading">
+          <button className="drill-back" onClick={() => setSelectedLetter(null)} aria-label="Back to letters">‹</button>
+          <div><p>Letter {selectedLetter}</p><h3>Choose the first word</h3></div>
+          <small>{letterItems.length} items</small>
+        </div>
+        <div className="word-tile-grid">
+          {wordGroups.map(([word, groupedWordItems]) => (
+            <button key={word} onClick={() => chooseWord(word)}>
+              <strong>{word}</strong>
+              <span>{groupedWordItems.length} item{groupedWordItems.length === 1 ? '' : 's'}</span>
+              {groupedWordItems.length > PAGE_SIZE && <small>{Math.ceil(groupedWordItems.length / PAGE_SIZE)} pages</small>}
+            </button>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <div className="alphabetical-browser">
-      <div className="alphabetical-list">
-        {letters.map(([letter, letterItems]) => (
-          <section className="alphabet-section" id={`letter-${categoryId}-${letter}`} key={letter}>
-            <header><span>{letter}</span><small>{letterItems.length} items</small></header>
-            <div className="item-grid">
-              {letterItems.map((item) => (
-                <ItemCard
-                  key={item.id}
-                  item={item}
-                  owned={save.owned[categoryId]?.[item.id]}
-                  checked={!!save.checked[categoryId]?.[item.id]}
-                  ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
-                  stars={categoryId === 'meals' ? item.stars : undefined}
-                  onOwned={() => onOwned(item)}
-                  onChecked={() => onChecked(item)}
-                  onEdit={() => onEdit(item)}
-                  onDelete={() => onDelete(item)}
-                />
-              ))}
-            </div>
-          </section>
+    <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label={`${selectedWord} items`}>
+      <div className="drill-heading">
+        <button className="drill-back" onClick={() => { setSelectedWord(null); setPage(0); }} aria-label="Back to first words">‹</button>
+        <div><p>{selectedLetter} / First word</p><h3>{selectedWord}</h3></div>
+        <small>{wordItems.length} items</small>
+      </div>
+      <div className="item-grid paged-item-grid">
+        {visiblePage.map((item) => (
+          <ItemCard
+            key={item.id}
+            item={item}
+            owned={save.owned[categoryId]?.[item.id]}
+            checked={!!save.checked[categoryId]?.[item.id]}
+            ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
+            stars={categoryId === 'meals' ? item.stars : undefined}
+            onOwned={() => onOwned(item)}
+            onChecked={() => onChecked(item)}
+            onEdit={() => onEdit(item)}
+            onDelete={() => onDelete(item)}
+          />
         ))}
       </div>
-      <nav className="alphabet-rail" aria-label="Alphabetical index">
-        {letters.map(([letter]) => (
-          <button key={letter} onClick={() => document.getElementById(`letter-${categoryId}-${letter}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-            {letter}
-          </button>
-        ))}
-      </nav>
-    </div>
+      {totalPages > 1 && (
+        <nav className="pagination" aria-label={`Pages for ${selectedWord}`}>
+          <button disabled={page === 0} onClick={() => { setPage(page - 1); focusBrowser(); }}>‹ Previous</button>
+          <span>Page {page + 1} of {totalPages}</span>
+          <button disabled={page + 1 >= totalPages} onClick={() => { setPage(page + 1); focusBrowser(); }}>Next ›</button>
+        </nav>
+      )}
+    </section>
   );
+}
+
+function buildFirstWordGroups(items: GameItem[]): Array<[string, GameItem[]]> {
+  const groups = new Map<string, GameItem[]>();
+  for (const item of items) {
+    const firstWord = item.name.trim().split(/\s+/)[0]?.replace(/^["'“”]+|["'“”]+$/g, '') || 'Other';
+    groups.set(firstWord, [...(groups.get(firstWord) ?? []), item]);
+  }
+  return Array.from(groups.entries()).sort(([wordA], [wordB]) => wordA.localeCompare(wordB));
 }
 
 function AddItemRow({
