@@ -996,7 +996,6 @@ function ItemCard({
   onEdit: () => void;
   onDelete: () => void;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
 
   return (
@@ -1018,20 +1017,11 @@ function ItemCard({
           )}
         </span>
         </button>
-        {ingredients.length > 0 && !expanded && (
-          <button className="ingredient-summary" onClick={() => setExpanded(true)}>
-            {ingredients.length} ingredient{ingredients.length === 1 ? '' : 's'}
-            <ChevronDown size={15} />
-          </button>
-        )}
-        {ingredients.length > 0 && expanded && (
+        {ingredients.length > 0 && (
           <span className="ingredient-preview" aria-label={`Recipe: ${ingredients.join(', ')}`}>
             {ingredients.map((ingredient, index) => (
               <i key={`${ingredient}-${index}`}>{ingredient}</i>
             ))}
-            <button className="ingredient-collapse" aria-label="Collapse ingredients" onClick={() => setExpanded(false)}>
-              <ChevronDown className="rotate" size={15} />
-            </button>
           </span>
         )}
       </div>
