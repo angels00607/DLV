@@ -1371,53 +1371,6 @@ h1 {
   font-weight: 760;
 }
 
-.subcategory-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9px;
-}
-
-.subcategory-grid button {
-  min-width: 0;
-  min-height: 116px;
-  display: grid;
-  align-content: start;
-  gap: 5px;
-  padding: 13px;
-  border: 1px solid rgba(98, 74, 139, 0.12);
-  border-radius: 18px;
-  background: linear-gradient(145deg, var(--surface-strong), rgba(185, 165, 239, 0.12));
-  color: var(--ink);
-  text-align: left;
-}
-
-.subcategory-grid strong {
-  overflow-wrap: anywhere;
-  font-size: 0.9rem;
-  line-height: 1.2;
-}
-
-.subcategory-grid span,
-.subcategory-grid small {
-  color: var(--muted);
-  font-size: 0.7rem;
-}
-
-.subcategory-grid i {
-  height: 5px;
-  margin-top: auto;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(109, 79, 143, 0.11);
-}
-
-.subcategory-grid b {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--orchid);
-}
-
 .alphabetical-browser {
   position: relative;
   padding-right: 22px;
@@ -1604,39 +1557,6 @@ h1 {
   background: transparent;
 }
 
-.quick-access {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin: 12px 0;
-}
-
-.quick-access button {
-  min-width: 0;
-  min-height: 106px;
-  display: grid;
-  align-content: start;
-  gap: 5px;
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 17px;
-  background: var(--surface-strong);
-  color: var(--plum);
-  text-align: left;
-}
-
-.quick-access strong {
-  color: var(--ink);
-  font-size: 0.8rem;
-  line-height: 1.2;
-}
-
-.quick-access small {
-  color: var(--muted);
-  font-size: 0.66rem;
-  line-height: 1.25;
-}
-
 @media (max-width: 430px) {
   .top-panel {
     min-height: 66px;
@@ -1678,19 +1598,6 @@ h1 {
     height: 32px;
   }
 
-  .quick-access {
-    grid-template-columns: 1fr;
-  }
-
-  .quick-access button {
-    min-height: 70px;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
-  }
-
-  .quick-access button small {
-    grid-column: 2;
-  }
 }
 
 
