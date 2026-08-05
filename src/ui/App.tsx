@@ -102,12 +102,18 @@ export function App() {
     () => groupItems(baseFilteredItems, currentCategory.groupBy[0] ?? 'meta'),
     [baseFilteredItems, currentCategory.groupBy],
   );
+  useEffect(() => {
+    if (activeView === 'home' || groupedItems.length === 0) return;
+    const groupNames = groupedItems.map(([group]) => group);
+    if (activeGroup === 'all' || !groupNames.includes(activeGroup)) setActiveGroup(groupNames[0]);
+  }, [activeView, activeGroup, groupedItems]);
+
   const visibleItems = useMemo(
     () => baseFilteredItems.filter((item) =>
-      (activeGroup === 'all' || (item.meta || 'Other') === activeGroup) &&
+      (filters.query.trim() !== '' || (item.meta || 'Other') === activeGroup) &&
       (starFilter === 'all' || (categoryId === 'meals' && item.stars === starFilter)),
     ),
-    [baseFilteredItems, activeGroup, starFilter, categoryId],
+    [baseFilteredItems, activeGroup, starFilter, categoryId, filters.query],
   );
   const progress = useMemo(() => getProgress(zoneItems, save, categoryId), [zoneItems, save, categoryId]);
   const totalProgress = useMemo(() => getTotalProgress(save, activeZone), [save, activeZone]);
@@ -258,12 +264,6 @@ export function App() {
             setActiveView(category);
             setActiveGroup('all');
           }}
-          onQuickOpen={(category, status, rating = 'all') => {
-            setActiveView(category);
-            setActiveGroup('all');
-            setFilters({ ...initialFilters, status });
-            setStarFilter(rating);
-          }}
         />
       ) : (
         <main className="content">
@@ -312,19 +312,15 @@ export function App() {
             onSelect={setActiveGroup}
           />
 
-          {activeGroup === 'all' && !filters.query ? (
-            <SubcategoryGrid groups={groupedItems} save={save} categoryId={categoryId} onSelect={setActiveGroup} />
-          ) : (
-            <AlphabeticalCollection
-              categoryId={categoryId}
-              items={visibleItems}
-              save={save}
-              onOwned={toggleOwned}
-              onChecked={toggleChecked}
-              onEdit={setEditingItem}
-              onDelete={deleteItem}
-            />
-          )}
+          <AlphabeticalCollection
+            categoryId={categoryId}
+            items={visibleItems}
+            save={save}
+            onOwned={toggleOwned}
+            onChecked={toggleChecked}
+            onEdit={setEditingItem}
+            onDelete={deleteItem}
+          />
         </main>
       )}
 
@@ -578,12 +574,8 @@ function SubcategoryNavigator({
   categoryId: CategoryId;
   onSelect: (group: string) => void;
 }) {
-  const total = groups.reduce((count, [, items]) => count + items.length, 0);
   return (
     <nav className="subcategory-strip" aria-label="Subcategories">
-      <button className={activeGroup === 'all' ? 'active' : ''} onClick={() => onSelect('all')}>
-        <span>All groups</span><small>{total}</small>
-      </button>
       {groups.map(([group, items]) => {
         const progress = getProgress(items, save, categoryId);
         return (
@@ -593,35 +585,6 @@ function SubcategoryNavigator({
         );
       })}
     </nav>
-  );
-}
-
-function SubcategoryGrid({
-  groups,
-  save,
-  categoryId,
-  onSelect,
-}: {
-  groups: Array<[string, GameItem[]]>;
-  save: SavePayload;
-  categoryId: CategoryId;
-  onSelect: (group: string) => void;
-}) {
-  if (!groups.length) return <div className="empty-collection">No subcategories match these filters.</div>;
-  return (
-    <section className="subcategory-grid" aria-label="Choose a subcategory">
-      {groups.map(([group, items]) => {
-        const progress = getProgress(items, save, categoryId);
-        return (
-          <button key={group} onClick={() => onSelect(group)}>
-            <strong>{group}</strong>
-            <span>{progress.total} items</span>
-            <small>{progress.done} collected · {progress.total - progress.done} remaining</small>
-            <i><b style={{ width: `${progress.percent}%` }} /></i>
-          </button>
-        );
-      })}
-    </section>
   );
 }
 
@@ -971,13 +934,11 @@ function HomeView({
   activeZone,
   totalProgress,
   onOpenCategory,
-  onQuickOpen,
 }: {
   save: SavePayload;
   activeZone: ActiveZone;
   totalProgress: { done: number; total: number; percent: number };
   onOpenCategory: (categoryId: CategoryId) => void;
-  onQuickOpen: (categoryId: CategoryId, status: FilterState['status'], rating?: StarFilter) => void;
 }) {
   const missing = totalProgress.total - totalProgress.done;
   const missingMarked = CATEGORIES.reduce(
@@ -1013,24 +974,6 @@ function HomeView({
           <span>{missingMarked}</span>
           <p>Marked missing</p>
         </div>
-      </section>
-
-      <section className="quick-access" aria-label="Quick access">
-        <button onClick={() => onQuickOpen('meals', 'all', 5)}>
-          <span>★</span>
-          <strong>5-star meals</strong>
-          <small>Open the best recipes</small>
-        </button>
-        <button onClick={() => onQuickOpen('furniture', 'missing')}>
-          <X size={18} />
-          <strong>Missing furniture</strong>
-          <small>Continue your collection</small>
-        </button>
-        <button onClick={() => onQuickOpen('crafting', 'all')}>
-          <ChevronDown size={18} />
-          <strong>Crafting categories</strong>
-          <small>Jump to a TAG 1 group</small>
-        </button>
       </section>
 
       <section className="collection-group">
