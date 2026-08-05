@@ -1548,6 +1548,27 @@ h1 {
   display: flex; gap: 5px; padding: 2px 1px 7px; overflow-x: auto;
   scroll-snap-type: x proximity; scrollbar-width: none;
 }
+.persistent-letter-bar {
+  position: sticky;
+  top: 126px;
+  z-index: 15;
+  margin: 0 -4px;
+  padding: 7px 4px 9px;
+  background: linear-gradient(var(--bg) 82%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.letter-tile-grid button.active {
+  border-color: transparent;
+  background: var(--plum);
+  color: white;
+  box-shadow: 0 5px 12px rgba(73, 46, 105, 0.2);
+}
+
+.letter-tile-grid button.active span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
 .letter-tile-grid::-webkit-scrollbar { display: none; }
 .letter-tile-grid button {
   min-width: 38px; height: 40px; flex: 0 0 38px; display: grid; place-items: center; align-content: center;
