@@ -636,11 +636,13 @@ function AlphabeticalCollection({
   onEdit: (item: GameItem) => void;
   onDelete: (item: GameItem) => void;
 }) {
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 8;
   const letters = buildLetterGroups(items);
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+  const [isWordPickerOpen, setWordPickerOpen] = useState(false);
+  const swipeStartX = useRef<number | null>(null);
 
   useEffect(() => {
     setSelectedLetter(null);
@@ -676,6 +678,12 @@ function AlphabeticalCollection({
   function chooseWord(word: string) {
     setSelectedWord(word);
     setPage(0);
+    setWordPickerOpen(false);
+    focusBrowser();
+  }
+
+  function changePage(nextPage: number) {
+    setPage(Math.max(0, Math.min(totalPages - 1, nextPage)));
     focusBrowser();
   }
 
@@ -723,10 +731,26 @@ function AlphabeticalCollection({
     <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label={`${selectedWord} items`}>
       <div className="drill-heading">
         <button className="drill-back" onClick={() => { setSelectedWord(null); setPage(0); }} aria-label="Back to first words">‹</button>
-        <div><p>{selectedLetter} / First word</p><h3>{selectedWord}</h3></div>
+        <div>
+          <p>{selectedLetter} / First word</p>
+          <button className="word-switch-trigger" onClick={() => setWordPickerOpen(true)}>
+            <h3>{selectedWord}</h3><ChevronDown size={15} />
+          </button>
+        </div>
         <small>{wordItems.length} items</small>
       </div>
-      <div className="item-grid paged-item-grid">
+      <div
+        className="item-grid paged-item-grid"
+        onTouchStart={(event) => { swipeStartX.current = event.touches[0]?.clientX ?? null; }}
+        onTouchEnd={(event) => {
+          if (swipeStartX.current === null) return;
+          const delta = event.changedTouches[0]?.clientX - swipeStartX.current;
+          swipeStartX.current = null;
+          if (Math.abs(delta) < 55) return;
+          if (delta < 0 && page + 1 < totalPages) changePage(page + 1);
+          if (delta > 0 && page > 0) changePage(page - 1);
+        }}
+      >
         {visiblePage.map((item) => (
           <ItemCard
             key={item.id}
@@ -744,10 +768,22 @@ function AlphabeticalCollection({
       </div>
       {totalPages > 1 && (
         <nav className="pagination" aria-label={`Pages for ${selectedWord}`}>
-          <button disabled={page === 0} onClick={() => { setPage(page - 1); focusBrowser(); }}>‹ Previous</button>
+          <button disabled={page === 0} onClick={() => changePage(page - 1)}>‹ Previous</button>
           <span>Page {page + 1} of {totalPages}</span>
-          <button disabled={page + 1 >= totalPages} onClick={() => { setPage(page + 1); focusBrowser(); }}>Next ›</button>
+          <button disabled={page + 1 >= totalPages} onClick={() => changePage(page + 1)}>Next ›</button>
         </nav>
+      )}
+      {isWordPickerOpen && (
+        <ChoiceSheet title={`Groups in ${selectedLetter}`} onClose={() => setWordPickerOpen(false)}>
+          {wordGroups.map(([word, groupedItems]) => (
+            <button className={`choice-row ${word === selectedWord ? 'active' : ''}`} key={word} onClick={() => chooseWord(word)}>
+              <span>{word}</span>
+              <small>{groupedItems.length} items</small>
+              <span />
+              {word === selectedWord && <Check size={17} />}
+            </button>
+          ))}
+        </ChoiceSheet>
       )}
     </section>
   );
