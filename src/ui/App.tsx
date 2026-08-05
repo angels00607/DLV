@@ -681,67 +681,59 @@ function AlphabeticalCollection({
     : [];
   const wordGroups = buildFirstWordGroups(letterItems);
 
-  if (!selectedLetter) {
-    return (
-      <section className="drill-browser" aria-label="Choose a letter">
-        <div className="drill-heading">
-          <div><p>Browse alphabetically</p><h3>Choose a letter</h3></div>
-          <small>{items.length} items</small>
-        </div>
-        <div className="letter-tile-grid">
-          {letters.map(([letter, letterGroup]) => (
-            <button key={letter} onClick={() => setSelectedLetter(letter)}>
-              <strong>{letter}</strong>
-              <span>{letterGroup.length}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section className="drill-browser" aria-label={`Items beginning with ${selectedLetter}`}>
-      <div className="drill-heading">
-        <button className="drill-back" onClick={() => setSelectedLetter(null)} aria-label="Back to letters">‹</button>
-        <div><p>Alphabetical order</p><h3>Letter {selectedLetter}</h3></div>
-        <small>{letterItems.length} items</small>
-      </div>
-      <div className="alphabetical-word-list">
-        {wordGroups.map(([word, groupedItems]) => (
-          groupedItems.length > FIRST_WORD_ACCORDION_LIMIT ? (
-            <details className="word-accordion" key={word}>
-              <summary>
-                <strong>{word}</strong>
-                <span>{groupedItems.length} items</span>
-                <ChevronDown size={16} aria-hidden="true" />
-              </summary>
-              <ItemCards
-                categoryId={categoryId}
-                items={groupedItems}
-                save={save}
-                onOwned={onOwned}
-                onChecked={onChecked}
-                onEdit={onEdit}
-                onDelete={onDelete}
-              />
-            </details>
-          ) : (
-            <section className="direct-word-group" key={word}>
-              {wordGroups.length > 1 && <h4>{word}</h4>}
-              <ItemCards
-                categoryId={categoryId}
-                items={groupedItems}
-                save={save}
-                onOwned={onOwned}
-                onChecked={onChecked}
-                onEdit={onEdit}
-                onDelete={onDelete}
-              />
-            </section>
-          )
+    <section className="drill-browser" aria-label="Alphabetical navigation">
+      <div className="letter-tile-grid persistent-letter-bar" aria-label="Letters">
+        {letters.map(([letter, letterGroup]) => (
+          <button
+            key={letter}
+            className={selectedLetter === letter ? 'active' : ''}
+            aria-pressed={selectedLetter === letter}
+            onClick={() => setSelectedLetter(letter)}
+          >
+            <strong>{letter}</strong>
+            <span>{letterGroup.length}</span>
+          </button>
         ))}
       </div>
+
+      {selectedLetter && (
+        <div className="alphabetical-word-list" aria-label={`Items beginning with ${selectedLetter}`}>
+          {wordGroups.map(([word, groupedItems]) => (
+            groupedItems.length > FIRST_WORD_ACCORDION_LIMIT ? (
+              <details className="word-accordion" key={word}>
+                <summary>
+                  <strong>{word}</strong>
+                  <span>{groupedItems.length} items</span>
+                  <ChevronDown size={16} aria-hidden="true" />
+                </summary>
+                <ItemCards
+                  categoryId={categoryId}
+                  items={groupedItems}
+                  save={save}
+                  onOwned={onOwned}
+                  onChecked={onChecked}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                />
+              </details>
+            ) : (
+              <section className="direct-word-group" key={word}>
+                {wordGroups.length > 1 && <h4>{word}</h4>}
+                <ItemCards
+                  categoryId={categoryId}
+                  items={groupedItems}
+                  save={save}
+                  onOwned={onOwned}
+                  onChecked={onChecked}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                />
+              </section>
+            )
+          ))}
+        </div>
+      )}
     </section>
   );
 }
