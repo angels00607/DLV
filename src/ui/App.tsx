@@ -299,7 +299,7 @@ export function App() {
             </button>
           </div>
 
-          <SubcategoryNavigator
+          <SubcategoryGrid
             groups={groupedItems}
             activeGroup={activeGroup}
             save={save}
@@ -307,9 +307,7 @@ export function App() {
             onSelect={setActiveGroup}
           />
 
-          {activeGroup === 'all' && !filters.query ? (
-            <SubcategoryGrid groups={groupedItems} save={save} categoryId={categoryId} onSelect={setActiveGroup} />
-          ) : (
+          {(activeGroup !== 'all' || filters.query) && (
             <AlphabeticalCollection
               categoryId={categoryId}
               items={visibleItems}
@@ -560,7 +558,7 @@ function ChoiceSheet({
   );
 }
 
-function SubcategoryNavigator({
+function SubcategoryGrid({
   groups,
   activeGroup,
   save,
@@ -573,42 +571,18 @@ function SubcategoryNavigator({
   categoryId: CategoryId;
   onSelect: (group: string) => void;
 }) {
-  const total = groups.reduce((count, [, items]) => count + items.length, 0);
-  return (
-    <nav className="subcategory-strip" aria-label="Subcategories">
-      <button className={activeGroup === 'all' ? 'active' : ''} onClick={() => onSelect('all')}>
-        <span>All groups</span><small>{total}</small>
-      </button>
-      {groups.map(([group, items]) => {
-        const progress = getProgress(items, save, categoryId);
-        return (
-          <button key={group} className={activeGroup === group ? 'active' : ''} onClick={() => onSelect(group)}>
-            <span>{group}</span><small>{progress.done}/{progress.total}</small>
-          </button>
-        );
-      })}
-    </nav>
-  );
-}
-
-function SubcategoryGrid({
-  groups,
-  save,
-  categoryId,
-  onSelect,
-}: {
-  groups: Array<[string, GameItem[]]>;
-  save: SavePayload;
-  categoryId: CategoryId;
-  onSelect: (group: string) => void;
-}) {
   if (!groups.length) return <div className="empty-collection">No subcategories match these filters.</div>;
   return (
-    <section className="subcategory-grid" aria-label="Choose a subcategory">
+    <section className={`subcategory-grid ${activeGroup !== 'all' ? 'compact' : ''}`} aria-label="Choose a subcategory">
       {groups.map(([group, items]) => {
         const progress = getProgress(items, save, categoryId);
         return (
-          <button key={group} onClick={() => onSelect(group)}>
+          <button
+            key={group}
+            className={activeGroup === group ? 'active' : ''}
+            aria-pressed={activeGroup === group}
+            onClick={() => onSelect(group)}
+          >
             <strong>{group}</strong>
             <span>{progress.total} items</span>
             <small>{progress.done} collected · {progress.total - progress.done} remaining</small>
