@@ -173,6 +173,21 @@ export function App() {
     updateSave(next);
   }
 
+  function selectSubcategory(group: string) {
+    const nextGroup = activeGroup === group ? 'all' : group;
+    setActiveGroup(nextGroup);
+    if (nextGroup !== 'all') {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.getElementById('active-group-results')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        });
+      });
+    }
+  }
+
   function addItem(item: Omit<GameItem, 'id'>) {
     if (!save || activeView === 'home' || !item.name.trim()) return;
     const next = structuredClone(save);
@@ -304,11 +319,12 @@ export function App() {
             activeGroup={activeGroup}
             save={save}
             categoryId={categoryId}
-            onSelect={setActiveGroup}
+            onSelect={selectSubcategory}
           />
 
           {(activeGroup !== 'all' || filters.query) && (
-            <AlphabeticalCollection
+            <section id="active-group-results" className="active-group-results" aria-live="polite">
+              <AlphabeticalCollection
               categoryId={categoryId}
               items={visibleItems}
               save={save}
@@ -316,7 +332,8 @@ export function App() {
               onChecked={toggleChecked}
               onEdit={setEditingItem}
               onDelete={deleteItem}
-            />
+              />
+            </section>
           )}
         </main>
       )}

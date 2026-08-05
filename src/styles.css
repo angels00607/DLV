@@ -1455,6 +1455,10 @@ h1 {
   background: var(--orchid);
 }
 
+.active-group-results {
+  scroll-margin-top: 132px;
+}
+
 .drill-browser { display: grid; gap: 12px; scroll-margin-top: 172px; }
 .drill-heading {
   position: sticky; top: 164px; z-index: 14; min-height: 58px;
