@@ -1313,7 +1313,11 @@ function EditSheet({
 }
 
 function getIngredientSuggestions(value: string): string[] {
-  const query = normalizeText(value.trim());
+  const withoutNumbers = normalizeText(value).replace(/\d/g, '');
+  const firstLetterIndex = withoutNumbers.search(/[a-z]/i);
+  if (firstLetterIndex === -1) return [];
+
+  const query = withoutNumbers.slice(firstLetterIndex).trim();
   if (!query) return [];
 
   return INGREDIENT_OPTIONS
