@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Check,
   ChevronDown,
@@ -40,7 +40,8 @@ type ActiveZone =
   | 'STORYBOOK VALE'
   | 'WISHBLOSSOM MOUNTAINS';
 const DIRECT_RENDER_LIMIT = 6;
-const ALPHABETICAL_NAV_LIMIT = 25;
+const ALPHABETICAL_NAV_LIMIT = 15;
+const FIRST_WORD_ACCORDION_LIMIT = 3;
 const GH_STORAGE_KEY = 'dlv_gh_config';
 const NAV_STORAGE_KEY = 'dlv_iphone_nav_v1';
 type StarFilter = 'all' | 1 | 2 | 3 | 4 | 5;
@@ -320,19 +321,30 @@ export function App() {
             save={save}
             categoryId={categoryId}
             onSelect={selectSubcategory}
+            renderActiveGroup={() => (
+              <AlphabeticalCollection
+                  categoryId={categoryId}
+                  items={visibleItems}
+                  save={save}
+                  onOwned={toggleOwned}
+                  onChecked={toggleChecked}
+                  onEdit={setEditingItem}
+                  onDelete={deleteItem}
+                />
+            )}
           />
 
-          {(activeGroup !== 'all' || filters.query) && (
-            <section id="active-group-results" className="active-group-results" aria-live="polite">
+          {activeGroup === 'all' && filters.query && (
+            <section className="active-group-results search-results" aria-live="polite">
               <AlphabeticalCollection
-              categoryId={categoryId}
-              items={visibleItems}
-              save={save}
-              onOwned={toggleOwned}
-              onChecked={toggleChecked}
-              onEdit={setEditingItem}
-              onDelete={deleteItem}
-              />
+                  categoryId={categoryId}
+                  items={visibleItems}
+                  save={save}
+                  onOwned={toggleOwned}
+                  onChecked={toggleChecked}
+                  onEdit={setEditingItem}
+                  onDelete={deleteItem}
+                />
             </section>
           )}
         </main>
@@ -581,30 +593,39 @@ function SubcategoryGrid({
   save,
   categoryId,
   onSelect,
+  renderActiveGroup,
 }: {
   groups: Array<[string, GameItem[]]>;
   activeGroup: string;
   save: SavePayload;
   categoryId: CategoryId;
   onSelect: (group: string) => void;
+  renderActiveGroup: () => React.ReactNode;
 }) {
   if (!groups.length) return <div className="empty-collection">No subcategories match these filters.</div>;
   return (
     <section className={`subcategory-grid ${activeGroup !== 'all' ? 'compact' : ''}`} aria-label="Choose a subcategory">
       {groups.map(([group, items]) => {
         const progress = getProgress(items, save, categoryId);
+        const isActive = activeGroup === group;
         return (
-          <button
-            key={group}
-            className={activeGroup === group ? 'active' : ''}
-            aria-pressed={activeGroup === group}
-            onClick={() => onSelect(group)}
-          >
-            <strong>{group}</strong>
-            <span>{progress.total} items</span>
-            <small>{progress.done} collected · {progress.total - progress.done} remaining</small>
-            <i><b style={{ width: `${progress.percent}%` }} /></i>
-          </button>
+          <Fragment key={group}>
+            <button
+              className={isActive ? 'active' : ''}
+              aria-pressed={isActive}
+              onClick={() => onSelect(group)}
+            >
+              <strong>{group}</strong>
+              <span>{progress.total} items</span>
+              <small>{progress.done} collected · {progress.total - progress.done} remaining</small>
+              <i><b style={{ width: `${progress.percent}%` }} /></i>
+            </button>
+            {isActive && (
+              <section id="active-group-results" className="active-group-results" aria-live="polite">
+                {renderActiveGroup()}
+              </section>
+            )}
+          </Fragment>
         );
       })}
     </section>
@@ -628,18 +649,15 @@ function AlphabeticalCollection({
   onEdit: (item: GameItem) => void;
   onDelete: (item: GameItem) => void;
 }) {
-  const PAGE_SIZE = 8;
-  const letters = buildLetterGroups(items);
+  const sortedItems = useMemo(
+    () => [...items].sort((itemA, itemB) => itemA.name.localeCompare(itemB.name)),
+    [items],
+  );
+  const letters = buildLetterGroups(sortedItems);
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
-  const [selectedWord, setSelectedWord] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
-  const [isWordPickerOpen, setWordPickerOpen] = useState(false);
-  const swipeStartX = useRef<number | null>(null);
 
   useEffect(() => {
     setSelectedLetter(null);
-    setSelectedWord(null);
-    setPage(0);
   }, [items]);
 
   if (!letters.length) return <div className="empty-collection">No items match these filters.</div>;
@@ -648,7 +666,7 @@ function AlphabeticalCollection({
     return (
       <ItemCards
         categoryId={categoryId}
-        items={items}
+        items={sortedItems}
         save={save}
         onOwned={onOwned}
         onChecked={onChecked}
@@ -662,47 +680,17 @@ function AlphabeticalCollection({
     ? letters.find(([letter]) => letter === selectedLetter)?.[1] ?? []
     : [];
   const wordGroups = buildFirstWordGroups(letterItems);
-  const wordItems = selectedWord
-    ? wordGroups.find(([word]) => word === selectedWord)?.[1] ?? []
-    : [];
-  const totalPages = Math.max(1, Math.ceil(wordItems.length / PAGE_SIZE));
-  const visiblePage = wordItems.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
-
-  function focusBrowser() {
-    requestAnimationFrame(() =>
-      document.getElementById(`collection-browser-${categoryId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
-    );
-  }
-
-  function chooseLetter(letter: string) {
-    setSelectedLetter(letter);
-    setSelectedWord(null);
-    setPage(0);
-    focusBrowser();
-  }
-
-  function chooseWord(word: string) {
-    setSelectedWord(word);
-    setPage(0);
-    setWordPickerOpen(false);
-    focusBrowser();
-  }
-
-  function changePage(nextPage: number) {
-    setPage(Math.max(0, Math.min(totalPages - 1, nextPage)));
-    focusBrowser();
-  }
 
   if (!selectedLetter) {
     return (
-      <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label="Choose a letter">
+      <section className="drill-browser" aria-label="Choose a letter">
         <div className="drill-heading">
           <div><p>Browse alphabetically</p><h3>Choose a letter</h3></div>
           <small>{items.length} items</small>
         </div>
         <div className="letter-tile-grid">
           {letters.map(([letter, letterGroup]) => (
-            <button key={letter} onClick={() => chooseLetter(letter)}>
+            <button key={letter} onClick={() => setSelectedLetter(letter)}>
               <strong>{letter}</strong>
               <span>{letterGroup.length}</span>
             </button>
@@ -712,84 +700,48 @@ function AlphabeticalCollection({
     );
   }
 
-  if (!selectedWord) {
-    return (
-      <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label={`Words beginning with ${selectedLetter}`}>
-        <div className="drill-heading">
-          <button className="drill-back" onClick={() => setSelectedLetter(null)} aria-label="Back to letters">‹</button>
-          <div><p>Letter {selectedLetter}</p><h3>Choose the first word</h3></div>
-          <small>{letterItems.length} items</small>
-        </div>
-        <div className="word-tile-grid">
-          {wordGroups.map(([word, groupedWordItems]) => (
-            <button key={word} onClick={() => chooseWord(word)}>
-              <strong>{word}</strong>
-              <span>{groupedWordItems.length} item{groupedWordItems.length === 1 ? '' : 's'}</span>
-              {groupedWordItems.length > PAGE_SIZE && <small>{Math.ceil(groupedWordItems.length / PAGE_SIZE)} pages</small>}
-            </button>
-          ))}
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section id={`collection-browser-${categoryId}`} className="drill-browser" aria-label={`${selectedWord} items`}>
+    <section className="drill-browser" aria-label={`Items beginning with ${selectedLetter}`}>
       <div className="drill-heading">
-        <button className="drill-back" onClick={() => { setSelectedWord(null); setPage(0); }} aria-label="Back to first words">‹</button>
-        <div>
-          <p>{selectedLetter} / First word</p>
-          <button className="word-switch-trigger" onClick={() => setWordPickerOpen(true)}>
-            <h3>{selectedWord}</h3><ChevronDown size={15} />
-          </button>
-        </div>
-        <small>{wordItems.length} items</small>
+        <button className="drill-back" onClick={() => setSelectedLetter(null)} aria-label="Back to letters">‹</button>
+        <div><p>Alphabetical order</p><h3>Letter {selectedLetter}</h3></div>
+        <small>{letterItems.length} items</small>
       </div>
-      <div
-        className="item-grid paged-item-grid"
-        onTouchStart={(event) => { swipeStartX.current = event.touches[0]?.clientX ?? null; }}
-        onTouchEnd={(event) => {
-          if (swipeStartX.current === null) return;
-          const delta = event.changedTouches[0]?.clientX - swipeStartX.current;
-          swipeStartX.current = null;
-          if (Math.abs(delta) < 55) return;
-          if (delta < 0 && page + 1 < totalPages) changePage(page + 1);
-          if (delta > 0 && page > 0) changePage(page - 1);
-        }}
-      >
-        {visiblePage.map((item) => (
-          <ItemCard
-            key={item.id}
-            item={item}
-            owned={save.owned[categoryId]?.[item.id]}
-            checked={!!save.checked[categoryId]?.[item.id]}
-            ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
-            stars={categoryId === 'meals' ? item.stars : undefined}
-            onOwned={() => onOwned(item)}
-            onChecked={() => onChecked(item)}
-            onEdit={() => onEdit(item)}
-            onDelete={() => onDelete(item)}
-          />
+      <div className="alphabetical-word-list">
+        {wordGroups.map(([word, groupedItems]) => (
+          groupedItems.length > FIRST_WORD_ACCORDION_LIMIT ? (
+            <details className="word-accordion" key={word}>
+              <summary>
+                <strong>{word}</strong>
+                <span>{groupedItems.length} items</span>
+                <ChevronDown size={16} aria-hidden="true" />
+              </summary>
+              <ItemCards
+                categoryId={categoryId}
+                items={groupedItems}
+                save={save}
+                onOwned={onOwned}
+                onChecked={onChecked}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
+            </details>
+          ) : (
+            <section className="direct-word-group" key={word}>
+              {wordGroups.length > 1 && <h4>{word}</h4>}
+              <ItemCards
+                categoryId={categoryId}
+                items={groupedItems}
+                save={save}
+                onOwned={onOwned}
+                onChecked={onChecked}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
+            </section>
+          )
         ))}
       </div>
-      {totalPages > 1 && (
-        <nav className="pagination" aria-label={`Pages for ${selectedWord}`}>
-          <button disabled={page === 0} onClick={() => changePage(page - 1)}>‹ Previous</button>
-          <span>Page {page + 1} of {totalPages}</span>
-          <button disabled={page + 1 >= totalPages} onClick={() => changePage(page + 1)}>Next ›</button>
-        </nav>
-      )}
-      {isWordPickerOpen && (
-        <ChoiceSheet title={`Groups in ${selectedLetter}`} onClose={() => setWordPickerOpen(false)}>
-          {wordGroups.map(([word, groupedItems]) => (
-            <button className={`choice-row word-choice-row ${word === selectedWord ? 'active' : ''}`} key={word} onClick={() => chooseWord(word)}>
-              <span>{word}</span>
-              <small>{groupedItems.length} items</small>
-              {word === selectedWord ? <Check size={17} /> : <span />}
-            </button>
-          ))}
-        </ChoiceSheet>
-      )}
     </section>
   );
 }
