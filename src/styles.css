@@ -1692,30 +1692,6 @@ h1 {
   font-size: 0.94rem;
 }
 
-.ingredient-summary {
-  width: max-content;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 0;
-  border: 0;
-  background: transparent;
-  color: var(--plum);
-  font-size: 0.7rem;
-  font-weight: 760;
-}
-
-.ingredient-collapse {
-  width: 27px;
-  height: 27px;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(109, 79, 143, 0.12);
-  color: var(--plum);
-}
-
 .item-actions {
   display: grid;
   gap: 5px;
