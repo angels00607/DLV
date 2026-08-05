@@ -655,10 +655,21 @@ function AlphabeticalCollection({
   );
   const letters = buildLetterGroups(sortedItems);
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
+  const [openWords, setOpenWords] = useState<Set<string>>(() => new Set());
 
-  useEffect(() => {
-    setSelectedLetter(null);
-  }, [items]);
+  function chooseLetter(letter: string) {
+    if (letter !== selectedLetter) setOpenWords(new Set());
+    setSelectedLetter(letter);
+  }
+
+  function toggleWord(word: string, open: boolean) {
+    setOpenWords((current) => {
+      const next = new Set(current);
+      if (open) next.add(word);
+      else next.delete(word);
+      return next;
+    });
+  }
 
   if (!letters.length) return <div className="empty-collection">No items match these filters.</div>;
 
@@ -689,7 +700,7 @@ function AlphabeticalCollection({
             key={letter}
             className={selectedLetter === letter ? 'active' : ''}
             aria-pressed={selectedLetter === letter}
-            onClick={() => setSelectedLetter(letter)}
+            onClick={() => chooseLetter(letter)}
           >
             <strong>{letter}</strong>
             <span>{letterGroup.length}</span>
@@ -701,7 +712,12 @@ function AlphabeticalCollection({
         <div className="alphabetical-word-list" aria-label={`Items beginning with ${selectedLetter}`}>
           {wordGroups.map(([word, groupedItems]) => (
             groupedItems.length > FIRST_WORD_ACCORDION_LIMIT ? (
-              <details className="word-accordion" key={word}>
+              <details
+                className="word-accordion"
+                key={word}
+                open={openWords.has(word)}
+                onToggle={(event) => toggleWord(word, event.currentTarget.open)}
+              >
                 <summary>
                   <strong>{word}</strong>
                   <span>{groupedItems.length} items</span>
