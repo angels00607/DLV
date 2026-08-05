@@ -175,18 +175,15 @@ export function App() {
   }
 
   function selectSubcategory(group: string) {
-    const nextGroup = activeGroup === group ? 'all' : group;
-    setActiveGroup(nextGroup);
-    if (nextGroup !== 'all') {
+    setActiveGroup(group);
+    requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          document.getElementById('active-group-results')?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
+        document.getElementById('active-group-results')?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
         });
       });
-    }
+    });
   }
 
   function addItem(item: Omit<GameItem, 'id'>) {
@@ -660,6 +657,14 @@ function AlphabeticalCollection({
   function chooseLetter(letter: string) {
     if (letter !== selectedLetter) setOpenWords(new Set());
     setSelectedLetter(letter);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.getElementById('alphabetical-list-top')?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
+    });
   }
 
   function toggleWord(word: string, open: boolean) {
@@ -709,7 +714,7 @@ function AlphabeticalCollection({
       </div>
 
       {selectedLetter && (
-        <div className="alphabetical-word-list" aria-label={`Items beginning with ${selectedLetter}`}>
+        <div id="alphabetical-list-top" className="alphabetical-word-list" aria-label={`Items beginning with ${selectedLetter}`}>
           {wordGroups.map(([word, groupedItems]) => (
             groupedItems.length > FIRST_WORD_ACCORDION_LIMIT ? (
               <details

@@ -1467,6 +1467,10 @@ h1 {
   gap: 9px;
 }
 
+#alphabetical-list-top {
+  scroll-margin-top: 184px;
+}
+
 .word-accordion {
   overflow: hidden;
   border: 1px solid rgba(109, 79, 143, 0.14);
