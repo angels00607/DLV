@@ -1159,7 +1159,12 @@ function EditSheet({
   }
 
   function selectIngredient(index: number, ingredient: string) {
-    updateIngredient(index, ingredient);
+    const currentValue = ingredients[index] ?? '';
+    const firstLetterIndex = currentValue.search(/\p{L}/u);
+    const preservedPrefix = firstLetterIndex === -1
+      ? currentValue
+      : currentValue.slice(0, firstLetterIndex);
+    updateIngredient(index, `${preservedPrefix}${ingredient}`);
     setFocusedIngredient(null);
     setHighlightedSuggestion(0);
   }
