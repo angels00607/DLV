@@ -35482,25 +35482,25 @@
         "id": 246,
         "name": "Wooden Lamppost with Blue Light",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 247,
         "name": "Wooden Lamppost with Green Light",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 248,
         "name": "Wooden Lamppost with Pink Light",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 249,
         "name": "Wooden Lamppost with Yellow Light",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 250,
@@ -35518,67 +35518,67 @@
         "id": 252,
         "name": "Wrought Iron Arch",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 253,
         "name": "Wrought Iron Walkway Slab",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 254,
         "name": "Yellow and White Flower Rectangle",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 255,
         "name": "Yellow Egg Lamppost",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 256,
         "name": "Yellow Light High Beach Torch",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 257,
         "name": "Yellow Light Low Beach Torch",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 258,
-        "name": "Yellow, Green and Purple Flower Rectangle",
+        "name": "Yellow Green and Purple Flower Rectangle",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 259,
-        "name": "Yellow, Red and Black Balloon Arch",
+        "name": "Yellow Red and Black Balloon Arch",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 260,
-        "name": "Yellow, Red and Blue Flower Disk",
+        "name": "Yellow Red and Blue Flower Disk",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 261,
         "name": "Yule Goat",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 262,
         "name": "Zen Garden",
         "meta": "FURNITURE",
-        "meta2": ""
+        "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 994,
@@ -38723,6 +38723,24 @@
         "name": "Round Straw Bale",
         "meta": "FURNITURE",
         "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1511,
+        "name": "Woodland Fae Copper Topiary",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1512,
+        "name": "Woodland Fae Floral Arch",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1513,
+        "name": "Woodland Fae Picnic Table",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
       }
     ]
   },
@@ -41845,6 +41863,7 @@
       "209": false
     },
     "crafting": {
+      "262": false,
       "265": false,
       "369": false,
       "575": false,
@@ -41860,7 +41879,7 @@
     "clothing": 1743,
     "furniture": 3591,
     "meals": 480,
-    "crafting": 1511
+    "crafting": 1514
   },
   "ingredients": {
     "clothing": {},
@@ -44615,6 +44634,65 @@
         "6 Hardwood",
         "15 Stone"
       ],
+      "252": [
+        "10 Iron Ingot",
+        "4 Fabric"
+      ],
+      "253": [
+        "2 Iron Ingot"
+      ],
+      "254": [
+        "1 Rectangular Soil Area",
+        "2 White Daisy",
+        "1 Yellow Bromeliad",
+        "3 Orange Star Lily"
+      ],
+      "255": [
+        "5 Fishy Green Egg",
+        "1 Citrine",
+        "1 Glass",
+        "2 Gold Ingot",
+        "1 Stone"
+      ],
+      "256": [
+        "5 Softwood",
+        "5 Fiber",
+        "3 Sand",
+        "1 Topaz"
+      ],
+      "257": [
+        "5 Softwood",
+        "5 Fiber",
+        "3 Sand",
+        "1 Topaz"
+      ],
+      "258": [
+        "1 Rectangular Soil Area",
+        "2 Purple Falling Penstemon",
+        "2 Dandelion",
+        "2 Green Rising Penstemon"
+      ],
+      "259": [
+        "10 Iron Ingot",
+        "20 Red Nasturtium",
+        "20 Black Passion Lily",
+        "20 Yellow Nasturtium"
+      ],
+      "260": [
+        "1 Round Soil Area",
+        "4 Blue Passion Lily",
+        "2 Red Bell Flower",
+        "4 Sunflower"
+      ],
+      "261": [
+        "50 Wheat",
+        "2 Fabric"
+      ],
+      "262": [
+        "100 Stone",
+        "100 Pebbles",
+        "200 Sand"
+      ],
       "263": [
         "3 Tropical Wood",
         "1 Brass Ingot",
@@ -46879,6 +46957,25 @@
         "1 Silver Ore",
         "1 Reclaimed Barn Wood"
       ],
+      "1222": [
+        "4 Beady Soil",
+        "4 Wire Coat Hanger",
+        "4 Black Silk Flower",
+        "4 Red Silk Flower",
+        "4 Silver Silk Flower"
+      ],
+      "1223": [
+        "1 Pyrite",
+        "1 Stone",
+        "1 Yellow Crocus",
+        "1 Silver Ore",
+        "1 Reclaimed Barn Wood"
+      ],
+      "1224": [
+        "1 Honeycomb Stone",
+        "1 Yellow Lily of the Valley",
+        "1 Clay"
+      ],
       "1230": [
         "6 Sequin Strands",
         "6 Antique Clothes Iron",
@@ -47086,6 +47183,17 @@
         "12 Iron Ingot",
         "2 Glass",
         "1 Black Passion Lily"
+      ],
+      "1332": [
+        "10 Iron Ingot",
+        "10 Hardwood",
+        "1 Topaz",
+        "3 Red Falling Penstemon"
+      ],
+      "1333": [
+        "2 Fiber",
+        "1 Peridot",
+        "1 Garnet"
       ],
       "1335": [
         "15 Hardwood",
@@ -47740,6 +47848,24 @@
       "1510": [
         "5 Old Braided Rope",
         "5 Wheat"
+      ],
+      "1511": [
+        "2 Soil",
+        "1 Green Rising Penstemon",
+        "1 Peridot"
+      ],
+      "1512": [
+        "4 Yellow Daisy",
+        "4 Purple Falling Penstemon",
+        "4 Red Falling Penstemon",
+        "4 Red Daisy",
+        "4 White & Pink Falling Penstemon"
+      ],
+      "1513": [
+        "5 Purple Rising Penstemon",
+        "3 Red Daisy",
+        "1 Rope",
+        "1 Garnet"
       ]
     }
   },
@@ -47868,5 +47994,5 @@
       "1506": true
     }
   },
-  "savedAt": "2026-08-06T14:58:34.449Z"
+  "savedAt": "2026-08-07T07:24:27.051Z"
 }
