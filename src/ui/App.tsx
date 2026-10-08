@@ -212,6 +212,10 @@ export function App() {
       },
     ];
     next.nextId[activeView] = nextId + 1;
+    if (localStorage.getItem(COLLECTION_MODE_KEY) === '1') {
+      next.owned[activeView] ??= {};
+      next.owned[activeView]![nextId] = 'owned';
+    }
     updateSave(next);
   }
 
@@ -413,7 +417,7 @@ export function App() {
               </div>
               <Plus size={18} aria-hidden="true" />
             </div>
-            <AddItemRow category={currentCategory.label} activeZone={activeZone} onAdd={addItem} />
+            <AddItemRow category={currentCategory.label} activeZone={activeZone} existingItems={items} onAdd={addItem} />
           </section>
 
           {filters.query.trim() ? (
@@ -921,61 +925,69 @@ function buildFirstWordGroups(items: GameItem[]): Array<[string, GameItem[]]> {
 }
 
 function AddItemRow({
-  category,
-  activeZone,
-  onAdd,
+  category, activeZone, existingItems, onAdd,
 }: {
   category: string;
   activeZone: ActiveZone;
+  existingItems: GameItem[];
   onAdd: (item: Omit<GameItem, 'id'>) => void;
 }) {
   const [name, setName] = useState('');
-  const [meta, setMeta] = useState('');
-  const [meta2, setMeta2] = useState(activeZone === 'all' ? '' : activeZone);
+  const [universe, setUniverse] = useState('');
+  const [zone, setZone] = useState(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone);
+  const [newZone, setNewZone] = useState('');
+  const [creatingZone, setCreatingZone] = useState(false);
+  const [addedZones, setAddedZones] = useState<string[]>([]);
+  const [notice, setNotice] = useState('');
+  const nameInput = useRef<HTMLInputElement>(null);
+  const universes = Array.from(new Set(existingItems.map((item) => item.meta?.trim()).filter((x): x is string => !!x))).sort();
+  const zones = Array.from(new Set([...ZONE_OPTIONS, ...existingItems.map((item) => item.meta2?.trim() ?? '').filter(Boolean), ...addedZones]));
+  const duplicate = existingItems.some((item) => normalizeText(item.name) === normalizeText(name.trim()) &&
+    normalizeText(item.meta ?? '') === normalizeText(universe.trim()) && normalizeZone(item.meta2) === normalizeZone(zone));
 
   useEffect(() => {
-    if (activeZone !== 'all') setMeta2(activeZone);
+    if (activeZone !== 'all') setZone(activeZone);
   }, [activeZone]);
 
   function submit() {
-    if (!name.trim()) return;
-    onAdd({ name, meta, meta2 });
+    if (!name.trim() || !universe.trim() || !zone.trim() || duplicate) return;
+    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone });
+    setNotice(`Added ${name.trim()}`);
     setName('');
-    setMeta('');
+    nameInput.current?.focus();
   }
 
   return (
-    <div className="add-item-row">
-      <input
-        autoCapitalize="words"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') submit();
-        }}
-        placeholder={`Add ${category.toLowerCase()}...`}
-      />
-      <input
-        autoCapitalize="words"
-        value={meta}
-        onChange={(event) => setMeta(event.target.value)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') submit();
-        }}
-        placeholder="Tag 1"
-      />
-      <select value={meta2} onChange={(event) => setMeta2(event.target.value)}>
-        <option value="">-- No zone --</option>
-        {ZONE_OPTIONS.map((zone) => (
-          <option key={zone} value={zone}>
-            {formatZoneLabel(zone)}
-          </option>
-        ))}
-      </select>
-      <button onClick={submit}>
-        <Plus size={17} />
-        Add
-      </button>
+    <div className="quick-add">
+      <label>Item name
+        <input ref={nameInput} autoCapitalize="words" value={name} onChange={(event) => { setName(event.target.value); setNotice(''); }}
+          onKeyDown={(event) => { if (event.key === 'Enter') submit(); }} placeholder={`New ${category.toLowerCase()} item`} />
+      </label>
+      <label>Universe
+        <input list="collection-universe-options" autoCapitalize="words" value={universe} onChange={(event) => setUniverse(event.target.value)}
+          placeholder="Choose or type a universe" />
+        <datalist id="collection-universe-options">{universes.map((value) => <option key={value} value={value} />)}</datalist>
+      </label>
+      <label>Zone / Expansion
+        <select value={zone} onChange={(event) => setZone(event.target.value)}>
+          {zones.map((value) => <option key={value} value={value}>{formatZoneLabel(value)}</option>)}
+        </select>
+      </label>
+      {creatingZone ? (
+        <div className="quick-add-zone">
+          <input value={newZone} onChange={(event) => setNewZone(event.target.value)} placeholder="New expansion / zone" />
+          <button type="button" disabled={!newZone.trim()} onClick={() => {
+            const value = newZone.trim().toUpperCase();
+            if (!zones.includes(value)) setAddedZones((current) => [...current, value]);
+            setZone(value); setNewZone(''); setCreatingZone(false);
+          }}>Save zone</button>
+          <button type="button" onClick={() => setCreatingZone(false)}>Cancel</button>
+        </div>
+      ) : <button type="button" className="quick-add-secondary" onClick={() => setCreatingZone(true)}>+ Add a zone</button>}
+      {duplicate && <p role="alert">This item already exists in this universe and zone.</p>}
+      {notice && <p role="status">{notice}</p>}
+      <button type="button" className="quick-add-submit" disabled={!name.trim() || !universe.trim() || !zone.trim() || duplicate}
+        onClick={submit}><Plus size={17} /> Save & add another</button>
     </div>
   );
 }
