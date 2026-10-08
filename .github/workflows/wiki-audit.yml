@@ -2,6 +2,11 @@ name: Wiki catalog audit (read only)
 
 on:
   workflow_dispatch:
+    inputs:
+      snapshot_path:
+        description: 'Path to reviewed JSON snapshot committed to this branch (required; wiki API is blocked)'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -13,10 +18,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Validate snapshot path
+        env:
+          SNAPSHOT_PATH: ${{ inputs.snapshot_path }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          value = os.environ['SNAPSHOT_PATH']
+          path = Path(value)
+          if path.is_absolute() or '..' in path.parts or not path.is_file() or path.suffix != '.json':
+              raise SystemExit('Provide a committed relative .json snapshot file path; the blocked wiki API cannot be used.')
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              env.write(f'SNAPSHOT_PATH={value}\\n')
+          PY
       - name: Generate candidate report
         id: audit
         continue-on-error: true
-        run: python3 scripts/wiki_audit.py --catalog public/data.json --output wiki-sync-report.json
+        run: python3 scripts/wiki_audit.py --catalog public/data.json --snapshot "$SNAPSHOT_PATH" --output wiki-sync-report.json
       - name: Summarize source status
         if: always()
         run: |
