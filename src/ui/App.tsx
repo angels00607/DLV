@@ -1038,7 +1038,7 @@ function GithubSaveSheet({ save, onClose, onRestore }: {
       setUser(cfg.user || 'angels00607');
       setRepo(cfg.repo || 'DLV');
       setFilename(cfg.filename || 'index.html');
-      setToken(cfg.token || '');
+      setToken('');
     } catch {
       // Keep defaults.
     }
@@ -1161,6 +1161,7 @@ function GithubSaveSheet({ save, onClose, onRestore }: {
           <span>GitHub token</span>
           <input type="password" autoCapitalize="none" autoCorrect="off" spellCheck={false} value={token} onChange={(event) => setToken(event.target.value)} />
         </label>
+        <p role="note">Privacy: this file is committed to your GitHub repository. If the repository is public, your collection backup will be publicly readable. Use a private repository for private backups.</p>
         <div className="github-actions">
           <button className="action-button primary" disabled={isSaving || isLoading} onClick={uploadCollection}>Back up collection</button>
           <button className="action-button" disabled={isSaving || isLoading} onClick={previewCloudCollection}>Load cloud backup</button>
