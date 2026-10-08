@@ -1014,6 +1014,7 @@ function ItemCards({
 }: {
   categoryId: CategoryId;
   items: GameItem[];
+  showSearchContext?: boolean;
   save: SavePayload;
   onOwned: (item: GameItem) => void;
   onChecked: (item: GameItem) => void;
