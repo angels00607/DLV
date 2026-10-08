@@ -1,0 +1,22 @@
+name: Validate wiki audit
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/wiki_audit.py'
+      - 'tests/test_wiki_audit.py'
+      - '.github/workflows/wiki-audit.yml'
+      - '.github/workflows/validate-wiki-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test offline snapshot comparison
+        run: python3 -m unittest discover -s tests -p 'test_wiki_audit.py' -v
