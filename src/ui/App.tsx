@@ -591,7 +591,15 @@ export function App() {
           </div>
         </aside>
       )}
-      {isGithubOpen && <GithubSaveSheet save={save} onClose={() => setGithubOpen(false)} />}
+      {isGithubOpen && <GithubSaveSheet save={save} onRestore={(cloudSave, totals) => {
+        try {
+          localStorage.setItem('dlv_before_cloud_restore_v1', localStorage.getItem(STORAGE_KEY) ?? '');
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudSave));
+          localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(totals));
+          localStorage.setItem(COLLECTION_MODE_KEY, '1');
+          setSave(cloudSave); setManualTotals(totals); setGithubOpen(false);
+        } catch { window.alert('Restore failed. Check browser storage.'); }
+      }} onClose={() => setGithubOpen(false)} />}
       {editingItem && activeView !== 'home' && (
         <EditSheet
           item={editingItem}
@@ -1005,7 +1013,10 @@ function AddItemRow({
   );
 }
 
-function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => void }) {
+function GithubSaveSheet({ save, onClose, onRestore }: {
+  save: SavePayload; onClose: () => void;
+  onRestore: (cloudSave: SavePayload, totals: Record<string, number>) => void;
+}) {
   const [user, setUser] = useState('angels00607');
   const [repo, setRepo] = useState('DLV');
   const [filename, setFilename] = useState('index.html');
@@ -1013,6 +1024,8 @@ function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => 
   const [status, setStatus] = useState('');
   const [isError, setError] = useState(false);
   const [isSaving, setSaving] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [restorePreview, setRestorePreview] = useState<{ save: SavePayload; totals: Record<string, number> } | null>(null);
 
   useEffect(() => {
     try {
@@ -1041,7 +1054,7 @@ function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => 
     setSaving(true);
     setError(false);
     setStatus('Preparing data...');
-    localStorage.setItem(GH_STORAGE_KEY, JSON.stringify({ user, repo, filename, token }));
+    localStorage.setItem(GH_STORAGE_KEY, JSON.stringify({ user, repo, filename }));
 
     try {
       const repository = `${user.trim()}/${repo.trim()}`;
@@ -1070,6 +1083,53 @@ function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => 
     }
   }
 
+  async function uploadCollection() {
+    if (!user.trim() || !repo.trim() || !token.trim()) { setError(true); setStatus('Enter repository and token.'); return; }
+    setSaving(true); setError(false);
+    try {
+      const repository = `${user.trim()}/${repo.trim()}`;
+      const payload = JSON.stringify({
+        schema: 'dlv-owned-collection-v1',
+        collection: save,
+        manualTotals: readManualTotals(),
+        ownedOnly: localStorage.getItem(COLLECTION_MODE_KEY) === '1',
+        savedAt: new Date().toISOString(),
+      }, null, 2);
+      localStorage.setItem(GH_STORAGE_KEY, JSON.stringify({ user, repo, filename }));
+      await uploadGithubFile(repository, CLOUD_COLLECTION_PATH, token.trim(), payload, 'Back up personal DLV collection');
+      setStatus('Personal collection and totals saved to GitHub.');
+    } catch (error) { setError(true); setStatus(error instanceof Error ? error.message : 'Backup failed.'); }
+    finally { setSaving(false); }
+  }
+
+  async function previewCloudCollection() {
+    if (!user.trim() || !repo.trim() || !token.trim()) { setError(true); setStatus('Enter repository and token.'); return; }
+    setLoading(true); setError(false); setRestorePreview(null);
+    try {
+      const repository = `${user.trim()}/${repo.trim()}`;
+      const response = await fetch(`https://api.github.com/repos/${repository}/contents/${CLOUD_COLLECTION_PATH}`, {
+        headers: { Authorization: `Bearer ${token.trim()}`, Accept: 'application/vnd.github.raw+json' },
+        cache: 'no-store',
+      });
+      if (!response.ok) throw new Error(`Could not read cloud collection (HTTP ${response.status}).`);
+      const data = await response.json() as {
+        schema?: string; collection?: SavePayload; manualTotals?: Record<string, number>; ownedOnly?: boolean;
+      };
+      if (data.schema !== 'dlv-owned-collection-v1' || !data.ownedOnly || !data.collection ||
+        !data.collection.data || !data.collection.owned || !data.collection.nextId ||
+        !data.collection.checked || !data.collection.ingredients || !data.collection.deletedIds ||
+        !data.manualTotals || typeof data.manualTotals !== 'object' || Array.isArray(data.manualTotals)) {
+        throw new Error('Cloud file is not a valid migrated personal collection. No local data changed.');
+      }
+      const totals = Object.fromEntries(Object.entries(data.manualTotals).filter(([, value]) =>
+        typeof value === 'number' && Number.isSafeInteger(value) && value >= 0,
+      )) as Record<string, number>;
+      setRestorePreview({ save: data.collection, totals });
+      setStatus('Cloud collection ready to review. Restoring will replace local data on this device.');
+    } catch (error) { setError(true); setStatus(error instanceof Error ? error.message : 'Could not load cloud collection.'); }
+    finally { setLoading(false); }
+  }
+
   return (
     <aside className="sheet github-sheet" role="dialog" aria-modal="true" aria-label="Save on GitHub">
       <div className="sheet-card github-card">
@@ -1083,7 +1143,7 @@ function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => 
           </button>
         </div>
         <p className="github-help">
-          data.json will be sent to GitHub with your checks, crosses, edits, and deletions.
+          Back up or restore your personal collection and manual totals using your GitHub token. The token stays in this form and is not saved.
         </p>
         <label>
           <span>GitHub user</span>
@@ -1101,7 +1161,20 @@ function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => 
           <span>GitHub token</span>
           <input type="password" autoCapitalize="none" autoCorrect="off" spellCheck={false} value={token} onChange={(event) => setToken(event.target.value)} />
         </label>
-        {status && <p className={`github-status ${isError ? 'error' : ''}`}>{status}</p>}
+        <div className="github-actions">
+          <button className="action-button primary" disabled={isSaving || isLoading} onClick={uploadCollection}>Back up collection</button>
+          <button className="action-button" disabled={isSaving || isLoading} onClick={previewCloudCollection}>Load cloud backup</button>
+        </div>
+        {restorePreview && (
+          <div className="cloud-restore-confirm">
+            <p>Cloud: {Object.values(restorePreview.save.data).reduce((sum, items) => sum + (items?.length ?? 0), 0)} items.
+              Local: {Object.values(save.data).reduce((sum, items) => sum + (items?.length ?? 0), 0)} items.</p>
+            <p>Restoring will replace the collection and totals on this device. A local copy is kept before replacement.</p>
+            <button className="action-button primary" onClick={() => onRestore(restorePreview.save, restorePreview.totals)}>Confirm restore on this device</button>
+            <button className="action-button" onClick={() => setRestorePreview(null)}>Cancel restore</button>
+          </div>
+        )}
+        {status && <p className={`github-status ${isError ? 'error' : ''}`}>{status}</p>
         <div className="github-actions">
           <button className="action-button" onClick={onClose} disabled={isSaving}>
             Cancel
