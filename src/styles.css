@@ -1850,3 +1850,21 @@ h1 {
 }
 
 
+
+/* Search results: keep Disney universes alphabetical and visually distinct. */
+.search-universe-group {
+  margin-top: 18px;
+}
+.search-universe-group > h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.search-universe-group > h3 small {
+  color: var(--muted);
+  font-weight: 500;
+}
+.search-results .item-meta-row {
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
