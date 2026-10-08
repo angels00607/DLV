@@ -324,37 +324,42 @@ export function App() {
             <AddItemRow category={currentCategory.label} activeZone={activeZone} onAdd={addItem} />
           </section>
 
-          <SubcategoryGrid
-            groups={groupedItems}
-            activeGroup={activeGroup}
-            save={save}
-            categoryId={categoryId}
-            onSelect={selectSubcategory}
-            renderActiveGroup={() => (
-              <AlphabeticalCollection
-                  categoryId={categoryId}
-                  items={visibleItems}
-                  save={save}
-                  onOwned={toggleOwned}
-                  onChecked={toggleChecked}
-                  onEdit={setEditingItem}
-                  onDelete={deleteItem}
-                />
-            )}
-          />
-
-          {activeGroup === 'all' && filters.query && (
-            <section className="active-group-results search-results" aria-live="polite">
-              <AlphabeticalCollection
-                  categoryId={categoryId}
-                  items={visibleItems}
-                  save={save}
-                  onOwned={toggleOwned}
-                  onChecked={toggleChecked}
-                  onEdit={setEditingItem}
-                  onDelete={deleteItem}
-                />
+          {filters.query.trim() ? (
+            <section className="active-group-results search-results" aria-live="polite" aria-label="Search results">
+              <p className="search-results-count">
+                {baseFilteredItems.filter((item) => starFilter === 'all' || categoryId !== 'meals' || item.stars === starFilter).length} results
+              </p>
+              <ItemCards
+                categoryId={categoryId}
+                items={baseFilteredItems
+                  .filter((item) => starFilter === 'all' || categoryId !== 'meals' || item.stars === starFilter)
+                  .sort((a, b) => a.name.localeCompare(b.name))}
+                save={save}
+                onOwned={toggleOwned}
+                onChecked={toggleChecked}
+                onEdit={setEditingItem}
+                onDelete={deleteItem}
+              />
             </section>
+          ) : (
+            <SubcategoryGrid
+              groups={groupedItems}
+              activeGroup={activeGroup}
+              save={save}
+              categoryId={categoryId}
+              onSelect={selectSubcategory}
+              renderActiveGroup={() => (
+                <AlphabeticalCollection
+                  categoryId={categoryId}
+                  items={visibleItems}
+                  save={save}
+                  onOwned={toggleOwned}
+                  onChecked={toggleChecked}
+                  onEdit={setEditingItem}
+                  onDelete={deleteItem}
+                />
+              )}
+            />
           )}
         </main>
       )}
