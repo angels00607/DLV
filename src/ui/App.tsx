@@ -934,7 +934,7 @@ function AddItemRow({
 }) {
   const [name, setName] = useState('');
   const [universe, setUniverse] = useState('');
-  const [zone, setZone] = useState(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone);
+  const [zone, setZone] = useState<string>(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone);
   const [newZone, setNewZone] = useState('');
   const [creatingZone, setCreatingZone] = useState(false);
   const [addedZones, setAddedZones] = useState<string[]>([]);
