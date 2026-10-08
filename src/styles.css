@@ -1879,3 +1879,8 @@ h1 {
 .migration-actions button { min-height: 44px; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--line); }
 .migration-actions button:last-child { background: var(--plum); color: white; }
 .migration-actions button:disabled { opacity: .45; }
+
+.migration-home-trigger { width: 100%; min-height: 48px; margin-bottom: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-strong); color: var(--plum); font-weight: 750; }
+.migration-review-list { max-height: 30dvh; overflow-y: auto; display: grid; gap: 10px; padding: 12px 4px; }
+.migration-dialog details { border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.migration-dialog summary { cursor: pointer; font-weight: 750; }
