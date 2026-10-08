@@ -1364,23 +1364,14 @@ function HomeView({
         </div>
       </section>
 
-      <section className="overview" aria-label="Overall progress">
-        <div>
-          <span>{totalProgress.done}</span>
-          <p>Collected</p>
-        </div>
-        <div>
-          <span>{missing}</span>
-          <p>Remaining</p>
-        </div>
-        <div>
-          <span>{missingMarked}</span>
-          <p>Marked missing</p>
-        </div>
+      <section className="home-stats" aria-label="Collection summary">
+        <div className="home-stat"><strong>{totalProgress.done}</strong><span>Owned items</span></div>
+        <div className="home-stat"><strong>{missing}</strong><span>To collect</span></div>
+        {missingMarked > 0 && <div className="home-stat"><strong>{missingMarked}</strong><span>Marked missing</span></div>}
       </section>
 
       <section className="collection-group">
-        <div className="home-section-title">Categories</div>
+        <div className="home-section-title">Your collections</div>
         <div className="home-category-list">
           {CATEGORIES.map((category) => {
             const progress = getUniverseProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals);
@@ -1388,8 +1379,7 @@ function HomeView({
               <button key={category.id} className="home-category-row" onClick={() => onOpenCategory(category.id)}>
                 <img src={category.icon} alt="" onError={(event) => (event.currentTarget.style.display = 'none')} />
                 <span>{category.label}</span>
-                <small>{progress.done}/{progress.total}</small>
-
+                <small>{progress.done}/{progress.total} · {Math.round(progress.percent)}%</small>
                 <div className="home-bar"><i style={{ width: `${progress.percent}%` }} /></div>
               </button>
             );
