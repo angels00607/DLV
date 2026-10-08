@@ -1743,6 +1743,24 @@ h1 {
   padding: 4px 0 8px;
 }
 
+.sheet-filter-group > label {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sheet-filter-group > select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-strong);
+  color: var(--ink);
+}
+
 .sheet-filter-group > p {
   color: var(--muted);
   font-size: 0.74rem;
