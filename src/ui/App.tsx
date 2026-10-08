@@ -24,6 +24,8 @@ import { INGREDIENT_OPTIONS } from '../data/ingredientOptions';
 import { downloadSave, readImportedFile } from '../data/manualImport';
 import { buildPortableData, getNextId, loadSave, mergeImportedSave, persistSave } from '../data/saveSystem';
 import { normalizeText } from '../lib/text';
+import { previewOwnedOnlyMigration } from '../data/ownedOnlyMigration';
+import { COLLECTION_BACKUP_KEY, COLLECTION_MODE_KEY, STORAGE_KEY } from '../data/saveSystem';
 
 const initialFilters: FilterState = {
   query: '',
@@ -67,6 +69,10 @@ export function App() {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [editingItem, setEditingItem] = useState<GameItem | null>(null);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [migrationOpen, setMigrationOpen] = useState(false);
+  const [migrationChecked, setMigrationChecked] = useState(false);
+  const [migrationError, setMigrationError] = useState('');
+  const [reviewedCheckedIds, setReviewedCheckedIds] = useState<Record<string, boolean>>({});
   const [isGithubOpen, setGithubOpen] = useState(false);
   const [isZoneOpen, setZoneOpen] = useState(false);
   const [isFilterOpen, setFilterOpen] = useState(false);
@@ -209,6 +215,43 @@ export function App() {
     updateSave(next);
   }
 
+  function commitOwnedOnlyMigration() {
+    if (!save || !migrationChecked) return;
+    try {
+      const preview = previewOwnedOnlyMigration(save);
+      for (const [category, ambiguousItems] of Object.entries(preview.ambiguousItems) as [CategoryId, GameItem[]][]) {
+        for (const item of ambiguousItems) {
+          if (reviewedCheckedIds[`${category}:${item.id}`]) {
+            preview.collection.data[category] ??= [];
+            preview.collection.data[category]!.push({ ...item });
+            preview.collection.owned[category] ??= {};
+            preview.collection.owned[category]![item.id] = 'owned';
+            const ingredients = save.ingredients[category]?.[item.id];
+            if (ingredients) {
+              preview.collection.ingredients[category] ??= {};
+              preview.collection.ingredients[category]![item.id] = [...ingredients];
+            }
+          }
+        }
+      }
+      // Verify backup storage BEFORE touching the live save or mode flag.
+      const original = localStorage.getItem(STORAGE_KEY);
+      if (original === null) throw new Error('Existing local save was not found. No changes made.');
+      localStorage.setItem(COLLECTION_BACKUP_KEY, original);
+      if (localStorage.getItem(COLLECTION_BACKUP_KEY) !== original) {
+        throw new Error('Could not verify the backup. No changes made.');
+      }
+      // Persist the converted save first; activate catalog-free mode only after success.
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(preview.collection));
+      if (localStorage.getItem(STORAGE_KEY) === null) throw new Error('Could not write the new collection.');
+      localStorage.setItem(COLLECTION_MODE_KEY, '1');
+      setSave(preview.collection);
+      setMigrationOpen(false);
+    } catch (error) {
+      setMigrationError(error instanceof Error ? error.message : 'Migration failed.');
+    }
+  }
+
   async function importFile(event: ChangeEvent<HTMLInputElement>) {
     if (!save || !event.target.files?.[0]) return;
     const imported = await readImportedFile(event.target.files[0]);
@@ -269,6 +312,44 @@ export function App() {
         <ChevronDown size={17} />
       </button>
 
+      {migrationOpen && (() => {
+        const preview = previewOwnedOnlyMigration(save);
+        const count = (values: Partial<Record<CategoryId, number>>) => Object.values(values).reduce((a, b) => a + (b ?? 0), 0);
+        return (
+          <div role="dialog" aria-modal="true" aria-label="Confirm owned-only migration" className="migration-overlay">
+            <div className="migration-dialog">
+              <h2>Switch to My Collection</h2>
+              <p><strong>{count(preview.included)}</strong> explicitly Owned items will remain in your collection.</p>
+              <p><strong>{count(preview.excluded)}</strong> other catalog entries will be removed from the active collection.</p>
+              <p><strong>{count(preview.ambiguous)}</strong> Checked-only items need your decision. Select only the ones you own:</p>
+              {Object.entries(preview.ambiguousItems).map(([category, entries]) => entries?.length ? (
+                <details key={category}>
+                  <summary>{category} ({entries.length} to review)</summary>
+                  <div className="migration-review-list">
+                    {entries.map((item) => (
+                      <label key={item.id}>
+                        <input type="checkbox" checked={!!reviewedCheckedIds[`${category}:${item.id}`]}
+                          onChange={(event) => setReviewedCheckedIds((old) => ({ ...old, [`${category}:${item.id}`]: event.target.checked }))} />
+                        {item.name} {item.meta ? `· ${item.meta}` : ''}
+                      </label>
+                    ))}
+                  </div>
+                </details>
+              ) : null)}
+              <p>A copy of your current save will be kept in this browser before conversion. Export your backup from Settings first for additional safety.</p>
+              <label><input type="checkbox" checked={migrationChecked} onChange={(event) => setMigrationChecked(event.target.checked)} /> I understand that Checked does not necessarily mean Owned.</label>
+              {migrationError && <p role="alert">{migrationError}</p>}
+              <div className="migration-actions">
+                <button onClick={() => { setMigrationOpen(false); setMigrationChecked(false); setMigrationError(''); }}>Cancel</button>
+                <button disabled={!migrationChecked} onClick={commitOwnedOnlyMigration}>Confirm migration</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+      {activeView === 'home' && localStorage.getItem(COLLECTION_MODE_KEY) !== '1' && (
+        <button className="migration-home-trigger" onClick={() => setMigrationOpen(true)}>Preview My Collection migration</button>
+      )}
       {activeView === 'home' ? (
         <HomeView
           save={save}
@@ -317,6 +398,13 @@ export function App() {
               Filters{filters.status !== 'all' || starFilter !== 'all' || filters.universe !== 'all' ? ' •' : ''}
             </button>
           </div>
+          {localStorage.getItem(COLLECTION_MODE_KEY) !== '1' && (
+            <section className="add-item-panel" aria-label="Owned-only migration">
+              <strong>Switch to My Collection</strong>
+              <p>Keep only items explicitly marked Owned. Checked-only items will need your review.</p>
+              <button type="button" onClick={() => setMigrationOpen(true)}>Preview migration</button>
+            </section>
+          )}
           <section className="add-item-panel" aria-label={`Add an item to ${currentCategory.label}`}>
             <div className="add-item-panel-heading">
               <div>

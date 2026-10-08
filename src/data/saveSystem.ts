@@ -2,6 +2,8 @@ import { CATEGORIES } from '../domain/categories';
 import type { CategoryId, GameItem, SavePayload } from '../domain/types';
 
 export const STORAGE_KEY = 'dlv_guide_v6';
+export const COLLECTION_MODE_KEY = 'dlv_collection_owned_only_v1';
+export const COLLECTION_BACKUP_KEY = 'dlv_collection_pre_migration_backup_v1';
 const EMPTY_SAVE: SavePayload = {
   data: {},
   checked: {},
@@ -22,6 +24,7 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
   const defaultChecked = defaults.checked ?? {};
   const defaultIngredients = defaults.ingredients ?? {};
 
+  const collectionMode = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
   CATEGORIES.forEach(({ id }) => {
     next.data[id] ??= [];
     next.checked[id] ??= {};
@@ -32,7 +35,7 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     const localItems = next.data[id] ?? [];
     const localById = new Map(localItems.map((item) => [item.id, item]));
 
-    for (const item of defaultData[id] ?? []) {
+    for (const item of collectionMode ? [] : (defaultData[id] ?? [])) {
       if (!localById.has(item.id) && !next.deletedIds[id]?.[item.id]) {
         localItems.push({ ...item });
       } else {
@@ -44,20 +47,20 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
       }
     }
 
-    for (const [itemId, value] of Object.entries(defaultOwned[id] ?? {})) {
+    for (const [itemId, value] of Object.entries(collectionMode ? {} : (defaultOwned[id] ?? {}))) {
       if (next.owned[id]?.[itemId] === undefined) next.owned[id]![itemId] = value;
     }
 
-    for (const [itemId, value] of Object.entries(defaultChecked[id] ?? {})) {
+    for (const [itemId, value] of Object.entries(collectionMode ? {} : (defaultChecked[id] ?? {}))) {
       if (next.checked[id]?.[itemId] === undefined) next.checked[id]![itemId] = value;
     }
 
-    for (const [itemId, value] of Object.entries(defaultIngredients[id] ?? {})) {
+    for (const [itemId, value] of Object.entries(collectionMode ? {} : (defaultIngredients[id] ?? {}))) {
       if (!next.ingredients[id]?.[itemId]) next.ingredients[id]![itemId] = value;
     }
 
     next.data[id] = sortCatItems(id, localItems);
-    next.nextId[id] = getNextId(localItems);
+    next.nextId[id] = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
   });
 
   return next;

@@ -1868,3 +1868,19 @@ h1 {
   flex-wrap: wrap;
   gap: 4px 10px;
 }
+
+/* Explicit migration confirmation; never auto-convert local collections. */
+.migration-overlay { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 18px; background: rgba(25, 18, 39, .66); }
+.migration-dialog { width: min(100%, 520px); max-height: 90dvh; overflow-y: auto; display: grid; gap: 16px; padding: 24px; border-radius: 22px; background: var(--surface-strong); color: var(--ink); box-shadow: var(--shadow); }
+.migration-dialog p { line-height: 1.5; }
+.migration-dialog label { display: flex; align-items: flex-start; gap: 10px; line-height: 1.45; }
+.migration-dialog label input { margin-top: 4px; flex-shrink: 0; }
+.migration-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; }
+.migration-actions button { min-height: 44px; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--line); }
+.migration-actions button:last-child { background: var(--plum); color: white; }
+.migration-actions button:disabled { opacity: .45; }
+
+.migration-home-trigger { width: 100%; min-height: 48px; margin-bottom: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-strong); color: var(--plum); font-weight: 750; }
+.migration-review-list { max-height: 30dvh; overflow-y: auto; display: grid; gap: 10px; padding: 12px 4px; }
+.migration-dialog details { border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.migration-dialog summary { cursor: pointer; font-weight: 750; }
