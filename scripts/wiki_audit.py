@@ -45,12 +45,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--catalog", default="public/data.json")
     parser.add_argument("--output", default="wiki-sync-report.json")
+    parser.add_argument("--snapshot", help="Optional reviewed JSON snapshot of wiki collection item names; avoids wiki API access")
     args = parser.parse_args()
     catalog = json.loads(Path(args.catalog).read_text(encoding="utf-8"))
+    snapshot = json.loads(Path(args.snapshot).read_text(encoding="utf-8")) if args.snapshot else None
+    if snapshot is not None:
+        if not isinstance(snapshot, dict) or any(not isinstance(snapshot.get(k), list) or any(not isinstance(x, str) for x in snapshot[k]) for k in CATEGORIES):
+            parser.error("Snapshot must contain string arrays for clothing, furniture, meals and crafting")
     report = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "mode": "READ_ONLY_NO_CATALOG_CHANGES",
-        "source": API,
+        "snapshotMode": snapshot is not None,
+        "source": args.snapshot if args.snapshot else API,
         "categories": {},
         "warnings": ["Wiki category membership is only a candidate discovery source. Missing items, subcategories, universe and zone require human verification.", "This audit never changes catalog IDs, progress, zones or universes."],
     }
@@ -60,7 +66,7 @@ def main():
         for item in existing:
             by_name.setdefault(normalized(item["name"]), []).append(item)
         try:
-            titles = fetch_members(wiki_category)
+            titles = sorted(set(snapshot[key]), key=str.casefold) if snapshot is not None else fetch_members(wiki_category)
             candidates = []
             matched = 0
             for title in titles:
