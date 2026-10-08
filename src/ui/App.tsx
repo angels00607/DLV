@@ -857,13 +857,14 @@ function AlphabeticalCollection({
   const letters = buildLetterGroups(sortedItems);
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
   const [openWords, setOpenWords] = useState<Set<string>>(() => new Set());
+  const listTopRef = useRef<HTMLDivElement>(null);
 
   function chooseLetter(letter: string) {
     if (letter !== selectedLetter) setOpenWords(new Set());
     setSelectedLetter(letter);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        document.getElementById('alphabetical-list-top')?.scrollIntoView({
+        listTopRef.current?.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
         });
@@ -894,7 +895,7 @@ function AlphabeticalCollection({
   const wordGroups = buildFirstWordGroups(visibleItems);
 
   const renderWordGroups = () => (
-    <div id="alphabetical-list-top" className="alphabetical-word-list" aria-label="Browse items by name">
+    <div ref={listTopRef} className="alphabetical-word-list" aria-label="Browse items by name">
       {wordGroups.map(([word, groupedItems]) => (
         groupedItems.length > FIRST_WORD_ACCORDION_LIMIT ? (
           <details className="word-accordion" key={word} open={openWords.has(word)}
