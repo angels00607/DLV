@@ -77,6 +77,7 @@ export function App() {
   const [reviewedCheckedIds, setReviewedCheckedIds] = useState<Record<string, boolean>>({});
   const [isGithubOpen, setGithubOpen] = useState(false);
   const [isZoneOpen, setZoneOpen] = useState(false);
+  const [isCategoryOpen, setCategoryOpen] = useState(false);
   const [isFilterOpen, setFilterOpen] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -287,38 +288,45 @@ export function App() {
       </header>
 
       <nav className="tab-bar" aria-label="Primary">
-        <button
-          className={activeView === 'home' ? 'active' : ''}
-          onClick={() => {
-            setActiveView('home');
-            setActiveGroup('all');
-            setFilters(initialFilters);
-          }}
-        >
-          <Home size={20} />
+        <button className={activeView === 'home' ? 'active' : ''} aria-current={activeView === 'home' ? 'page' : undefined} onClick={() => {
+          setActiveView('home'); setActiveGroup('all'); setFilters(initialFilters);
+        }}>
+          <Home size={21} />
           <span>Home</span>
-          <small>{Math.round(totalProgress.percent)}%</small>
         </button>
-        {CATEGORIES.map((category) => {
-          const categoryProgress = getUniverseProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals);
-          return (
-            <button
-              key={category.id}
-              className={category.id === activeView ? 'active' : ''}
-              onClick={() => {
-                setActiveView(category.id);
-                setActiveGroup('all');
-                setStarFilter('all');
-                setFilters(initialFilters);
-              }}
-            >
-              <img src={category.icon} alt="" onError={(event) => (event.currentTarget.style.display = 'none')} />
-              <span>{category.shortLabel}</span>
-              <small>{categoryProgress.done}/{categoryProgress.total}</small>
-            </button>
-          );
-        })}
+        <button className={activeView !== 'home' ? 'active' : ''} aria-current={activeView !== 'home' ? 'page' : undefined} onClick={() => setCategoryOpen(true)}>
+          <span className="nav-collection-icon"><img src={currentCategory.icon} alt="" /></span>
+          <span>Collection</span>
+        </button>
+        <button onClick={() => setSettingsOpen(true)} aria-label="Open settings">
+          <Settings size={21} />
+          <span>Settings</span>
+        </button>
       </nav>
+
+      {isCategoryOpen && (
+        <ChoiceSheet title="Choose a collection" onClose={() => setCategoryOpen(false)}>
+          <div className="category-choice-list">
+            {CATEGORIES.map((category) => {
+              const counts = getUniverseProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals);
+              return (
+                <button className={category.id === activeView ? 'category-choice active' : 'category-choice'} key={category.id} onClick={() => {
+                  setActiveView(category.id);
+                  setActiveGroup('all');
+                  setStarFilter('all');
+                  setFilters(initialFilters);
+                  setCategoryOpen(false);
+                }}>
+                  <img src={category.icon} alt="" />
+                  <span>{category.label}</span>
+                  <small>{counts.done}/{counts.total}</small>
+                  <ChevronDown size={16} aria-hidden="true" />
+                </button>
+              );
+            })}
+          </div>
+        </ChoiceSheet>
+      )}
 
       <button className="zone-trigger" onClick={() => setZoneOpen(true)} aria-haspopup="dialog">
         <MapPin size={16} />
@@ -381,7 +389,7 @@ export function App() {
         <main className="content">
           <div className="section-title">
             <div>
-              <h2>{currentCategory.label}</h2>
+              <button className="category-heading-switch" onClick={() => setCategoryOpen(true)} aria-label="Change collection category"><h2>{currentCategory.label}</h2><ChevronDown size={20}/></button>
               <p>{progress.done} of {progress.total} collected</p>
 
             </div>
