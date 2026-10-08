@@ -47,7 +47,7 @@ jobs:
               data = json.loads(path.read_text())
               lines = ["## Wiki audit source status", ""]
               for category, details in data.get("categories", {}).items():
-                  lines.append(f"- **{category}**: " + (f"ERROR — {details['error']}" if "error" in details else f"{details['wikiPagesFound']} pages discovered"))
+                  lines.append(f"- **{category}**: " + (f"ERROR — {details['error']}" if "error" in details else ("NOT CHECKED" if details.get("status") == "NOT_CHECKED" else f"{details['wikiPagesFound']} pages discovered")))
               with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
                   summary.write("\\n".join(lines) + "\\n")
           PY
