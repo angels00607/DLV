@@ -1898,3 +1898,8 @@ h1 {
 .quick-add-zone { display: flex; flex-wrap: wrap; gap: 6px; grid-column: 1 / -1; }
 .quick-add-zone input { flex: 1 1 140px; }
 @media (max-width: 520px) { .quick-add { grid-template-columns: 1fr; } .quick-add label:first-child, .quick-add-submit, .quick-add p, .quick-add-zone { grid-column: 1; } }
+
+.manual-total-editor { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--muted); }
+.manual-total-editor input { width: 88px; min-height: 38px; padding: 6px 9px; border-radius: 9px; border: 1px solid var(--line); background: var(--surface-strong); color: var(--ink); }
+.home-total-edit { display: inline-flex; justify-self: end; }
+.home-total-edit .manual-total-editor input { width: 75px; }
