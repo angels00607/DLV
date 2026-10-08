@@ -29,7 +29,7 @@ jobs:
           from pathlib import Path
           report = json.loads(Path('/tmp/wiki-audit-smoke.json').read_text())
           assert report['snapshotMode'] is True
-          assert report['categories']['clothing']['status'] == 'CHECKED'
+          assert report['categories']['clothing']['status'] == 'SNAPSHOT_COMPARED'
           assert report['categories']['furniture']['status'] == 'NOT_CHECKED'
           assert report['categories']['meals']['status'] == 'NOT_CHECKED'
           assert report['categories']['crafting']['status'] == 'NOT_CHECKED'
