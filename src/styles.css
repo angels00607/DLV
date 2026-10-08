@@ -1959,3 +1959,10 @@ h1 {
 .universe-card .manual-total-editor { justify-content: space-between; gap: 6px; font-size: .72rem; }
 .universe-card .manual-total-editor input { width: 68px; min-height: 44px; text-align: center; }
 @media (max-width: 390px) { .subcategory-grid { grid-template-columns: 1fr; } }
+
+/* Phase 4: focused add flow instead of a permanent form above collection content. */
+.tab-bar { grid-template-columns: repeat(4, minmax(0,1fr)); }
+.inline-add-trigger { width: 100%; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border: 1px dashed var(--lavender); border-radius: 15px; background: var(--surface-strong); color: var(--plum); font-size: .84rem; font-weight: 750; }
+.quick-add-sheet-intro { color: var(--muted); font-size: .83rem; line-height: 1.5; margin-bottom: 12px; }
+.quick-add-sheet-intro + .quick-add { margin-top: 6px; }
+@media (max-width: 430px) { .tab-bar span { font-size: .7rem; } }

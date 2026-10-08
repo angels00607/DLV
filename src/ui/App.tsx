@@ -78,6 +78,7 @@ export function App() {
   const [isGithubOpen, setGithubOpen] = useState(false);
   const [isZoneOpen, setZoneOpen] = useState(false);
   const [isCategoryOpen, setCategoryOpen] = useState(false);
+  const [isQuickAddOpen, setQuickAddOpen] = useState(false);
   const [isFilterOpen, setFilterOpen] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -298,6 +299,10 @@ export function App() {
           <span className="nav-collection-icon"><img src={currentCategory.icon} alt="" /></span>
           <span>Collection</span>
         </button>
+        <button onClick={() => { if (activeView === 'home') { setCategoryOpen(true); } else { setQuickAddOpen(true); } }} aria-label={activeView === 'home' ? 'Choose a collection to add an item' : 'Add an item'}>
+          <Plus size={21} />
+          <span>Add</span>
+        </button>
         <button onClick={() => setSettingsOpen(true)} aria-label="Open settings">
           <Settings size={21} />
           <span>Settings</span>
@@ -431,16 +436,7 @@ export function App() {
               <button type="button" onClick={() => setMigrationOpen(true)}>Preview migration</button>
             </section>
           )}
-          <section className="add-item-panel" aria-label={`Add an item to ${currentCategory.label}`}>
-            <div className="add-item-panel-heading">
-              <div>
-                <p>Add an item</p>
-                <small>{currentCategory.label} · {formatZoneLabel(activeZone)}</small>
-              </div>
-              <Plus size={18} aria-hidden="true" />
-            </div>
-            <AddItemRow category={currentCategory.label} activeZone={activeZone} existingItems={items} onAdd={addItem} />
-          </section>
+          <button className="inline-add-trigger" onClick={() => setQuickAddOpen(true)}><Plus size={18} /> Add an item to {currentCategory.label}</button>
 
           {filters.query.trim() ? (
             <section className="active-group-results search-results" aria-live="polite" aria-label="Search results">
@@ -571,6 +567,12 @@ export function App() {
         </ChoiceSheet>
       )}
 
+      {isQuickAddOpen && activeView !== 'home' && (
+        <ChoiceSheet title={`Add to ${currentCategory.label}`} onClose={() => setQuickAddOpen(false)}>
+          <div className="quick-add-sheet-intro">Add an owned item. Save & add another keeps your universe and zone.</div>
+          <AddItemRow category={currentCategory.label} activeZone={activeZone} existingItems={items} onAdd={addItem} />
+        </ChoiceSheet>
+      )}
       {isSettingsOpen && (
         <aside className="sheet" role="dialog" aria-modal="true" aria-label="Settings">
           <div className="sheet-card">
@@ -588,15 +590,15 @@ export function App() {
               }}
             >
               <Github size={18} />
-              Save on GitHub
+              GitHub backup & restore
             </button>
             <button className="action-button" onClick={() => downloadSave(save)}>
               <Download size={18} />
-              Export manual save
+              Export collection file
             </button>
             <button className="action-button" onClick={() => fileInput.current?.click()}>
               <Upload size={18} />
-              Import manual save
+              Import collection file
             </button>
             <input ref={fileInput} className="hidden" type="file" accept="application/json" onChange={importFile} />
           </div>
