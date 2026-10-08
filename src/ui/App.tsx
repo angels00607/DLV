@@ -306,7 +306,7 @@ export function App() {
                   type="button"
                   className="search-clear"
                   aria-label="Clear search"
-                  onClick={() => setFilters({ ...filters, query: '' })}
+                  onClick={() => { setFilters(initialFilters); setStarFilter('all'); setActiveGroup('all'); }}
                 >
                   <X size={17} />
                 </button>
@@ -317,16 +317,6 @@ export function App() {
               Filters{filters.status !== 'all' || starFilter !== 'all' || filters.universe !== 'all' ? ' •' : ''}
             </button>
           </div>
-          {(filters.query || filters.status !== 'all' || starFilter !== 'all' || filters.universe !== 'all') && (
-            <button
-              type="button"
-              className="filter-trigger"
-              onClick={() => { setFilters(initialFilters); setStarFilter('all'); setActiveGroup('all'); }}
-            >
-              <X size={16} /> Clear filters
-            </button>
-          )}
-
           <section className="add-item-panel" aria-label={`Add an item to ${currentCategory.label}`}>
             <div className="add-item-panel-heading">
               <div>
@@ -348,6 +338,21 @@ export function App() {
                 items={baseFilteredItems
                   .filter((item) => starFilter === 'all' || categoryId !== 'meals' || item.stars === starFilter)
                   .sort((a, b) => a.name.localeCompare(b.name))}
+                save={save}
+                onOwned={toggleOwned}
+                onChecked={toggleChecked}
+                onEdit={setEditingItem}
+                onDelete={deleteItem}
+              />
+            </section>
+          ) : filters.universe !== 'all' ? (
+            <section className="active-group-results" aria-label={`Items in ${filters.universe}`}>
+              <AlphabeticalCollection
+                key={`${categoryId}:${activeZone}:${filters.universe}`}
+                categoryId={categoryId}
+                items={baseFilteredItems.filter((item) =>
+                  starFilter === 'all' || categoryId !== 'meals' || item.stars === starFilter
+                )}
                 save={save}
                 onOwned={toggleOwned}
                 onChecked={toggleChecked}
@@ -418,6 +423,7 @@ export function App() {
               onChange={(event) => {
                 setFilters((current) => ({ ...current, universe: event.target.value }));
                 setActiveGroup('all');
+                if (event.target.value !== 'all') setFilterOpen(false);
               }}
             >
               <option value="all">{categoryId === 'clothing' || categoryId === 'furniture' ? 'All universes' : 'All categories'}</option>
