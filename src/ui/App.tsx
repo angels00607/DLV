@@ -290,11 +290,11 @@ export function App() {
             <div className="search-field">
               <Search size={18} />
               <input
-                aria-label="Search everything"
+                aria-label={`Search ${currentCategory.label.toLowerCase()}`}
                 autoCapitalize="words"
                 value={filters.query}
                 onChange={(event) => setFilters({ ...filters, query: event.target.value })}
-                placeholder="Search everything"
+                placeholder={`Search ${currentCategory.label.toLowerCase()}...`}
               />
               {filters.query && (
                 <button
@@ -312,6 +312,15 @@ export function App() {
               Filters{filters.status !== 'all' || starFilter !== 'all' ? ' •' : ''}
             </button>
           </div>
+          {(filters.query || filters.status !== 'all' || starFilter !== 'all') && (
+            <button
+              type="button"
+              className="filter-trigger"
+              onClick={() => { setFilters(initialFilters); setStarFilter('all'); }}
+            >
+              <X size={16} /> Clear filters
+            </button>
+          )}
 
           <section className="add-item-panel" aria-label={`Add an item to ${currentCategory.label}`}>
             <div className="add-item-panel-heading">
