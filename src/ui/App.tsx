@@ -125,13 +125,13 @@ export function App() {
     ),
     [baseFilteredItems, activeGroup, starFilter, categoryId],
   );
-  const progress = getProgress(zoneItems, save, categoryId, manualTotals[totalKey(categoryId, activeZone)]);
+  const progress = getUniverseProgress(zoneItems, save, categoryId, manualTotals);
   const totalProgress = getTotalProgress(save, activeZone, manualTotals);
-  function setCategoryTotal(category: CategoryId, zone: string, value: number | null) {
+  function setCategoryTotal(category: CategoryId, zone: string, universe: string, value: number | null) {
     setManualTotals((current) => {
       const next = { ...current };
-      if (value === null) delete next[totalKey(category, zone)];
-      else next[totalKey(category, zone)] = Math.max(0, Math.floor(value));
+      if (value === null) delete next[universeTotalKey(category, zone, universe)];
+      else next[universeTotalKey(category, zone, universe)] = Math.max(0, Math.floor(value));
       localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(next));
       return next;
     });
@@ -300,7 +300,7 @@ export function App() {
           <small>{Math.round(totalProgress.percent)}%</small>
         </button>
         {CATEGORIES.map((category) => {
-          const categoryProgress = getProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id);
+          const categoryProgress = getUniverseProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals);
           return (
             <button
               key={category.id}
@@ -383,7 +383,7 @@ export function App() {
             <div>
               <h2>{currentCategory.label}</h2>
               <p>{progress.done} of {progress.total} collected</p>
-              <ManualTotalEditor category={categoryId} zone={activeZone} value={manualTotals[totalKey(categoryId, activeZone)]} onChange={setCategoryTotal} />
+
             </div>
             <div className="progress-ring" style={{ '--progress': `${progress.percent * 3.6}deg` } as React.CSSProperties}>
               {Math.round(progress.percent)}%
@@ -481,6 +481,8 @@ export function App() {
               activeGroup={activeGroup}
               save={save}
               categoryId={categoryId}
+              manualTotals={manualTotals}
+              onSetTotal={setCategoryTotal}
               onSelect={selectSubcategory}
               renderActiveGroup={() => (
                 <AlphabeticalCollection
@@ -766,6 +768,8 @@ function SubcategoryGrid({
   activeGroup,
   save,
   categoryId,
+  manualTotals,
+  onSetTotal,
   onSelect,
   renderActiveGroup,
 }: {
@@ -773,6 +777,8 @@ function SubcategoryGrid({
   activeGroup: string;
   save: SavePayload;
   categoryId: CategoryId;
+  manualTotals: Record<string, number>;
+  onSetTotal: (category: CategoryId, zone: string, universe: string, value: number | null) => void;
   onSelect: (group: string) => void;
   renderActiveGroup: () => React.ReactNode;
 }) {
@@ -780,7 +786,7 @@ function SubcategoryGrid({
   return (
     <section className={`subcategory-grid ${activeGroup !== 'all' ? 'compact' : ''}`} aria-label="Choose a subcategory">
       {groups.map(([group, items]) => {
-        const progress = getProgress(items, save, categoryId);
+        const progress = getUniverseProgress(items, save, categoryId, manualTotals);
         const isActive = activeGroup === group;
         return (
           <Fragment key={group}>
@@ -791,11 +797,14 @@ function SubcategoryGrid({
             >
               <strong>{group}</strong>
               <span>{progress.total} items</span>
-              <small>{progress.done} collected · {progress.total - progress.done} remaining</small>
+              <small>{progress.done} collected · {Math.max(0, progress.total - progress.done)} remaining</small>
               <i><b style={{ width: `${progress.percent}%` }} /></i>
             </button>
             {isActive && (
               <section id="active-group-results" className="active-group-results" aria-live="polite">
+                <div className="universe-total-editors">{Array.from(new Set(items.map((item) => normalizeZone(item.meta2 ?? '') || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
+                  <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={group} value={manualTotals[universeTotalKey(categoryId, zone, group)]} onChange={onSetTotal} />
+                ))}</div>
                 {renderActiveGroup()}
               </section>
             )}
@@ -1320,7 +1329,7 @@ function HomeView({
   activeZone: ActiveZone;
   totalProgress: { done: number; total: number; percent: number };
   manualTotals: Record<string, number>;
-  onSetTotal: (category: CategoryId, zone: string, value: number | null) => void;
+  onSetTotal: (category: CategoryId, zone: string, universe: string, value: number | null) => void;
   onOpenCategory: (categoryId: CategoryId) => void;
 }) {
   const missing = Math.max(0, totalProgress.total - totalProgress.done);
@@ -1363,13 +1372,13 @@ function HomeView({
         <div className="home-section-title">Categories</div>
         <div className="home-category-list">
           {CATEGORIES.map((category) => {
-            const progress = getProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals[totalKey(category.id, activeZone)]);
+            const progress = getUniverseProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals);
             return (
               <button key={category.id} className="home-category-row" onClick={() => onOpenCategory(category.id)}>
                 <img src={category.icon} alt="" onError={(event) => (event.currentTarget.style.display = 'none')} />
                 <span>{category.label}</span>
                 <small>{progress.done}/{progress.total}</small>
-                <span className="home-total-edit" onClick={(event) => event.stopPropagation()}><ManualTotalEditor category={category.id} zone={activeZone} value={manualTotals[totalKey(category.id, activeZone)]} onChange={onSetTotal} /></span>
+
                 <div className="home-bar"><i style={{ width: `${progress.percent}%` }} /></div>
               </button>
             );
@@ -1783,7 +1792,22 @@ function toggleAccordion(
 }
 
 const MANUAL_TOTALS_KEY = 'dlv_manual_collection_totals_v1';
-function totalKey(category: CategoryId, zone: string) { return `${zone}::${category}`; }
+function universeTotalKey(category: CategoryId, zone: string, universe: string) {
+  return JSON.stringify([category, normalizeZone(zone), universe.trim()]);
+}
+function getUniverseProgress(items: GameItem[], save: SavePayload | null, category: CategoryId, totals: Record<string, number>) {
+  const groups = new Map<string, GameItem[]>();
+  for (const item of items) {
+    const key = universeTotalKey(category, item.meta2 ?? 'DREAMLIGHT VALLEY', item.meta || 'Other');
+    groups.set(key, [...(groups.get(key) ?? []), item]);
+  }
+  let done = 0, total = 0;
+  for (const [key, entries] of groups) {
+    done += entries.filter((item) => save?.owned[category]?.[item.id] === 'owned').length;
+    total += totals[key] ?? entries.length;
+  }
+  return { done, total, percent: total ? Math.min(100, done / total * 100) : 0 };
+}
 function readManualTotals(): Record<string, number> {
   try {
     const parsed: unknown = JSON.parse(localStorage.getItem(MANUAL_TOTALS_KEY) ?? '{}');
@@ -1793,16 +1817,16 @@ function readManualTotals(): Record<string, number> {
     )) as Record<string, number>;
   } catch { return {}; }
 }
-function ManualTotalEditor({ category, zone, value, onChange }: {
-  category: CategoryId; zone: string; value: number | undefined;
-  onChange: (category: CategoryId, zone: string, value: number | null) => void;
+function ManualTotalEditor({ category, zone, universe, value, onChange }: {
+  category: CategoryId; zone: string; universe: string; value: number | undefined;
+  onChange: (category: CategoryId, zone: string, universe: string, value: number | null) => void;
 }) {
   return <label className="manual-total-editor" onClick={(event) => event.stopPropagation()}>
-    Total <input type="number" min="0" step="1" inputMode="numeric" aria-label="Manual collection total"
+    Total · {formatZoneLabel(zone)} <input type="number" min="0" step="1" inputMode="numeric" aria-label="Manual collection total"
       placeholder="Set total" value={value ?? ''} onChange={(event) => {
         const raw = event.target.value;
-        if (!raw) onChange(category, zone, null);
-        else if (/^\\d+$/.test(raw) && Number.isSafeInteger(Number(raw))) onChange(category, zone, Number(raw));
+        if (!raw) onChange(category, zone, universe, null);
+        else if (/^\\d+$/.test(raw) && Number.isSafeInteger(Number(raw))) onChange(category, zone, universe, Number(raw));
       }} />
   </label>;
 }
@@ -1817,9 +1841,8 @@ function getMarkedMissing(items: GameItem[], save: SavePayload | null, categoryI
 }
 
 function getTotalProgress(save: SavePayload | null, zone: ActiveZone = 'all', manualTotals: Record<string, number> = {}) {
-  const parts = CATEGORIES.map((category) => getProgress(
-    filterByZone(save?.data[category.id] ?? [], zone), save, category.id,
-    manualTotals[totalKey(category.id, zone)],
+  const parts = CATEGORIES.map((category) => getUniverseProgress(
+    filterByZone(save?.data[category.id] ?? [], zone), save, category.id, manualTotals,
   ));
   const done = parts.reduce((sum, part) => sum + part.done, 0);
   const total = parts.reduce((sum, part) => sum + part.total, 0);
