@@ -798,21 +798,21 @@ function SubcategoryGrid({
         const isActive = activeGroup === group;
         return (
           <Fragment key={group}>
-            <button
-              className={isActive ? 'active' : ''}
-              aria-pressed={isActive}
-              onClick={() => onSelect(group)}
-            >
-              <strong>{group}</strong>
-              <span>{progress.done}/{progress.total} collected</span>
-              <small>{Math.max(0, progress.total - progress.done)} remaining</small>
-              <i><b style={{ width: `${progress.percent}%` }} /></i>
-            </button>
-            <div className="universe-total-editors" style={{ padding: '0.5rem 0.75rem 1rem' }}>
-              {Array.from(new Set(items.map((item) => normalizeZone(item.meta2) || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
-                <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={group}
-                  value={manualTotals[universeTotalKey(categoryId, zone, group)]} onChange={onSetTotal} />
-              ))}
+            <div className={isActive ? 'universe-card active' : 'universe-card'}>
+              <button className="universe-card-open" aria-pressed={isActive} onClick={() => onSelect(group)}>
+                <span className="universe-card-heading">
+                  <strong>{group}</strong>
+                  <ChevronDown size={17} aria-hidden="true" />
+                </span>
+                <span className="universe-card-count"><strong>{progress.done}/{progress.total}</strong><small>collected</small></span>
+                <span className="universe-card-bar"><i style={{ width: `${progress.percent}%` }} /></span>
+              </button>
+              <div className="universe-total-editors">
+                {Array.from(new Set(items.map((item) => normalizeZone(item.meta2) || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
+                  <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={group}
+                    value={manualTotals[universeTotalKey(categoryId, zone, group)]} onChange={onSetTotal} />
+                ))}
+              </div>
             </div>
             {isActive && (
               <section id="active-group-results" className="active-group-results" aria-live="polite">
