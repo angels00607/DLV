@@ -52,6 +52,8 @@ def main():
     if snapshot is not None:
         if not isinstance(snapshot, dict) or any(not isinstance(snapshot.get(k), list) or any(not isinstance(x, str) for x in snapshot[k]) for k in CATEGORIES):
             parser.error("Snapshot must contain string arrays for clothing, furniture, meals and crafting")
+    if snapshot is not None and not any(snapshot[key] for key in CATEGORIES):
+        parser.error("Snapshot contains no item names; refusing to report a misleading successful audit")
     report = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "mode": "READ_ONLY_NO_CATALOG_CHANGES",
