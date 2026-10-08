@@ -1175,7 +1175,7 @@ function GithubSaveSheet({ save, onClose, onRestore }: {
             <button className="action-button" onClick={() => setRestorePreview(null)}>Cancel restore</button>
           </div>
         )}
-        {status && <p className={`github-status ${isError ? 'error' : ''}`}>{status}</p>
+        {status && <p className={`github-status ${isError ? 'error' : ''}`}>{status}</p>}
         <div className="github-actions">
           <button className="action-button" onClick={onClose} disabled={isSaving}>
             Cancel
