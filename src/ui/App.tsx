@@ -333,17 +333,26 @@ export function App() {
               <p className="search-results-count">
                 {baseFilteredItems.filter((item) => starFilter === 'all' || categoryId !== 'meals' || item.stars === starFilter).length} results
               </p>
-              <ItemCards
-                categoryId={categoryId}
-                items={baseFilteredItems
-                  .filter((item) => starFilter === 'all' || categoryId !== 'meals' || item.stars === starFilter)
-                  .sort((a, b) => a.name.localeCompare(b.name))}
-                save={save}
-                onOwned={toggleOwned}
-                onChecked={toggleChecked}
-                onEdit={setEditingItem}
-                onDelete={deleteItem}
-              />
+              {groupItems(
+                baseFilteredItems.filter((item) =>
+                  starFilter === 'all' || categoryId !== 'meals' || item.stars === starFilter
+                ),
+                'meta',
+              ).map(([universe, universeItems]) => (
+                <div className="search-universe-group" key={universe}>
+                  <h3>{universe} <small>({universeItems.length})</small></h3>
+                  <ItemCards
+                    categoryId={categoryId}
+                    items={[...universeItems].sort((a, b) => a.name.localeCompare(b.name))}
+                    showSearchContext
+                    save={save}
+                    onOwned={toggleOwned}
+                    onChecked={toggleChecked}
+                    onEdit={setEditingItem}
+                    onDelete={deleteItem}
+                  />
+                </div>
+              ))}
             </section>
           ) : filters.universe !== 'all' ? (
             <section className="active-group-results" aria-label={`Items in ${filters.universe}`}>
@@ -694,6 +703,7 @@ function AlphabeticalCollection({
 }: {
   categoryId: CategoryId;
   items: GameItem[];
+  showSearchContext?: boolean;
   save: SavePayload;
   onOwned: (item: GameItem) => void;
   onChecked: (item: GameItem) => void;
@@ -995,6 +1005,7 @@ function GithubSaveSheet({ save, onClose }: { save: SavePayload; onClose: () => 
 function ItemCards({
   categoryId,
   items,
+  showSearchContext = false,
   save,
   onOwned,
   onChecked,
@@ -1015,6 +1026,7 @@ function ItemCards({
         <ItemCard
           key={item.id}
           item={item}
+          showSearchContext={showSearchContext}
           owned={save.owned[categoryId]?.[item.id]}
           checked={!!save.checked[categoryId]?.[item.id]}
           ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
@@ -1031,6 +1043,7 @@ function ItemCards({
 
 function ItemCard({
   item,
+  showSearchContext = false,
   owned,
   checked,
   ingredients,
@@ -1041,6 +1054,7 @@ function ItemCard({
   onDelete,
 }: {
   item: GameItem;
+  showSearchContext?: boolean;
   owned?: 'owned' | 'missing';
   checked: boolean;
   ingredients: string[];
@@ -1061,7 +1075,14 @@ function ItemCard({
         <button className="item-title-button" onClick={onChecked}>
         <strong>{item.name}</strong>
         <span className="item-meta-row">
-          <span>{item.meta2 || item.meta || 'Dreamlight Valley'}</span>
+          {showSearchContext ? (
+            <>
+              <span>{item.meta?.trim() || 'Other'}</span>
+              <span>{item.meta2?.trim() ? formatZoneLabel(item.meta2.trim()) : 'Zone unspecified'}</span>
+            </>
+          ) : (
+            <span>{item.meta2 || item.meta || 'Dreamlight Valley'}</span>
+          )}
           {stars !== undefined && (
             <span className="meal-stars" role="img" aria-label={`${stars} out of 5 stars`}>
               {Array.from({ length: 5 }, (_, index) => (
