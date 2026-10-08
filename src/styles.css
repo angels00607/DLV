@@ -1884,3 +1884,17 @@ h1 {
 .migration-review-list { max-height: 30dvh; overflow-y: auto; display: grid; gap: 10px; padding: 12px 4px; }
 .migration-dialog details { border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
 .migration-dialog summary { cursor: pointer; font-weight: 750; }
+
+/* Owned-only collection: compact, touch-friendly quick entry. */
+.quick-add { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.quick-add label { display: grid; gap: 5px; min-width: 0; color: var(--muted); font-size: .78rem; font-weight: 700; }
+.quick-add label:first-child { grid-column: 1 / -1; }
+.quick-add input, .quick-add select { width: 100%; min-width: 0; min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-strong); color: var(--ink); }
+.quick-add button { min-height: 44px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); }
+.quick-add-secondary { justify-self: start; background: transparent; color: var(--plum); }
+.quick-add-submit { display: flex; align-items: center; justify-content: center; gap: 8px; grid-column: 1 / -1; background: var(--plum); color: white; font-weight: 800; }
+.quick-add button:disabled { opacity: .45; }
+.quick-add p { grid-column: 1 / -1; }
+.quick-add-zone { display: flex; flex-wrap: wrap; gap: 6px; grid-column: 1 / -1; }
+.quick-add-zone input { flex: 1 1 140px; }
+@media (max-width: 520px) { .quick-add { grid-template-columns: 1fr; } .quick-add label:first-child, .quick-add-submit, .quick-add p, .quick-add-zone { grid-column: 1; } }
