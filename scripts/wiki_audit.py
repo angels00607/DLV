@@ -2,6 +2,7 @@
 """Read-only wiki discovery report. Never writes to the game catalog."""
 import argparse
 import json
+import sys
 import re
 import urllib.error
 import urllib.parse
@@ -80,6 +81,7 @@ def main():
                 "reviewCandidates": candidates,
             }
         except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
+            print(f"WIKI SOURCE ERROR [{key}] {type(exc).__name__}: {exc}", file=sys.stderr)
             report["categories"][key] = {
                 "wikiCategory": wiki_category, "catalogItems": len(existing),
                 "error": f"{type(exc).__name__}: {exc}",
@@ -88,6 +90,8 @@ def main():
     Path(args.output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     errors = [key for key, entry in report["categories"].items() if "error" in entry]
     print(f"Read-only report: {args.output}; source errors: {', '.join(errors) or 'none'}")
+    if errors:
+        print("Wiki source unavailable: no retry, no alternate scraping, no catalog modifications. Check authorized API access or request an approved export.", file=sys.stderr)
     return 1 if errors else 0
 
 if __name__ == "__main__":
