@@ -1828,11 +1828,11 @@ function ManualTotalEditor({ category, zone, universe, value, onChange }: {
   onChange: (category: CategoryId, zone: string, universe: string, value: number | null) => void;
 }) {
   return <label className="manual-total-editor" onClick={(event) => event.stopPropagation()}>
-    Total · {formatZoneLabel(zone)} <input type="number" min="0" step="1" inputMode="numeric" aria-label="Manual collection total"
+    Total · {formatZoneLabel(zone)} <input type="number" min="0" step="1" inputMode="numeric" aria-label={`Total for ${universe} in ${formatZoneLabel(zone)}`}
       placeholder="Set total" value={value ?? ''} onChange={(event) => {
         const raw = event.target.value;
         if (!raw) onChange(category, zone, universe, null);
-        else if (/^\\d+$/.test(raw) && Number.isSafeInteger(Number(raw))) onChange(category, zone, universe, Number(raw));
+        else if (/^\d+$/.test(raw) && Number.isSafeInteger(Number(raw))) onChange(category, zone, universe, Number(raw));
       }} />
   </label>;
 }
