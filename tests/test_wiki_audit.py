@@ -37,6 +37,12 @@ class WikiAuditTests(unittest.TestCase):
         self.assertEqual(len(clothing["reviewCandidates"]), 1)
         self.assertEqual(clothing["reviewCandidates"][0]["status"], "POSSIBLE_NEW")
 
+    def test_empty_snapshot_is_rejected(self):
+        process, report, before, after = self.run_audit({key: [] for key in CATEGORIES})
+        self.assertNotEqual(process.returncode, 0)
+        self.assertIsNone(report)
+        self.assertEqual(before, after)
+
     def test_invalid_snapshot_is_rejected(self):
         process, report, before, after = self.run_audit({"clothing": ["Atta Leaf Crown"]})
         self.assertNotEqual(process.returncode, 0)
