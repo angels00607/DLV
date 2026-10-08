@@ -1372,7 +1372,7 @@ function HomeView({
         <div className="home-section-title">Categories</div>
         <div className="home-category-list">
           {CATEGORIES.map((category) => {
-            const progress = getProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals[totalKey(category.id, activeZone)]);
+            const progress = getUniverseProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals);
             return (
               <button key={category.id} className="home-category-row" onClick={() => onOpenCategory(category.id)}>
                 <img src={category.icon} alt="" onError={(event) => (event.currentTarget.style.display = 'none')} />
