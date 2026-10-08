@@ -1,0 +1,29 @@
+name: Wiki catalog audit (read only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Generate candidate report
+        id: audit
+        continue-on-error: true
+        run: python3 scripts/wiki_audit.py --catalog public/data.json --output wiki-sync-report.json
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wiki-sync-report
+          path: wiki-sync-report.json
+          if-no-files-found: warn
+      - name: Fail if source discovery failed
+        if: steps.audit.outcome == 'failure'
+        run: exit 1
