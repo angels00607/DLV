@@ -796,15 +796,18 @@ function SubcategoryGrid({
               onClick={() => onSelect(group)}
             >
               <strong>{group}</strong>
-              <span>{progress.total} items</span>
-              <small>{progress.done} collected · {Math.max(0, progress.total - progress.done)} remaining</small>
+              <span>{progress.done}/{progress.total} collected</span>
+              <small>{Math.max(0, progress.total - progress.done)} remaining</small>
               <i><b style={{ width: `${progress.percent}%` }} /></i>
             </button>
+            <div className="universe-total-editors" style={{ padding: '0.5rem 0.75rem 1rem' }}>
+              {Array.from(new Set(items.map((item) => normalizeZone(item.meta2) || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
+                <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={group}
+                  value={manualTotals[universeTotalKey(categoryId, zone, group)]} onChange={onSetTotal} />
+              ))}
+            </div>
             {isActive && (
               <section id="active-group-results" className="active-group-results" aria-live="polite">
-                <div className="universe-total-editors">{Array.from(new Set(items.map((item) => normalizeZone(item.meta2 ?? '') || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
-                  <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={group} value={manualTotals[universeTotalKey(categoryId, zone, group)]} onChange={onSetTotal} />
-                ))}</div>
                 {renderActiveGroup()}
               </section>
             )}
