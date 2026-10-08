@@ -79,6 +79,7 @@ export function App() {
   const [isZoneOpen, setZoneOpen] = useState(false);
   const [isCategoryOpen, setCategoryOpen] = useState(false);
   const [isQuickAddOpen, setQuickAddOpen] = useState(false);
+  const [chooseCategoryForAdd, setChooseCategoryForAdd] = useState(false);
   const [isFilterOpen, setFilterOpen] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -295,11 +296,11 @@ export function App() {
           <Home size={21} />
           <span>Home</span>
         </button>
-        <button className={activeView !== 'home' ? 'active' : ''} aria-current={activeView !== 'home' ? 'page' : undefined} onClick={() => setCategoryOpen(true)}>
+        <button className={activeView !== 'home' ? 'active' : ''} aria-current={activeView !== 'home' ? 'page' : undefined} onClick={() => { setChooseCategoryForAdd(false); setCategoryOpen(true); }}>
           <span className="nav-collection-icon"><img src={currentCategory.icon} alt="" /></span>
           <span>Collection</span>
         </button>
-        <button onClick={() => { if (activeView === 'home') { setCategoryOpen(true); } else { setQuickAddOpen(true); } }} aria-label={activeView === 'home' ? 'Choose a collection to add an item' : 'Add an item'}>
+        <button onClick={() => { if (activeView === 'home') { setChooseCategoryForAdd(true); setCategoryOpen(true); } else { setQuickAddOpen(true); } }} aria-label={activeView === 'home' ? 'Choose a collection to add an item' : 'Add an item'}>
           <Plus size={21} />
           <span>Add</span>
         </button>
@@ -310,7 +311,7 @@ export function App() {
       </nav>
 
       {isCategoryOpen && (
-        <ChoiceSheet title="Choose a collection" onClose={() => setCategoryOpen(false)}>
+        <ChoiceSheet title={chooseCategoryForAdd ? "Add to which collection?" : "Choose a collection"} onClose={() => { setCategoryOpen(false); setChooseCategoryForAdd(false); }}>
           <div className="category-choice-list">
             {CATEGORIES.map((category) => {
               const counts = getUniverseProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals);
@@ -321,6 +322,8 @@ export function App() {
                   setStarFilter('all');
                   setFilters(initialFilters);
                   setCategoryOpen(false);
+                  if (chooseCategoryForAdd) setQuickAddOpen(true);
+                  setChooseCategoryForAdd(false);
                 }}>
                   <img src={category.icon} alt="" />
                   <span>{category.label}</span>
@@ -394,7 +397,7 @@ export function App() {
         <main className="content">
           <div className="section-title">
             <div>
-              <button className="category-heading-switch" onClick={() => setCategoryOpen(true)} aria-label="Change collection category"><h2>{currentCategory.label}</h2><ChevronDown size={20}/></button>
+              <button className="category-heading-switch" onClick={() => { setChooseCategoryForAdd(false); setCategoryOpen(true); }} aria-label="Change collection category"><h2>{currentCategory.label}</h2><ChevronDown size={20}/></button>
               <p>{progress.done} of {progress.total} collected</p>
 
             </div>
