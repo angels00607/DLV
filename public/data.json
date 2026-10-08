@@ -1834,7 +1834,7 @@
       {
         "id": 1601,
         "name": "Gladiator Sandals",
-        "meta": "GENERAL",
+        "meta": "OTHER (GENERAL)",
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
@@ -10350,6 +10350,66 @@
         "name": "Yesss's \"Run the Net\" Dress",
         "meta": "WRECK-IT RALPH",
         "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1743,
+        "name": "Enchanted Castle Tuxedo",
+        "meta": "OTHER (GENERAL)",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1744,
+        "name": "Fix-it Repair Gloves",
+        "meta": "OTHER (GENERAL)",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1745,
+        "name": "Pink Leopard Tank Top",
+        "meta": "OTHER (GENERAL)",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1746,
+        "name": "Crimson Wayfinder Patterned Skirt",
+        "meta": "OTHER (GENERAL)",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1747,
+        "name": "Artist’s overalls",
+        "meta": "OTHER (GENERAL)",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1748,
+        "name": "Lock Mask",
+        "meta": "TIM BURTON'S THE NIGHTMARE BEFORE CHRISTMAS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1749,
+        "name": "Shock Mask",
+        "meta": "TIM BURTON'S THE NIGHTMARE BEFORE CHRISTMAS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1750,
+        "name": "Barrel Mask",
+        "meta": "TIM BURTON'S THE NIGHTMARE BEFORE CHRISTMAS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1751,
+        "name": "Oogie Boogie’s Lair Skeleton",
+        "meta": "TIM BURTON'S THE NIGHTMARE BEFORE CHRISTMAS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1752,
+        "name": "Astronomer’s Apprentice Boots",
+        "meta": "OTHER (GENERAL)",
+        "meta2": "DREAMLIGHT VALLEY"
       }
     ],
     "furniture": [
@@ -14993,7 +15053,7 @@
       },
       {
         "id": 3373,
-        "name": "Balloon Family BOuquet",
+        "name": "BallOOn Family BOuquet",
         "meta": "GENERAL",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -31070,6 +31130,48 @@
         "name": "Hopps' Hay Maze Wall",
         "meta": "ZOOTOPIA",
         "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 3591,
+        "name": "Red Botanical Vine Lamp",
+        "meta": "CINDERELLA",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 3592,
+        "name": "Teak Botanical Vine Flower Lamp",
+        "meta": "CINDERELLA",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 3593,
+        "name": "Blue Botanical Vine Flower Lamp",
+        "meta": "CINDERELLA",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 3594,
+        "name": "Purple Botanical Vine Flower Lamp",
+        "meta": "CINDERELLA",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 3595,
+        "name": "Wreck-it Ralph Cake Topper",
+        "meta": "WRECK-IT RALPH",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 3596,
+        "name": "Spiral Axe",
+        "meta": "TIM BURTON'S THE NIGHTMARE BEFORE CHRISTMAS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 3597,
+        "name": "Pixelated Light Fixture",
+        "meta": "WRECK-IT RALPH",
+        "meta2": "DREAMLIGHT VALLEY"
       }
     ],
     "meals": [
@@ -34429,6 +34531,12 @@
     ],
     "crafting": [
       {
+        "id": 1497,
+        "name": "Trelis",
+        "meta": "",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1235,
         "name": "Ancient Fence",
         "meta": "",
@@ -34545,6 +34653,36 @@
       {
         "id": 1254,
         "name": "Purple Tea Set",
+        "meta": "",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 1255,
+        "name": "Red Ancient's Lamppost",
+        "meta": "",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 1256,
+        "name": "Red BBQ Tools",
+        "meta": "",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 1257,
+        "name": "Red Cobra Statue",
+        "meta": "",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 1258,
+        "name": "Round Orange Bivouac Tent",
+        "meta": "",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 1259,
+        "name": "Round White Basket",
         "meta": "",
         "meta2": "ETERNITY ISLE"
       },
@@ -34715,6 +34853,42 @@
         "name": "Zircon Tiles",
         "meta": "",
         "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 1233,
+        "name": "Transparent Blooming Teapot",
+        "meta": "",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 1226,
+        "name": "Snowy Alpine Building",
+        "meta": "",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1227,
+        "name": "Snowy Alpine Corner — Short",
+        "meta": "",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1228,
+        "name": "Snowy Alpine Corner — Tall",
+        "meta": "",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1229,
+        "name": "Snowy Rectangular Straw Bale",
+        "meta": "",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1230,
+        "name": "Vintage Sewing Machine",
+        "meta": "",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
       },
       {
         "id": 567,
@@ -35245,6 +35419,420 @@
         "meta2": "WISHBLOSSOM MOUNTAINS"
       },
       {
+        "id": 659,
+        "name": "Bayou Companion Home",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 660,
+        "name": "Black Flat-Top Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 661,
+        "name": "Black Gas Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 662,
+        "name": "Black Retro Portable Radio",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 663,
+        "name": "Blue Retro Portable Radio",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 664,
+        "name": "Brown Retro Portable Radio",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 665,
+        "name": "Campfire",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 667,
+        "name": "Cozy Companion Home",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 668,
+        "name": "Custom Signpost",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 669,
+        "name": "Delicious Gift",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 670,
+        "name": "Flying Companion Feeder",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 671,
+        "name": "Fuzzy Friend Companion Dish",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 672,
+        "name": "Gray Flat-Top Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 673,
+        "name": "Gray Gas Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 674,
+        "name": "Gray Mailbox",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 676,
+        "name": "Handcrafted Gift",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 678,
+        "name": "Iron Crafting Station",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 679,
+        "name": "Large Blue Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 680,
+        "name": "Large Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 681,
+        "name": "Large Green Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 682,
+        "name": "Large Red Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 683,
+        "name": "Large White Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 684,
+        "name": "Large Yellow Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 685,
+        "name": "Medium Blue Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 686,
+        "name": "Medium Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 687,
+        "name": "Medium Green Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 688,
+        "name": "Medium Red Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 689,
+        "name": "Medium White Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 690,
+        "name": "Medium Yellow Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 691,
+        "name": "Naughty Gift",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 692,
+        "name": "Pale Gray Flat-Top Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 693,
+        "name": "Pale Gray Gas Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 694,
+        "name": "Pastel Egg Cooking Station",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 695,
+        "name": "Pink Flat-Top Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 696,
+        "name": "Pink Gas Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 697,
+        "name": "Pixar Companion Ball",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 698,
+        "name": "Playful Companion Pinwheel",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 699,
+        "name": "Purple Button",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1054,
+        "name": "Red Athletic Sunglasses",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1055,
+        "name": "Red Leafy Mane",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 700,
+        "name": "Red Mailbox",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 703,
+        "name": "Rozian Mask",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 704,
+        "name": "Shiny Gift",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 705,
+        "name": "Slow Cooker",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 706,
+        "name": "Small Blue Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 707,
+        "name": "Small Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 708,
+        "name": "Small Green Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 709,
+        "name": "Small Red Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 710,
+        "name": "Small White Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 711,
+        "name": "Small Yellow Chest",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 712,
+        "name": "Substitute Snout",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 713,
+        "name": "Tony's Apron",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 714,
+        "name": "Tony's Shirt",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 716,
+        "name": "Uncrafting Station",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 717,
+        "name": "White Flat-Top Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 718,
+        "name": "White Gas Stove",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 719,
+        "name": "Wooden Crafting Station",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 720,
+        "name": "Timebending Table",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 721,
+        "name": "Tropical Companion Home",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 722,
+        "name": "Basic Faerie Lure Trap",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 723,
+        "name": "Basic Faerie Slow Trap",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 724,
+        "name": "Basic Faerie Snippet Repellent",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 725,
+        "name": "Basic Fall Leaves Lure Trap",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 726,
+        "name": "Basic Fall Leaves Slow Trap",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 727,
+        "name": "Basic Fall Leaves Snippet Repellent",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 728,
+        "name": "Basic Olympic Lure Trap",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 729,
+        "name": "Basic Olympic Slow Trap",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 730,
+        "name": "Basic Olympic Snippet Repellent",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
+        "id": 731,
+        "name": "Fairytale Armor",
+        "meta": "FUNCTIONAL ITEMS",
+        "meta2": "STORYBOOK VALE"
+      },
+      {
         "id": 409,
         "name": "\"End of the Rainbow\" Cauldron",
         "meta": "FURNITURE",
@@ -35263,20 +35851,68 @@
         "meta2": ""
       },
       {
+        "id": 1136,
+        "name": "Basic Fall Leaves Lure Trap",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
         "id": 1137,
         "name": "Basic Fall Leaves Slow Trap",
         "meta": "FURNITURE",
         "meta2": ""
       },
       {
+        "id": 1138,
+        "name": "Basic Fall Leaves Snippet Repellent",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1225,
+        "name": "Black Gas Stove",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1069,
+        "name": "Blue Retro Portable Radio",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
         "id": 277,
-        "name": "Blue Green, and Purple Flower Disk",
+        "name": "Blue, Green, and Purple Flower Disk",
         "meta": "FURNITURE",
         "meta2": ""
       },
       {
         "id": 278,
-        "name": "Blue Green, and Purple Flower Rectangle",
+        "name": "Blue, Green, and Purple Flower Rectangle",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1075,
+        "name": "Brown Retro Portable Radio",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1077,
+        "name": "Campfire",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1086,
+        "name": "Cozy Companion Home",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1088,
+        "name": "Custom Signpost",
         "meta": "FURNITURE",
         "meta2": ""
       },
@@ -35299,6 +35935,12 @@
         "meta2": ""
       },
       {
+        "id": 1097,
+        "name": "Flying Companion Feeder",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
         "id": 372,
         "name": "Fountain of Thebes",
         "meta": "FURNITURE",
@@ -35313,6 +35955,18 @@
       {
         "id": 373,
         "name": "Garden Temple",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1100,
+        "name": "Gray Flat-Top Stove",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1101,
+        "name": "Gray Gas Stove",
         "meta": "FURNITURE",
         "meta2": ""
       },
@@ -35335,22 +35989,10 @@
         "meta2": ""
       },
       {
-        "id": 104,
-        "name": "Lamppost with Blue Light",
+        "id": 1103,
+        "name": "Iron Crafting Station",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 105,
-        "name": "Lamppost with Green Light",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 106,
-        "name": "Lamppost with Red Light",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
         "id": 107,
@@ -35359,76 +36001,34 @@
         "meta2": ""
       },
       {
-        "id": 298,
-        "name": "Large Black Bivouac Tent",
+        "id": 1104,
+        "name": "Large Blue Chest",
         "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
+        "meta2": ""
       },
       {
-        "id": 299,
-        "name": "Large Blue Market Stall",
+        "id": 1105,
+        "name": "Large Chest",
         "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
+        "meta2": ""
       },
       {
-        "id": 300,
-        "name": "Large Heap of Riches",
+        "id": 1107,
+        "name": "Large Red Chest",
         "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
+        "meta2": ""
       },
       {
-        "id": 301,
-        "name": "Large Red Market Stall",
+        "id": 1108,
+        "name": "Large White Chest",
         "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
+        "meta2": ""
       },
       {
-        "id": 109,
-        "name": "Large Round Gift Box",
+        "id": 1109,
+        "name": "Large Yellow Chest",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 110,
-        "name": "Large Square Gift Box",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 111,
-        "name": "Left Signpost",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 112,
-        "name": "Log Cutout",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 113,
-        "name": "Lost Boys Audition Sign",
-        "meta": "FURNITURE",
-        "meta2": "DREAMIGHT VALLEY"
-      },
-      {
-        "id": 114,
-        "name": "Low Sculpted Pillar",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 115,
-        "name": "Lucky Clover Archway",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 116,
-        "name": "Lucky Shamrock Banner",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
         "id": 302,
@@ -35443,142 +36043,844 @@
         "meta2": ""
       },
       {
-        "id": 159,
-        "name": "Pooh's Popcorn Bucket",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 165,
-        "name": "Purple Pink and Yellow Flower Disk",
+        "id": 1110,
+        "name": "Medium Blue Chest",
         "meta": "FURNITURE",
         "meta2": ""
       },
       {
-        "id": 169,
-        "name": "Red and Black Passion Lily Pot",
+        "id": 1111,
+        "name": "Medium Chest",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 211,
-        "name": "Spring Stall",
+        "id": 1112,
+        "name": "Medium Green Chest",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 231,
+        "id": 1113,
+        "name": "Medium Red Chest",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1115,
+        "name": "Medium Yellow Chest",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 120,
+        "name": "Mickey Mouse Park Balloons",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 121,
+        "name": "Mickey Mouse Water Tower",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 122,
+        "name": "Mickey's Halloween Candy Bowl",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 123,
+        "name": "Mine Cart Popcorn Bucket",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 124,
+        "name": "Modular Dragon Body",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 125,
+        "name": "Modular Dragon Head",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 126,
+        "name": "Modular Dragon Tail",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 127,
+        "name": "Moss-Covered Rock Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 128,
+        "name": "Mossy Base",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 129,
+        "name": "Mossy Circle-Carving Stone",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 130,
+        "name": "Mossy Eye-Carving Stone",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 131,
+        "name": "Nasturtium and Marsh Milkweed Pot",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 132,
+        "name": "Nautical-Themed Couch",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 133,
+        "name": "New Orleans Parade Arch",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 134,
+        "name": "Oak Tree Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 135,
+        "name": "Old Barrel",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 136,
+        "name": "Ornate Parisian Chair",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 137,
+        "name": "Ornate Parisian Statue",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 138,
+        "name": "Ornate Parisian Table",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 139,
+        "name": "Outdoor Lounge Chair",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 140,
+        "name": "Outhouse",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 141,
+        "name": "Over Easy Chair",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 142,
+        "name": "Painted Wood Table",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1117,
+        "name": "Pale Gray Gas Stove",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 143,
+        "name": "Palm Tree Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 144,
+        "name": "Pampas Grass Jug",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 145,
+        "name": "Parisian Chair",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 146,
+        "name": "Parisian Table",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 147,
+        "name": "Park Banner Lamppost",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 148,
+        "name": "Park Recycling Bin",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 149,
+        "name": "Passion Lily and Houseleek Pot",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 150,
+        "name": "Photo Backdrop",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 151,
+        "name": "Pile of Crates",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 152,
+        "name": "Pine Tree Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 153,
+        "name": "Pink and Blue Flower Disk",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1118,
+        "name": "Pink Flat-Top Stove",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1119,
+        "name": "Pink Gas Stove",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 154,
+        "name": "Pink, Blue and Purple Flower Rectangle",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 155,
+        "name": "Pink, Red and Purple Flower Rectangle",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 156,
+        "name": "Pink, Yellow and Black Flower Disk",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 157,
+        "name": "Pirate Map on the Wall",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1120,
+        "name": "Pixar Companion Ball",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1121,
+        "name": "Playful Companion Pinwheel",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 158,
+        "name": "Playful Pumpkin Scarecrow",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 160,
+        "name": "Poplar Tree Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 161,
+        "name": "Potted Lily Pad Bush",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 162,
+        "name": "Potted Spring Egg Tree",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 163,
+        "name": "Purple Egg Lamppost",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 164,
+        "name": "Purple Wrought Iron Streetlamp",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 165,
+        "name": "Purple, Pink and Yellow Flower Disk",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 166,
+        "name": "Raccoon Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 167,
+        "name": "Rainbow Rose Glass Breezeway",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 168,
+        "name": "Rectangular Soil Area",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 170,
+        "name": "Red and Yellow Flower Disk",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 171,
+        "name": "Red Egg Lamppost",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 172,
+        "name": "Red Light High Beach Torch",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 173,
+        "name": "Red Light Low Beach Torch",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1122,
+        "name": "Red Mailbox",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 174,
+        "name": "Red, Black, and Yellow Balloon Cluster",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 175,
+        "name": "Red, Blue and Green Flower Rectangle",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 176,
+        "name": "Red, White and Purple Flower Rectangle",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 177,
+        "name": "Refreshment Chest",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 178,
+        "name": "Right Signpost",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 179,
+        "name": "Rock and Ferns Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 180,
+        "name": "Rock Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 182,
+        "name": "Round Blue Three-Pronged Lamppost",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 183,
+        "name": "Round Gift Box",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 184,
+        "name": "Round Lamppost with Blue Light",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 185,
+        "name": "Round Lamppost with Orange Light",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 186,
+        "name": "Round Lamppost with Pink Light",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 187,
+        "name": "Round Lamppost with White Light",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 188,
+        "name": "Round Orange Three-Pronged Lamppost",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 189,
+        "name": "Round Pink Three-Pronged Lamppost",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 190,
+        "name": "Round Soil Area",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 191,
+        "name": "Round White Three-Pronged Lamppost",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 192,
+        "name": "Royal Blossom Column",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 193,
+        "name": "Rustic Clock Tower",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 194,
+        "name": "Rustic Wooden Case",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 195,
+        "name": "Sack",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 196,
+        "name": "Sandcastle Door",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 197,
+        "name": "Sandcastle Tower",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 198,
+        "name": "Sandcastle Tower Corner",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 199,
+        "name": "Sandcastle Tower Wall",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 200,
+        "name": "Sandcastle Wall",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 201,
+        "name": "Saucery Extract",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 203,
+        "name": "Ship Coffee Table",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 204,
+        "name": "Short Birdhouse",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 205,
+        "name": "Sizzling BBQ Cooking Station",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1123,
+        "name": "Slow Cooker",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1124,
+        "name": "Small Blue Chest",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1125,
+        "name": "Small Chest",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1126,
+        "name": "Small Green Chest",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1127,
+        "name": "Small Red Chest",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1128,
+        "name": "Small White Chest",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 207,
+        "name": "Snow Hut",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 208,
+        "name": "Snow Kid",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 209,
+        "name": "Snow Lady",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 210,
+        "name": "Spring Egg Bounty",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 212,
+        "name": "Square Gift Box",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 213,
+        "name": "Squirrel Cutout",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 214,
+        "name": "Stack of Crates",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 215,
+        "name": "Stack of Firewood",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 216,
+        "name": "Stall",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 217,
+        "name": "Star Lily and Falling Penstemon Pot",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 218,
+        "name": "Stellar Blue DJ Booth",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 219,
+        "name": "Stellar Pink DJ Booth",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 220,
+        "name": "Stitch Popcorn Bucket",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 221,
+        "name": "Stitch's Television",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 222,
+        "name": "Stone Well",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 223,
+        "name": "Stony Bench",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 224,
+        "name": "Sturdy Chair",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 225,
+        "name": "Summer Crafting Station",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 226,
+        "name": "Sunflower and Daisy Pot",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 227,
+        "name": "Sunny Side Up Arch",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 228,
+        "name": "Swimming Pool",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 1153,
+        "name": "Swirly Stripped Rug",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 229,
+        "name": "Tall Birdhouse",
+        "meta": "FURNITURE",
+        "meta2": ""
+      },
+      {
+        "id": 230,
         "name": "Tall Round Gift Box",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 245,
-        "name": "Wooden Bucket",
+        "id": 1156,
+        "name": "The Staines Glass Window to Imagination",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 246,
-        "name": "Wooden Lamppost with Blue Light",
+        "id": 233,
+        "name": "Tool Rack",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 247,
-        "name": "Wooden Lamppost with Green Light",
+        "id": 234,
+        "name": "Tree of Holiday Cheer",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 248,
-        "name": "Wooden Lamppost with Pink Light",
+        "id": 235,
+        "name": "Trellis",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 249,
-        "name": "Wooden Lamppost with Yellow Light",
+        "id": 236,
+        "name": "Trellis Arch",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 250,
-        "name": "Wooden Table",
+        "id": 237,
+        "name": "Uncooked Spaghetti Wall",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 251,
-        "name": "Wooden Training Dummy",
+        "id": 1129,
+        "name": "Uncrafting Station",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 252,
-        "name": "Wrought Iron Arch",
+        "id": 238,
+        "name": "Vintage Cooler",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 253,
-        "name": "Wrought Iron Walkway Slab",
+        "id": 1219,
+        "name": "Vintage Swing Machine",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 254,
-        "name": "Yellow and White Flower Rectangle",
+        "id": 1130,
+        "name": "White Flat-Top Stove",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 255,
-        "name": "Yellow Egg Lamppost",
+        "id": 1131,
+        "name": "White Gas Stove",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 256,
-        "name": "Yellow Light High Beach Torch",
+        "id": 240,
+        "name": "White, Red and Purple Flower Disk",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 257,
-        "name": "Yellow Light Low Beach Torch",
+        "id": 241,
+        "name": "White, Yellow and Black Balloon Arch",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 258,
-        "name": "Yellow Green and Purple Flower Rectangle",
+        "id": 242,
+        "name": "White, Yellow and Black Balloon Cluster",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 259,
-        "name": "Yellow Red and Black Balloon Arch",
+        "id": 243,
+        "name": "Wide Arched Window",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 260,
-        "name": "Yellow Red and Blue Flower Disk",
+        "id": 1132,
+        "name": "Wooden Crafting Station",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": ""
       },
       {
-        "id": 261,
-        "name": "Yule Goat",
+        "id": 113,
+        "name": "Lost Boys Audition Sign",
         "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 262,
-        "name": "Zen Garden",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMIGHT VALLEY"
       },
       {
         "id": 994,
@@ -35798,13 +37100,13 @@
       },
       {
         "id": 1071,
-        "name": "Blue Yellow and Pink Balloon Arch",
+        "name": "Blue, Yellow and Pink Balloon Arch",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 1072,
-        "name": "Blue Yellow and Pink Balloon Cluster",
+        "name": "Blue, Yellow and Pink Balloon Cluster",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -36085,6 +37387,12 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1339,
+        "name": "Fox Cutout",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1099,
         "name": "Fuzy Friend Companion Dish",
         "meta": "FURNITURE",
@@ -36097,7 +37405,19 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1340,
+        "name": "Giant Meatballs",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 80,
+        "name": "Granite Fire Bowl",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1341,
         "name": "Granite Fire Bowl",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36121,7 +37441,19 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1310,
+        "name": "Gray Mailbox",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 81,
+        "name": "Green Egg Lamppost",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1342,
         "name": "Green Egg Lamppost",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36133,7 +37465,19 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1343,
+        "name": "Green Light High Beach Torch",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 83,
+        "name": "Green Light Low Beach Torch",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1344,
         "name": "Green Light Low Beach Torch",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36145,14 +37489,20 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1345,
+        "name": "Green Wrought Iron Streetlamp",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1346,
-        "name": "Green Yellow and White Balloon Arch",
+        "name": "Green, Yellow and White Balloon Arch",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 1347,
-        "name": "Green Yellow and White Balloon Cluster",
+        "name": "Green, Yellow and White Balloon Cluster",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -36163,7 +37513,25 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1348,
+        "name": "Half-Barrel",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1349,
+        "name": "Hanging Egg Chair",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 90,
+        "name": "Haughty Snowman",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1350,
         "name": "Haughty Snowman",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36175,7 +37543,25 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1352,
+        "name": "Hay Bales",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1351,
+        "name": "Hay Bay",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 93,
+        "name": "Heavy Wooden Table",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1353,
         "name": "Heavy Wooden Table",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36187,7 +37573,19 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1354,
+        "name": "Helm Bookshelf",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 95,
+        "name": "Holiday Feast Chair",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1355,
         "name": "Holiday Feast Chair",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36199,7 +37597,19 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1356,
+        "name": "Holiday Feast Plate and Cutlery",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 97,
+        "name": "Hydrangea and Bell Flower Pot",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1357,
         "name": "Hydrangea and Bell Flower Pot",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36207,6 +37617,18 @@
       {
         "id": 99,
         "name": "Icy Counter",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1358,
+        "name": "Icy Counter",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1359,
+        "name": "Impatiens and Bomeliad Pot",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -36229,8 +37651,62 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1360,
+        "name": "Jubilant Topiary",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 103,
         "name": "Kinara",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1361,
+        "name": "Kinara",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 104,
+        "name": "Lamppost with Blue Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1362,
+        "name": "Lamppost with Blue Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 105,
+        "name": "Lamppost with Green Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1363,
+        "name": "Lamppost with Green Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 106,
+        "name": "Lamppost with Red Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1364,
+        "name": "Lamppost with Red Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1365,
+        "name": "Lamppost with Yellow Light",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -36259,6 +37735,30 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 109,
+        "name": "Large Round Gift Box",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1366,
+        "name": "Large Round Gift Box",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 110,
+        "name": "Large Square Gift Box",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1367,
+        "name": "Large Square Gift Box",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1315,
         "name": "Large White Chest",
         "meta": "FURNITURE",
@@ -36271,7 +37771,79 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 111,
+        "name": "Left Signpost",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1368,
+        "name": "Left Signpost",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 112,
+        "name": "Log Cutout",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1369,
+        "name": "Log Cutout",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1370,
+        "name": "Lost Boys Audition Sign",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 114,
+        "name": "Low Sculpted Pillar",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1371,
+        "name": "Low Sculpted Pillar",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 115,
+        "name": "Lucky Clover Archway",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1372,
+        "name": "Lucky Clover Archway",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 116,
+        "name": "Lucky Shamrock Banner",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1373,
+        "name": "Lucky Shamrock Banner",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 117,
+        "name": "Mailbox",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1374,
         "name": "Mailbox",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36285,6 +37857,12 @@
       {
         "id": 1376,
         "name": "Medium Chest",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1377,
+        "name": "Medium Green Chest",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -36319,7 +37897,19 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1380,
+        "name": "Menorah",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 119,
+        "name": "Metallic Mickey Popcorn Bucket",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1381,
         "name": "Metallic Mickey Popcorn Bucket",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
@@ -36535,12 +38125,6 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
-        "id": 1418,
-        "name": "Pink  Blue and Purple Flower Rectangle",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
         "id": 1417,
         "name": "Pink and Blue Flower Disk",
         "meta": "FURNITURE",
@@ -36559,14 +38143,20 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1418,
+        "name": "Pink, Blue and Purple Flower Rectangke",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1419,
-        "name": "Pink Red and Purple Flower Rectangle",
+        "name": "Pink, Red and Purple Flower Rectangle",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
         "id": 1420,
-        "name": "Pink Yellow and Black Flower Disk",
+        "name": "Pink, Yellow and Black Flower Disk",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -36591,6 +38181,18 @@
       {
         "id": 1422,
         "name": "Playful Pumpkin Scarecrow",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 159,
+        "name": "Pooh's Popcorn Bucket",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1423,
+        "name": "Pooh’s Popcorn Bucket",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -36625,6 +38227,12 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1429,
+        "name": "Purple, Pink and Yellow Flower Disk",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1430,
         "name": "Raccoon Cutout",
         "meta": "FURNITURE",
@@ -36639,6 +38247,18 @@
       {
         "id": 1432,
         "name": "Rectangular Soil Area",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 169,
+        "name": "Red and Black Passion Lily Pot",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1433,
+        "name": "Red and Black Passion Lily Pot",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -36835,6 +38455,12 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 202,
+        "name": "Scrooge McDuck's Store Sign",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1457,
         "name": "Scrooge McDuck’s Store Sign",
         "meta": "FURNITURE",
@@ -36921,6 +38547,18 @@
       {
         "id": 1472,
         "name": "Spring Egg Bounty",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 211,
+        "name": "Spring Stall",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1473,
+        "name": "Spring Stall",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -37027,8 +38665,20 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 1492,
+        "name": "Talk around Gift Box",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1491,
         "name": "Tall Birdhouse",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 231,
+        "name": "Tall Square Gift Box",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -37123,14 +38773,140 @@
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 245,
+        "name": "Wooden Bucket",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1332,
         "name": "Wooden Crafting Station",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
       {
+        "id": 246,
+        "name": "Wooden Lamppost with Blue Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 247,
+        "name": "Wooden Lamppost with Green Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 248,
+        "name": "Wooden Lamppost with Pink Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 249,
+        "name": "Wooden Lamppost with Yellow Light",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 250,
+        "name": "Wooden Table",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 251,
+        "name": "Wooden Training Dummy",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1511,
+        "name": "Woodland Fae Copper Topiary",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1512,
+        "name": "Woodland Fae Floral Arch",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 1513,
+        "name": "Woodland Fae Picnic Table",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
         "id": 1333,
         "name": "Woodland Fae String Lights",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 252,
+        "name": "Wrought Iron Arch",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 253,
+        "name": "Wrought Iron Walkway Slab",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 254,
+        "name": "Yellow and White Flower Rectangle",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 255,
+        "name": "Yellow Egg Lamppost",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 256,
+        "name": "Yellow Light High Beach Torch",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 257,
+        "name": "Yellow Light Low Beach Torch",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 258,
+        "name": "Yellow, Green and Purple Flower Rectangle",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 259,
+        "name": "Yellow, Red and Black Balloon Arch",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 260,
+        "name": "Yellow, Red and Blue Flower Disk",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 261,
+        "name": "Yule Goat",
+        "meta": "FURNITURE",
+        "meta2": "DREAMLIGHT VALLEY"
+      },
+      {
+        "id": 262,
+        "name": "Zen Garden",
         "meta": "FURNITURE",
         "meta2": "DREAMLIGHT VALLEY"
       },
@@ -37315,6 +39091,30 @@
         "meta2": "ETERNITY ISLE"
       },
       {
+        "id": 298,
+        "name": "Large Black Bivouac Tent",
+        "meta": "FURNITURE",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 299,
+        "name": "Large Blue Market Stall",
+        "meta": "FURNITURE",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 300,
+        "name": "Large Heap of Riches",
+        "meta": "FURNITURE",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
+        "id": 301,
+        "name": "Large Red Market Stall",
+        "meta": "FURNITURE",
+        "meta2": "ETERNITY ISLE"
+      },
+      {
         "id": 304,
         "name": "Medium Heap of Riches",
         "meta": "FURNITURE",
@@ -37323,48 +39123,6 @@
       {
         "id": 305,
         "name": "Metallic Flagstone Tile",
-        "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
-      },
-      {
-        "id": 1255,
-        "name": "Red Ancient's Lamppost",
-        "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
-      },
-      {
-        "id": 1256,
-        "name": "Red BBQ Tools",
-        "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
-      },
-      {
-        "id": 1257,
-        "name": "Red Cobra Statue",
-        "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
-      },
-      {
-        "id": 1258,
-        "name": "Round Orange Bivouac Tent",
-        "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
-      },
-      {
-        "id": 1259,
-        "name": "Round White Basket",
-        "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
-      },
-      {
-        "id": 720,
-        "name": "Timebending Table",
-        "meta": "FURNITURE",
-        "meta2": "ETERNITY ISLE"
-      },
-      {
-        "id": 721,
-        "name": "Tropical Companion Home",
         "meta": "FURNITURE",
         "meta2": "ETERNITY ISLE"
       },
@@ -37381,44 +39139,20 @@
         "meta2": "STORYBOOK VALE"
       },
       {
-        "id": 723,
-        "name": "Basic Faerie Slow Trap",
-        "meta": "FURNITURE",
-        "meta2": "STORYBOOK VALE"
-      },
-      {
-        "id": 724,
-        "name": "Basic Faerie Snippet Repellent",
-        "meta": "FURNITURE",
-        "meta2": "STORYBOOK VALE"
-      },
-      {
         "id": 1133,
         "name": "Basic Fairie Lure Trap",
         "meta": "FURNITURE",
         "meta2": "STORYBOOK VALE"
       },
       {
-        "id": 725,
-        "name": "Basic Fall Leaves Lure Trap",
+        "id": 1134,
+        "name": "Basic Fairie Slow Trap",
         "meta": "FURNITURE",
         "meta2": "STORYBOOK VALE"
       },
       {
-        "id": 726,
-        "name": "Basic Fall Leaves Slow Trap",
-        "meta": "FURNITURE",
-        "meta2": "STORYBOOK VALE"
-      },
-      {
-        "id": 727,
-        "name": "Basic Fall Leaves Snippet Repellent",
-        "meta": "FURNITURE",
-        "meta2": "STORYBOOK VALE"
-      },
-      {
-        "id": 728,
-        "name": "Basic Olympic Lure Trap",
+        "id": 1135,
+        "name": "Basic Fairie Snippet Repellent",
         "meta": "FURNITURE",
         "meta2": "STORYBOOK VALE"
       },
@@ -37429,20 +39163,8 @@
         "meta2": "STORYBOOK VALE"
       },
       {
-        "id": 729,
-        "name": "Basic Olympic Slow Trap",
-        "meta": "FURNITURE",
-        "meta2": "STORYBOOK VALE"
-      },
-      {
         "id": 1140,
         "name": "Basic Olympic Slow Trap",
-        "meta": "FURNITURE",
-        "meta2": "STORYBOOK VALE"
-      },
-      {
-        "id": 730,
-        "name": "Basic Olympic Snippet Repellent",
         "meta": "FURNITURE",
         "meta2": "STORYBOOK VALE"
       },
@@ -37473,12 +39195,6 @@
       {
         "id": 369,
         "name": "Corporate Ceiling Lamp",
-        "meta": "FURNITURE",
-        "meta2": "STORYBOOK VALE"
-      },
-      {
-        "id": 731,
-        "name": "Fairytale Armor",
         "meta": "FURNITURE",
         "meta2": "STORYBOOK VALE"
       },
@@ -37575,12 +39291,6 @@
       {
         "id": 1289,
         "name": "The Stained Glass Window to Imagination",
-        "meta": "FURNITURE",
-        "meta2": "STORYBOOK VALE"
-      },
-      {
-        "id": 1233,
-        "name": "Transparent Blooming Teapot",
         "meta": "FURNITURE",
         "meta2": "STORYBOOK VALE"
       },
@@ -38269,7 +39979,37 @@
         "meta2": "WISHBLOSSOM MOUNTAINS"
       },
       {
+        "id": 1192,
+        "name": "Round Snowy Straw Bales",
+        "meta": "FURNITURE",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1509,
+        "name": "Round Snowy Straw Bales",
+        "meta": "FURNITURE",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1193,
+        "name": "Round Straw Bale",
+        "meta": "FURNITURE",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1510,
+        "name": "Round Straw Bale",
+        "meta": "FURNITURE",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
         "id": 1194,
+        "name": "Round Straw Bales",
+        "meta": "FURNITURE",
+        "meta2": "WISHBLOSSOM MOUNTAINS"
+      },
+      {
+        "id": 1506,
         "name": "Round Straw Bales",
         "meta": "FURNITURE",
         "meta2": "WISHBLOSSOM MOUNTAINS"
@@ -38300,7 +40040,7 @@
       },
       {
         "id": 1199,
-        "name": "Snowy Alpine Building",
+        "name": "Snowy alpine Building",
         "meta": "FURNITURE",
         "meta2": "WISHBLOSSOM MOUNTAINS"
       },
@@ -38415,12 +40155,6 @@
       {
         "id": 1218,
         "name": "Vintage Lamppost",
-        "meta": "FURNITURE",
-        "meta2": "WISHBLOSSOM MOUNTAINS"
-      },
-      {
-        "id": 1230,
-        "name": "Vintage Sewing Machine",
         "meta": "FURNITURE",
         "meta2": "WISHBLOSSOM MOUNTAINS"
       },
@@ -38711,36 +40445,6 @@
         "name": "Yellow Frog Snippet",
         "meta": "MATERIALS",
         "meta2": "STORYBOOK VALE"
-      },
-      {
-        "id": 1509,
-        "name": "Round Snowy Straw Bales",
-        "meta": "FURNITURE",
-        "meta2": "WISHBLOSSOM MOUNTAINS"
-      },
-      {
-        "id": 1510,
-        "name": "Round Straw Bale",
-        "meta": "FURNITURE",
-        "meta2": "WISHBLOSSOM MOUNTAINS"
-      },
-      {
-        "id": 1511,
-        "name": "Woodland Fae Copper Topiary",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 1512,
-        "name": "Woodland Fae Floral Arch",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
-      },
-      {
-        "id": 1513,
-        "name": "Woodland Fae Picnic Table",
-        "meta": "FURNITURE",
-        "meta2": "DREAMLIGHT VALLEY"
       }
     ]
   },
@@ -39125,6 +40829,7 @@
       "609": "owned",
       "610": "owned",
       "611": "owned",
+      "612": "owned",
       "613": "owned",
       "614": "owned",
       "615": "owned",
@@ -39297,6 +41002,7 @@
       "850": "owned",
       "851": "owned",
       "852": "owned",
+      "853": "owned",
       "854": "owned",
       "855": "owned",
       "856": "owned",
@@ -39510,6 +41216,7 @@
       "1154": "owned",
       "1155": "owned",
       "1156": "owned",
+      "1157": "owned",
       "1159": "owned",
       "1160": "owned",
       "1161": "owned",
@@ -39768,7 +41475,17 @@
       "1737": "owned",
       "1739": "owned",
       "1741": "owned",
-      "1742": "owned"
+      "1742": "owned",
+      "1743": "owned",
+      "1744": "owned",
+      "1745": "owned",
+      "1746": "owned",
+      "1747": "owned",
+      "1748": "owned",
+      "1749": "owned",
+      "1750": "owned",
+      "1751": "owned",
+      "1752": "owned"
     },
     "furniture": {
       "5": "owned",
@@ -40107,6 +41824,7 @@
       "765": "neutral",
       "766": "owned",
       "767": "owned",
+      "768": "owned",
       "769": "owned",
       "770": "owned",
       "771": "owned",
@@ -40324,6 +42042,7 @@
       "1230": "owned",
       "1231": "owned",
       "1232": "owned",
+      "1233": "owned",
       "1234": "owned",
       "1238": "owned",
       "1239": "owned",
@@ -40714,6 +42433,7 @@
       "2223": "owned",
       "2229": "owned",
       "2230": "owned",
+      "2231": "owned",
       "2233": "owned",
       "2235": "owned",
       "2237": "owned",
@@ -40941,6 +42661,7 @@
       "2744": "owned",
       "2745": "owned",
       "2746": "owned",
+      "2747": "owned",
       "2749": "owned",
       "2750": "owned",
       "2751": "owned",
@@ -41093,6 +42814,7 @@
       "3069": "owned",
       "3070": "owned",
       "3072": "owned",
+      "3074": "owned",
       "3076": "owned",
       "3079": "owned",
       "3080": "owned",
@@ -41118,6 +42840,7 @@
       "3128": "owned",
       "3131": "owned",
       "3134": "owned",
+      "3135": "owned",
       "3136": "owned",
       "3137": "owned",
       "3138": "owned",
@@ -41137,6 +42860,7 @@
       "3161": "owned",
       "3167": "owned",
       "3168": "owned",
+      "3169": "owned",
       "3170": "owned",
       "3171": "owned",
       "3173": "owned",
@@ -41268,7 +42992,14 @@
       "3585": "owned",
       "3586": "owned",
       "3587": "owned",
-      "3588": "owned"
+      "3588": "owned",
+      "3591": "owned",
+      "3592": "owned",
+      "3593": "owned",
+      "3594": "owned",
+      "3595": "owned",
+      "3596": "owned",
+      "3597": "owned"
     },
     "meals": {
       "1": "owned",
@@ -41576,9 +43307,69 @@
       "116": "owned",
       "117": "owned",
       "118": "owned",
+      "120": "owned",
+      "121": "owned",
+      "122": "owned",
+      "129": "owned",
+      "133": "owned",
+      "134": "owned",
+      "135": "owned",
+      "136": "owned",
+      "138": "owned",
+      "141": "owned",
+      "144": "owned",
+      "145": "owned",
+      "146": "owned",
+      "147": "owned",
+      "148": "owned",
+      "150": "owned",
+      "151": "owned",
+      "152": "owned",
+      "153": "owned",
+      "154": "owned",
+      "158": "owned",
       "159": "owned",
+      "162": "owned",
+      "163": "owned",
+      "164": "owned",
+      "166": "owned",
+      "168": "owned",
+      "171": "owned",
+      "172": "owned",
+      "177": "owned",
+      "178": "owned",
+      "179": "owned",
+      "182": "owned",
+      "183": "owned",
+      "184": "owned",
+      "185": "owned",
+      "188": "owned",
+      "190": "owned",
+      "192": "owned",
+      "193": "owned",
+      "194": "owned",
+      "195": "owned",
+      "196": "owned",
+      "197": "owned",
+      "198": "owned",
+      "199": "owned",
+      "200": "owned",
+      "201": "owned",
+      "202": "owned",
+      "204": "owned",
+      "207": "owned",
+      "210": "owned",
       "211": "owned",
+      "212": "owned",
+      "214": "owned",
+      "215": "owned",
+      "223": "owned",
+      "224": "owned",
+      "229": "owned",
+      "230": "owned",
       "231": "owned",
+      "235": "owned",
+      "237": "owned",
       "245": "owned",
       "246": "owned",
       "247": "owned",
@@ -41671,6 +43462,30 @@
       "634": "owned",
       "635": "owned",
       "658": "owned",
+      "659": "owned",
+      "661": "owned",
+      "662": "owned",
+      "663": "owned",
+      "664": "owned",
+      "665": "owned",
+      "668": "owned",
+      "669": "owned",
+      "676": "owned",
+      "678": "owned",
+      "680": "owned",
+      "685": "owned",
+      "686": "owned",
+      "691": "owned",
+      "694": "owned",
+      "703": "owned",
+      "705": "owned",
+      "706": "owned",
+      "707": "owned",
+      "712": "owned",
+      "713": "owned",
+      "714": "owned",
+      "716": "owned",
+      "718": "owned",
       "726": "owned",
       "994": "owned",
       "1012": "owned",
@@ -41703,6 +43518,8 @@
       "1050": "owned",
       "1051": "owned",
       "1052": "owned",
+      "1054": "owned",
+      "1055": "owned",
       "1056": "owned",
       "1057": "owned",
       "1058": "owned",
@@ -41712,8 +43529,10 @@
       "1065": "owned",
       "1067": "owned",
       "1068": "owned",
+      "1069": "owned",
       "1070": "owned",
       "1071": "owned",
+      "1077": "owned",
       "1078": "owned",
       "1079": "owned",
       "1080": "owned",
@@ -41722,15 +43541,22 @@
       "1083": "owned",
       "1085": "owned",
       "1087": "owned",
+      "1088": "owned",
       "1090": "owned",
       "1091": "owned",
       "1094": "owned",
       "1095": "owned",
       "1096": "owned",
       "1098": "owned",
+      "1105": "owned",
+      "1110": "owned",
+      "1111": "owned",
+      "1124": "owned",
+      "1125": "owned",
       "1152": "owned",
       "1158": "owned",
       "1161": "owned",
+      "1225": "owned",
       "1290": "owned",
       "1291": "owned",
       "1292": "owned",
@@ -41750,8 +43576,28 @@
       "1333": "owned",
       "1335": "owned",
       "1336": "owned",
+      "1340": "owned",
+      "1341": "owned",
+      "1342": "owned",
+      "1348": "owned",
+      "1349": "owned",
+      "1351": "owned",
+      "1354": "owned",
+      "1355": "owned",
+      "1356": "owned",
+      "1358": "owned",
+      "1361": "owned",
+      "1362": "owned",
+      "1365": "owned",
+      "1366": "owned",
+      "1368": "owned",
+      "1371": "owned",
+      "1372": "owned",
+      "1373": "owned",
+      "1374": "owned",
       "1375": "owned",
       "1376": "owned",
+      "1380": "owned",
       "1382": "owned",
       "1383": "owned",
       "1384": "owned",
@@ -41803,12 +43649,14 @@
       "1468": "owned",
       "1469": "owned",
       "1472": "owned",
+      "1473": "owned",
       "1474": "owned",
       "1476": "owned",
       "1477": "owned",
       "1485": "owned",
       "1486": "owned",
       "1491": "owned",
+      "1492": "owned",
       "1493": "owned",
       "1498": "owned",
       "1500": "owned",
@@ -41863,6 +43711,7 @@
       "209": false
     },
     "crafting": {
+      "202": false,
       "262": false,
       "265": false,
       "369": false,
@@ -41876,8 +43725,8 @@
     }
   },
   "nextId": {
-    "clothing": 1743,
-    "furniture": 3591,
+    "clothing": 1753,
+    "furniture": 3598,
     "meals": 480,
     "crafting": 1514
   },
@@ -45960,17 +47809,210 @@
       "658": [
         "2 Pebbles"
       ],
+      "659": [
+        "5 Hardwood",
+        "5 Blue Marsh Milkweed",
+        "1 Orange & Red Marsh Milkweed",
+        "10 Clay",
+        "1 Okra Seed"
+      ],
+      "660": [
+        "10 Iron Ingot",
+        "3 Glass",
+        "1 Black Passion Lily"
+      ],
+      "661": [
+        "12 Iron Ingot",
+        "2 Glass"
+      ],
+      "662": [
+        "5 Softwood",
+        "2 Iron Ingot"
+      ],
+      "663": [
+        "5 Softwood",
+        "1 Iron Ingot",
+        "1 Blue Star Lily"
+      ],
+      "664": [
+        "10 Softwood",
+        "1 Iron Ingot"
+      ],
+      "665": [
+        "10 Iron Ingot",
+        "7 Dry Wood",
+        "3 Coal Ore"
+      ],
       "666": [
         "15 Dry Wood",
         "15 Fiber"
+      ],
+      "667": [
+        "15 Softwood",
+        "5 Sunflower",
+        "5 White & Red Hydrangea",
+        "1 Topaz"
+      ],
+      "668": [
+        "10 Softwood"
+      ],
+      "669": [
+        "1 Festive Wrapping Paper",
+        "1 Hot Cocoa",
+        "1 Minnie's Gingerbread Cookies"
+      ],
+      "670": [
+        "5 Softwood",
+        "5 Clay",
+        "5 Wheat",
+        "2 Red Bell Flower"
+      ],
+      "671": [
+        "5 Clay",
+        "5 Wheat",
+        "2 Red Bell Flower"
+      ],
+      "672": [
+        "10 Iron Ingot",
+        "2 Glass"
+      ],
+      "673": [
+        "12 Iron Ingot",
+        "2 Glass"
+      ],
+      "674": [
+        "2 Iron Ingot",
+        "10 Hardwood",
+        "1 White Bell Flower"
       ],
       "675": [
         "15 Dry Wood",
         "15 Fiber"
       ],
+      "676": [
+        "1 Festive Wrapping Paper",
+        "1 Holiday Feast Chair"
+      ],
       "677": [
         "15 Softwood",
         "15 Fiber"
+      ],
+      "678": [
+        "10 Iron Ingot",
+        "10 Hardwood",
+        "1 Topaz"
+      ],
+      "679": [
+        "25 Dark Wood",
+        "5 Gold Ingot",
+        "5000 Dreamlight",
+        "5 Blue Passion Lily"
+      ],
+      "680": [
+        "25 Dark Wood",
+        "5 Gold Ingot",
+        "5000 Dreamlight"
+      ],
+      "681": [
+        "25 Dark Wood",
+        "5 Gold Ingot",
+        "5000 Dreamlight",
+        "10 Green Passion Lily"
+      ],
+      "682": [
+        "25 Dark Wood",
+        "5 Gold Ingot",
+        "5000 Dreamlight",
+        "6 Red Nasturtium"
+      ],
+      "683": [
+        "25 Dark Wood",
+        "5 Gold Ingot",
+        "5000 Dreamlight",
+        "10 White Impatiens"
+      ],
+      "684": [
+        "25 Dark Wood",
+        "5 Gold Ingot",
+        "5000 Dreamlight",
+        "3 Yellow Nasturium"
+      ],
+      "685": [
+        "25 Hardwood",
+        "5 Iron Ingot",
+        "1000 Dreamlight",
+        "3 Blue Star Lily"
+      ],
+      "686": [
+        "25 Hardwood",
+        "5 Iron Ingot",
+        "1000 Dreamlight"
+      ],
+      "687": [
+        "25 Hardwood",
+        "5 Iron Ingot",
+        "1000 Dreamlight",
+        "5 Green Rising Penstermon"
+      ],
+      "688": [
+        "25 Hardwood",
+        "5 Iron Ingot",
+        "1000 Dreamlight",
+        "10 Red Bell Flower"
+      ],
+      "689": [
+        "25 Hardwood",
+        "5 Iron Ingot",
+        "1000 Dreamlight",
+        "6 White Marsh Milkweed"
+      ],
+      "690": [
+        "25 Hardwood",
+        "5 Iron Ingot",
+        "1000 Dreamlight",
+        "6 Sunflowers"
+      ],
+      "691": [
+        "1 Festive Wrapping Paper",
+        "1 Coal Ore"
+      ],
+      "692": [
+        "10 Iron Ingot",
+        "3 Glass"
+      ],
+      "693": [
+        "12 Iron Ingot",
+        "2 Glass"
+      ],
+      "694": [
+        "15 Fishy Green Egg",
+        "5 Purple Spring Egg",
+        "1 Onyx"
+      ],
+      "695": [
+        "10 Iron Ingot",
+        "3 Glass",
+        "1 Pink Houseleek"
+      ],
+      "696": [
+        "12 Iron Ingot",
+        "2 Glass",
+        "1 Pink Houseleek"
+      ],
+      "697": [
+        "3 Red Bell Flower",
+        "5 Yellow Daisiy",
+        "5 Blue Hydrangea"
+      ],
+      "699": [
+        "1 Blue Button",
+        "2 Red Button",
+        "100 Dreamlight"
+      ],
+      "700": [
+        "2 Iron Ingot",
+        "10 Hardwood",
+        "1 Red Bromeliad"
       ],
       "701": [
         "15 Hardwood",
@@ -45980,9 +48022,93 @@
         "15 Hardwood",
         "15 Fiber"
       ],
+      "703": [
+        "15 Fabric",
+        "23 Rope",
+        "25 Softwood"
+      ],
+      "704": [
+        "1 Festive Wrapping Paper",
+        "1 Shiny Ruby",
+        "1 Shiny Emerald"
+      ],
+      "705": [
+        "2500 Dreamlight",
+        "6 Iron Ingot",
+        "2 Tinkering Parts",
+        "20 Hardwood"
+      ],
+      "706": [
+        "25 Softwood",
+        "25 Stone",
+        "5 Blue Falling Penstemon"
+      ],
+      "707": [
+        "25 Softwood",
+        "25 Stone"
+      ],
+      "708": [
+        "25 Softwood",
+        "25 Stone"
+      ],
+      "709": [
+        "25 Softwood",
+        "25 Stone",
+        "10 Red Falling Penstemon"
+      ],
+      "710": [
+        "25 Softwood",
+        "25 Stone",
+        "6 White Daisy"
+      ],
+      "711": [
+        "25 Softwood",
+        "25 Stone",
+        "6 Dandelion"
+      ],
+      "712": [
+        "6 Raspberry",
+        "4 Blue Falling Penstemon",
+        "4 Purple Falling Penstemon",
+        "10 Soil",
+        "1 Topaz",
+        "12 Saucery Extract"
+      ],
+      "713": [
+        "2 Old Stuffing",
+        "2 Old Paper",
+        "2 Fabric"
+      ],
+      "714": [
+        "2 Old Stuffing",
+        "2 Old Paper",
+        "2 Fabric"
+      ],
       "715": [
         "15 Softwood",
         "15 Fiber"
+      ],
+      "716": [
+        "28 Mushroom",
+        "17 Glass",
+        "6 Purple Bell Flower",
+        "4 Blue Passion Lily",
+        "35 Hardwood"
+      ],
+      "717": [
+        "10 Iron Ingot",
+        "3 Glass"
+      ],
+      "718": [
+        "12 Iron Ingot",
+        "2 Glass",
+        "1 Black Passion Lily"
+      ],
+      "719": [
+        "10 Iron Ingot",
+        "10 Hardwood",
+        "1 Topaz",
+        "3 Red Falling Penstermon"
       ],
       "720": [
         "10 Quartz",
@@ -45995,6 +48121,13 @@
         "10 Bamboo",
         "1 Spinel",
         "3 Green Glass-Like Flowers"
+      ],
+      "722": [
+        "1 Magma",
+        "1 Stygiam Mudskipper",
+        "5 Petrified Wood",
+        "10 volcanic Rock",
+        "500 Storybook Magic"
       ],
       "723": [
         "1 Opal",
@@ -46300,6 +48433,11 @@
         "3 Sand",
         "1 Aquamarine"
       ],
+      "1069": [
+        "5 Softwood",
+        "1 Iron Ingot",
+        "1 Blue Star Lily"
+      ],
       "1070": [
         "5 Iron Ingot",
         "2 Glass",
@@ -46328,11 +48466,20 @@
         "3 Pink Bromeliad",
         "2 Blue Marsh Milkweed"
       ],
+      "1075": [
+        "10 Softwood",
+        "1 Iron Ingot"
+      ],
       "1076": [
         "6 Dry Wood",
         "1 White & Red Hydrangea",
         "1 Red Bromeliad",
         "1 Orange Star Lily"
+      ],
+      "1077": [
+        "10 Iron Ingot",
+        "7 Dry Wood",
+        "3 Coal Ore"
       ],
       "1078": [
         "15 Softwood",
@@ -46464,9 +48611,37 @@
         "10 Volcanic Rock",
         "500 Storybook Magic"
       ],
+      "1134": [
+        "1 Opal",
+        "1 Sorcerer Hat Hermit Crab",
+        "5 Petrified Wood",
+        "10 Volcanic Rock",
+        "500 Storybook Magic"
+      ],
+      "1135": [
+        "1 Star Sapphire",
+        "1 Lamprey",
+        "5 Petrified Wood",
+        "10 Volcanic Rock",
+        "500 Storybook Magic"
+      ],
+      "1136": [
+        "1 Magma",
+        "1 Stygian Mudskipper",
+        "5 Pine Cone",
+        "10 Moss",
+        "500 Storybook Magic"
+      ],
       "1137": [
         "1 Opal",
         "1 Sorcerer Hat Hermit Crab",
+        "5 Pine Cone",
+        "10 Moss",
+        "500 Storybook Magic"
+      ],
+      "1138": [
+        "1 Star Sapphire",
+        "1 Lmaprey",
         "5 Pine Cone",
         "10 Moss",
         "500 Storybook Magic"
@@ -47873,126 +50048,7 @@
     "clothing": {},
     "furniture": {},
     "meals": {},
-    "crafting": {
-      "153": true,
-      "158": true,
-      "160": true,
-      "161": true,
-      "162": true,
-      "163": true,
-      "164": true,
-      "166": true,
-      "167": true,
-      "168": true,
-      "170": true,
-      "171": true,
-      "172": true,
-      "173": true,
-      "174": true,
-      "175": true,
-      "176": true,
-      "177": true,
-      "178": true,
-      "179": true,
-      "180": true,
-      "182": true,
-      "183": true,
-      "184": true,
-      "185": true,
-      "186": true,
-      "187": true,
-      "188": true,
-      "189": true,
-      "190": true,
-      "191": true,
-      "192": true,
-      "193": true,
-      "194": true,
-      "195": true,
-      "196": true,
-      "197": true,
-      "198": true,
-      "199": true,
-      "200": true,
-      "201": true,
-      "202": true,
-      "203": true,
-      "204": true,
-      "205": true,
-      "207": true,
-      "208": true,
-      "209": true,
-      "210": true,
-      "212": true,
-      "213": true,
-      "214": true,
-      "215": true,
-      "216": true,
-      "217": true,
-      "218": true,
-      "219": true,
-      "220": true,
-      "221": true,
-      "222": true,
-      "223": true,
-      "224": true,
-      "225": true,
-      "226": true,
-      "227": true,
-      "228": true,
-      "229": true,
-      "230": true,
-      "233": true,
-      "234": true,
-      "235": true,
-      "236": true,
-      "237": true,
-      "238": true,
-      "240": true,
-      "241": true,
-      "242": true,
-      "243": true,
-      "1097": true,
-      "1104": true,
-      "1105": true,
-      "1107": true,
-      "1108": true,
-      "1109": true,
-      "1121": true,
-      "1122": true,
-      "1123": true,
-      "1124": true,
-      "1125": true,
-      "1126": true,
-      "1127": true,
-      "1128": true,
-      "1129": true,
-      "1130": true,
-      "1131": true,
-      "1132": true,
-      "1153": true,
-      "1156": true,
-      "1219": true,
-      "1339": true,
-      "1362": true,
-      "1363": true,
-      "1364": true,
-      "1365": true,
-      "1366": true,
-      "1367": true,
-      "1368": true,
-      "1369": true,
-      "1370": true,
-      "1371": true,
-      "1372": true,
-      "1373": true,
-      "1423": true,
-      "1429": true,
-      "1433": true,
-      "1473": true,
-      "1492": true,
-      "1506": true
-    }
+    "crafting": {}
   },
-  "savedAt": "2026-08-07T07:24:27.051Z"
+  "savedAt": "2026-10-08T19:00:51.102Z"
 }
