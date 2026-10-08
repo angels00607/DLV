@@ -868,12 +868,13 @@ function AlphabeticalCollection({
   }, [availableLetters, categoryId]);
 
   function chooseLetter(letter: string) {
-    if (letter !== activeLetter) setOpenWords(new Set());
+    if (letter === activeLetter) return;
+    setOpenWords(new Set());
     setSelectedLetter(letter);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         listTopRef.current?.scrollIntoView({
-          behavior: 'smooth',
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
           block: 'start',
         });
       });
@@ -935,7 +936,7 @@ function AlphabeticalCollection({
           <div className="letter-tile-grid persistent-letter-bar" aria-label="Letters">
             {letters.map(([letter, letterGroup]) => (
               <button key={letter} className={activeLetter === letter ? 'active' : ''}
-                aria-pressed={activeLetter === letter} onClick={() => chooseLetter(letter)}>
+                aria-pressed={activeLetter === letter} aria-label={`${letter}: ${letterGroup.length} items`} onClick={() => chooseLetter(letter)}>
                 <strong>{letter}</strong><span>{letterGroup.length}</span>
               </button>
             ))}
