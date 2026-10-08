@@ -58,9 +58,10 @@ def main():
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "mode": "READ_ONLY_NO_CATALOG_CHANGES",
         "snapshotMode": snapshot is not None,
+        "coverage": "PARTIAL_OR_UNVERIFIED" if snapshot is not None else "LIVE_API",
         "source": args.snapshot if args.snapshot else API,
         "categories": {},
-        "warnings": ["Wiki category membership is only a candidate discovery source. Missing items, subcategories, universe and zone require human verification.", "This audit never changes catalog IDs, progress, zones or universes."],
+        "warnings": ["Snapshot contents are unverified unless their provenance is independently documented; candidate status is not import approval.", "Wiki category membership is only a candidate discovery source. Missing items, subcategories, universe and zone require human verification.", "This audit never changes catalog IDs, progress, zones or universes."],
     }
     for key, wiki_category in CATEGORIES.items():
         existing = catalog.get("data", {}).get(key, [])
@@ -91,7 +92,7 @@ def main():
                         "note": "Requires item-page review, category, universe and zone confirmation; not approved for import.",
                     })
             report["categories"][key] = {
-                "wikiCategory": wiki_category, "status": "CHECKED", "wikiPagesFound": len(titles),
+                "wikiCategory": wiki_category, "status": "SNAPSHOT_COMPARED" if snapshot is not None else "CHECKED", "wikiPagesFound": len(titles),
                 "catalogItems": len(existing), "exactNameMatches": matched,
                 "reviewCandidates": candidates,
             }
