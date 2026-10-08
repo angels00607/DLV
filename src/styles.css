@@ -1940,3 +1940,22 @@ h1 {
 .home-category-row .home-bar { grid-column: 1 / -1; grid-row: 3; width: 100%; height: 5px; }
 .home-section-title { padding: 15px 2px 4px; color: var(--ink); font-size: .92rem; letter-spacing: 0; text-transform: none; }
 @media (max-width: 350px) { .home-category-list { grid-template-columns: 1fr; } }
+
+/* Phase 3: one cohesive universe card, with its editable total inside. */
+.subcategory-grid { gap: 12px; }
+.universe-card { min-width: 0; display: grid; align-content: start; border: 1px solid var(--line); border-radius: 19px; background: var(--surface-strong); overflow: hidden; box-shadow: 0 5px 20px rgba(60,42,90,.045); }
+.universe-card.active { border-color: var(--lavender); box-shadow: 0 0 0 1px rgba(109,79,143,.1); }
+.universe-card-open { width: 100%; min-height: 90px; display: grid; gap: 12px; padding: 14px 14px 10px; border: 0; background: transparent; color: var(--ink); text-align: left; }
+.universe-card-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.universe-card-heading strong { font-size: .9rem; line-height: 1.3; overflow-wrap: anywhere; }
+.universe-card-heading svg { flex: 0 0 auto; color: var(--muted); transform: rotate(-90deg); transition: transform .2s; }
+.universe-card.active .universe-card-heading svg { transform: rotate(0); }
+.universe-card-count { display: flex; align-items: baseline; gap: 6px; }
+.universe-card-count strong { font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.universe-card-count small { font-size: .72rem; color: var(--muted); }
+.universe-card-bar { height: 5px; overflow: hidden; border-radius: 999px; background: var(--soft); }
+.universe-card-bar i { display: block; height: 100%; border-radius: inherit; background: var(--plum); }
+.universe-card .universe-total-editors { display: grid; gap: 7px; padding: 10px 14px 13px; border-top: 1px solid var(--line); }
+.universe-card .manual-total-editor { justify-content: space-between; gap: 6px; font-size: .72rem; }
+.universe-card .manual-total-editor input { width: 68px; min-height: 44px; text-align: center; }
+@media (max-width: 390px) { .subcategory-grid { grid-template-columns: 1fr; } }
