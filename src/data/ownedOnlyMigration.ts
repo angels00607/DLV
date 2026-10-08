@@ -10,6 +10,7 @@ export interface CollectionMigrationPreview {
   included: Partial<Record<CategoryId, number>>;
   excluded: Partial<Record<CategoryId, number>>;
   ambiguous: Partial<Record<CategoryId, number>>;
+  ambiguousItems: Partial<Record<CategoryId, GameItem[]>>;
 }
 
 export function previewOwnedOnlyMigration(
@@ -20,6 +21,7 @@ export function previewOwnedOnlyMigration(
   const included: CollectionMigrationPreview['included'] = {};
   const excluded: CollectionMigrationPreview['excluded'] = {};
   const ambiguous: CollectionMigrationPreview['ambiguous'] = {};
+  const ambiguousItems: CollectionMigrationPreview['ambiguousItems'] = {};
   for (const [category, sourceItems] of Object.entries(original.data) as [CategoryId, GameItem[]][]) {
     const owned = original.owned[category] ?? {};
     const checked = original.checked[category] ?? {};
@@ -45,8 +47,9 @@ export function previewOwnedOnlyMigration(
     included[category] = selected.length;
     excluded[category] = sourceItems.length - selected.length;
     ambiguous[category] = uncertain.length;
+    ambiguousItems[category] = uncertain.map((item) => ({ ...item }));
   }
-  return { collection, included, excluded, ambiguous };
+  return { collection, included, excluded, ambiguous, ambiguousItems };
 }
 
 /** Manual total is independent of number of owned items; warn on overflow. */
