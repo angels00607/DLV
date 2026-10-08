@@ -60,6 +60,7 @@ const ZONE_OPTIONS = ZONES.filter((zone) => zone.value !== 'all').map((zone) => 
 
 export function App() {
   const [save, setSave] = useState<SavePayload | null>(null);
+  const [manualTotals, setManualTotals] = useState<Record<string, number>>(readManualTotals);
   const initialNav = readNavigationState();
   const [activeView, setActiveView] = useState<ActiveView>(initialNav.activeView);
   const [activeZone, setActiveZone] = useState<ActiveZone>(initialNav.activeZone);
@@ -123,8 +124,17 @@ export function App() {
     ),
     [baseFilteredItems, activeGroup, starFilter, categoryId],
   );
-  const progress = useMemo(() => getProgress(zoneItems, save, categoryId), [zoneItems, save, categoryId]);
-  const totalProgress = useMemo(() => getTotalProgress(save, activeZone), [save, activeZone]);
+  const progress = getProgress(zoneItems, save, categoryId, manualTotals[totalKey(categoryId, activeZone)]);
+  const totalProgress = getTotalProgress(save, activeZone, manualTotals);
+  function setCategoryTotal(category: CategoryId, zone: string, value: number | null) {
+    setManualTotals((current) => {
+      const next = { ...current };
+      if (value === null) delete next[totalKey(category, zone)];
+      else next[totalKey(category, zone)] = Math.max(0, Math.floor(value));
+      localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(next));
+      return next;
+    });
+  }
 
   if (!save) {
     return (
@@ -359,6 +369,8 @@ export function App() {
           save={save}
           activeZone={activeZone}
           totalProgress={totalProgress}
+          manualTotals={manualTotals}
+          onSetTotal={setCategoryTotal}
           onOpenCategory={(category) => {
             setActiveView(category);
             setActiveGroup('all');
@@ -370,6 +382,7 @@ export function App() {
             <div>
               <h2>{currentCategory.label}</h2>
               <p>{progress.done} of {progress.total} collected</p>
+              <ManualTotalEditor category={categoryId} zone={activeZone} value={manualTotals[totalKey(categoryId, activeZone)]} onChange={setCategoryTotal} />
             </div>
             <div className="progress-ring" style={{ '--progress': `${progress.percent * 3.6}deg` } as React.CSSProperties}>
               {Math.round(progress.percent)}%
@@ -1224,14 +1237,18 @@ function HomeView({
   save,
   activeZone,
   totalProgress,
+  manualTotals,
+  onSetTotal,
   onOpenCategory,
 }: {
   save: SavePayload;
   activeZone: ActiveZone;
   totalProgress: { done: number; total: number; percent: number };
+  manualTotals: Record<string, number>;
+  onSetTotal: (category: CategoryId, zone: string, value: number | null) => void;
   onOpenCategory: (categoryId: CategoryId) => void;
 }) {
-  const missing = totalProgress.total - totalProgress.done;
+  const missing = Math.max(0, totalProgress.total - totalProgress.done);
   const missingMarked = CATEGORIES.reduce(
     (count, category) =>
       count + getMarkedMissing(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id),
@@ -1271,12 +1288,13 @@ function HomeView({
         <div className="home-section-title">Categories</div>
         <div className="home-category-list">
           {CATEGORIES.map((category) => {
-            const progress = getProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id);
+            const progress = getProgress(filterByZone(save.data[category.id] ?? [], activeZone), save, category.id, manualTotals[totalKey(category.id, activeZone)]);
             return (
               <button key={category.id} className="home-category-row" onClick={() => onOpenCategory(category.id)}>
                 <img src={category.icon} alt="" onError={(event) => (event.currentTarget.style.display = 'none')} />
                 <span>{category.label}</span>
                 <small>{progress.done}/{progress.total}</small>
+                <span className="home-total-edit" onClick={(event) => event.stopPropagation()}><ManualTotalEditor category={category.id} zone={activeZone} value={manualTotals[totalKey(category.id, activeZone)]} onChange={onSetTotal} /></span>
                 <div className="home-bar"><i style={{ width: `${progress.percent}%` }} /></div>
               </button>
             );
@@ -1689,28 +1707,46 @@ function toggleAccordion(
   return next;
 }
 
-function getProgress(items: GameItem[], save: SavePayload | null, categoryId: CategoryId) {
+const MANUAL_TOTALS_KEY = 'dlv_manual_collection_totals_v1';
+function totalKey(category: CategoryId, zone: string) { return `${zone}::${category}`; }
+function readManualTotals(): Record<string, number> {
+  try {
+    const parsed: unknown = JSON.parse(localStorage.getItem(MANUAL_TOTALS_KEY) ?? '{}');
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+    return Object.fromEntries(Object.entries(parsed).filter(([, value]) =>
+      typeof value === 'number' && Number.isSafeInteger(value) && value >= 0,
+    )) as Record<string, number>;
+  } catch { return {}; }
+}
+function ManualTotalEditor({ category, zone, value, onChange }: {
+  category: CategoryId; zone: string; value: number | undefined;
+  onChange: (category: CategoryId, zone: string, value: number | null) => void;
+}) {
+  return <label className="manual-total-editor" onClick={(event) => event.stopPropagation()}>
+    Total <input type="number" min="0" step="1" inputMode="numeric" aria-label="Manual collection total"
+      placeholder="Set total" value={value ?? ''} onChange={(event) => {
+        const raw = event.target.value;
+        if (!raw) onChange(category, zone, null);
+        else if (/^\\d+$/.test(raw) && Number.isSafeInteger(Number(raw))) onChange(category, zone, Number(raw));
+      }} />
+  </label>;
+}
+function getProgress(items: GameItem[], save: SavePayload | null, categoryId: CategoryId, manualTotal?: number) {
   const done = items.filter((item) => save?.owned[categoryId]?.[item.id] === 'owned').length;
-  const total = items.length;
-  return { done, total, percent: total ? (done / total) * 100 : 0 };
+  const total = manualTotal ?? items.length;
+  return { done, total, percent: total ? Math.min(100, (done / total) * 100) : 0 };
 }
 
 function getMarkedMissing(items: GameItem[], save: SavePayload | null, categoryId: CategoryId) {
   return items.filter((item) => save?.owned[categoryId]?.[item.id] === 'missing').length;
 }
 
-function getTotalProgress(save: SavePayload | null, zone: ActiveZone = 'all') {
-  const entries = CATEGORIES.flatMap((category) => filterByZone(save?.data[category.id] ?? [], zone));
-  const done = CATEGORIES.reduce(
-    (count, category) =>
-      count +
-      filterByZone(save?.data[category.id] ?? [], zone).filter(
-        (item) => save?.owned[category.id]?.[item.id] === 'owned',
-      ).length,
-    0,
-  );
-  const total = entries.length;
-  return { done, total, percent: total ? (done / total) * 100 : 0 };
+function getTotalProgress(save: SavePayload | null, zone: ActiveZone = 'all', manualTotals: Record<string, number> = {}) {
+  const parts = CATEGORIES.map((category) => getProgress(
+    filterByZone(save?.data[category.id] ?? [], zone), save, category.id,
+    manualTotals[totalKey(category.id, zone)],
+  ));
+  const done = parts.reduce((sum, part) => sum + part.done, 0);
+  const total = parts.reduce((sum, part) => sum + part.total, 0);
+  return { done, total, percent: total ? Math.min(100, (done / total) * 100) : 0 };
 }
-
-
