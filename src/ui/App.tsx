@@ -1258,11 +1258,11 @@ function ItemCard({
 
   return (
     <article className={`item-card ${owned ?? ''} ${checked ? 'checked' : ''}`}>
-      <button className="state-button" aria-label={`Change status for ${item.name}`} onClick={onOwned}>
+      <button className="state-button" aria-label={`${item.name}: ${owned === 'owned' ? 'collected' : owned === 'missing' ? 'marked missing' : 'not marked'}. Change collection status`} title={owned === 'owned' ? 'Collected' : owned === 'missing' ? 'Missing' : 'Not marked'} onClick={onOwned}>
         {owned === 'owned' ? <Check size={17} /> : owned === 'missing' ? <X size={17} /> : null}
       </button>
       <div className="item-body">
-        <button className="item-title-button" onClick={onChecked}>
+        <button className="item-title-button" aria-pressed={checked} aria-label={`${item.name}: ${checked ? 'checked' : 'unchecked'}. Toggle check`} onClick={onChecked}>
         <strong>{item.name}</strong>
         <span className="item-meta-row">
           {showSearchContext ? (
@@ -1291,7 +1291,7 @@ function ItemCard({
         )}
       </div>
       <div className={`item-actions ${actionsOpen ? 'open' : ''}`}>
-        <button className="mini-button item-menu-button" aria-label={`Actions for ${item.name}`} onClick={() => setActionsOpen(!actionsOpen)}>
+        <button className="mini-button item-menu-button" aria-label={`Actions for ${item.name}`} aria-expanded={actionsOpen} onClick={() => setActionsOpen(!actionsOpen)}>
           <MoreHorizontal size={17} />
         </button>
         {actionsOpen && (
