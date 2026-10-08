@@ -1,0 +1,42 @@
+name: Probe alternative DDV sources (metadata only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check public repository metadata and license
+        run: |
+          python3 - <<'PY'
+          import json
+          import urllib.error
+          import urllib.request
+
+          repos = ["killingsworth-kristen/DDV-catalogue-API", "FeelinProggy/DDVTracker"]
+          headers = {"Accept": "application/vnd.github+json", "User-Agent": "DLV-Guide-Source-Assessment/1.0"}
+          for repo in repos:
+              request = urllib.request.Request(f"https://api.github.com/repos/{repo}", headers=headers)
+              try:
+                  with urllib.request.urlopen(request, timeout=15) as response:
+                      info = json.load(response)
+                  print(json.dumps({
+                      "repository": repo,
+                      "default_branch": info.get("default_branch"),
+                      "archived": info.get("archived"),
+                      "pushed_at": info.get("pushed_at"),
+                      "license": (info.get("license") or {}).get("spdx_id"),
+                      "size_kb": info.get("size"),
+                      "status": "metadata_accessible",
+                  }, sort_keys=True))
+              except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+                  print(json.dumps({"repository": repo, "status": "unavailable", "error_type": type(exc).__name__}))
+                  raise SystemExit(1)
+          print("Metadata-only probe complete; no third-party dataset downloaded or imported.")
+          PY
