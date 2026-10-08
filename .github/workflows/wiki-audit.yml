@@ -17,6 +17,21 @@ jobs:
         id: audit
         continue-on-error: true
         run: python3 scripts/wiki_audit.py --catalog public/data.json --output wiki-sync-report.json
+      - name: Summarize source status
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path("wiki-sync-report.json")
+          if path.exists():
+              data = json.loads(path.read_text())
+              lines = ["## Wiki audit source status", ""]
+              for category, details in data.get("categories", {}).items():
+                  lines.append(f"- **{category}**: " + (f"ERROR — {details['error']}" if "error" in details else f"{details['wikiPagesFound']} pages discovered"))
+              with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+                  summary.write("\\n".join(lines) + "\\n")
+          PY
       - name: Upload audit report
         if: always()
         uses: actions/upload-artifact@v4
