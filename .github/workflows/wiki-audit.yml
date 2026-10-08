@@ -30,7 +30,7 @@ jobs:
           if path.is_absolute() or '..' in path.parts or not path.is_file() or path.suffix != '.json':
               raise SystemExit('Provide a committed relative .json snapshot file path; the blocked wiki API cannot be used.')
           with open(os.environ['GITHUB_ENV'], 'a') as env:
-              env.write(f'SNAPSHOT_PATH={value}\\n')
+              env.write(f'SNAPSHOT_PATH={value}\n')
           PY
       - name: Generate candidate report
         id: audit
@@ -47,9 +47,9 @@ jobs:
               data = json.loads(path.read_text())
               lines = ["## Wiki audit source status", ""]
               for category, details in data.get("categories", {}).items():
-                  lines.append(f"- **{category}**: " + (f"ERROR — {details['error']}" if "error" in details else f"{details['wikiPagesFound']} pages discovered"))
+                  lines.append(f"- **{category}**: " + (f"ERROR — {details['error']}" if "error" in details else ("NOT CHECKED" if details.get("status") == "NOT_CHECKED" else f"{details['wikiPagesFound']} pages discovered")))
               with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
-                  summary.write("\\n".join(lines) + "\\n")
+                  summary.write("\n".join(lines) + "\n")
           PY
       - name: Upload audit report
         if: always()
