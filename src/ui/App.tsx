@@ -43,7 +43,8 @@ type ActiveZone =
   | 'STORYBOOK VALE'
   | 'WISHBLOSSOM MOUNTAINS';
 const DIRECT_RENDER_LIMIT = 6;
-const ALPHABETICAL_NAV_LIMIT = 15;
+const ALPHABETICAL_NAV_LIMIT = 40;
+const DIRECT_ITEMS_LIMIT = 10;
 const FIRST_WORD_ACCORDION_LIMIT = 3;
 const GH_STORAGE_KEY = 'dlv_gh_config';
 const CLOUD_COLLECTION_PATH = 'collection-sync.json';
@@ -881,83 +882,58 @@ function AlphabeticalCollection({
 
   if (!letters.length) return <div className="empty-collection">No items match these filters.</div>;
 
-  if (items.length <= ALPHABETICAL_NAV_LIMIT) {
-    return (
-      <ItemCards
-        categoryId={categoryId}
-        items={sortedItems}
-        save={save}
-        onOwned={onOwned}
-        onChecked={onChecked}
-        onEdit={onEdit}
-        onDelete={onDelete}
-      />
-    );
+  if (items.length <= DIRECT_ITEMS_LIMIT) {
+    return <ItemCards categoryId={categoryId} items={sortedItems} save={save}
+      onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />;
   }
 
-  const letterItems = selectedLetter
-    ? letters.find(([letter]) => letter === selectedLetter)?.[1] ?? []
-    : [];
-  const wordGroups = buildFirstWordGroups(letterItems);
+  const useLetterIndex = items.length > ALPHABETICAL_NAV_LIMIT;
+  const visibleItems = useLetterIndex
+    ? (selectedLetter ? letters.find(([letter]) => letter === selectedLetter)?.[1] ?? [] : [])
+    : sortedItems;
+  const wordGroups = buildFirstWordGroups(visibleItems);
+
+  const renderWordGroups = () => (
+    <div id="alphabetical-list-top" className="alphabetical-word-list" aria-label="Browse items by name">
+      {wordGroups.map(([word, groupedItems]) => (
+        groupedItems.length > FIRST_WORD_ACCORDION_LIMIT ? (
+          <details className="word-accordion" key={word} open={openWords.has(word)}
+            onToggle={(event) => toggleWord(word, event.currentTarget.open)}>
+            <summary>
+              <strong>{word}</strong>
+              <span>{groupedItems.length} items</span>
+              <ChevronDown size={16} aria-hidden="true" />
+            </summary>
+            <ItemCards categoryId={categoryId} items={groupedItems} save={save}
+              onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
+          </details>
+        ) : (
+          <section className="direct-word-group" key={word}>
+            {wordGroups.length > 1 && <h4>{word}</h4>}
+            <ItemCards categoryId={categoryId} items={groupedItems} save={save}
+              onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
+          </section>
+        )
+      ))}
+    </div>
+  );
 
   return (
     <section className="drill-browser" aria-label="Alphabetical navigation">
-      <div className="letter-tile-grid persistent-letter-bar" aria-label="Letters">
-        {letters.map(([letter, letterGroup]) => (
-          <button
-            key={letter}
-            className={selectedLetter === letter ? 'active' : ''}
-            aria-pressed={selectedLetter === letter}
-            onClick={() => chooseLetter(letter)}
-          >
-            <strong>{letter}</strong>
-            <span>{letterGroup.length}</span>
-          </button>
-        ))}
-      </div>
-
-      {selectedLetter && (
-        <div id="alphabetical-list-top" className="alphabetical-word-list" aria-label={`Items beginning with ${selectedLetter}`}>
-          {wordGroups.map(([word, groupedItems]) => (
-            groupedItems.length > FIRST_WORD_ACCORDION_LIMIT ? (
-              <details
-                className="word-accordion"
-                key={word}
-                open={openWords.has(word)}
-                onToggle={(event) => toggleWord(word, event.currentTarget.open)}
-              >
-                <summary>
-                  <strong>{word}</strong>
-                  <span>{groupedItems.length} items</span>
-                  <ChevronDown size={16} aria-hidden="true" />
-                </summary>
-                <ItemCards
-                  categoryId={categoryId}
-                  items={groupedItems}
-                  save={save}
-                  onOwned={onOwned}
-                  onChecked={onChecked}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                />
-              </details>
-            ) : (
-              <section className="direct-word-group" key={word}>
-                {wordGroups.length > 1 && <h4>{word}</h4>}
-                <ItemCards
-                  categoryId={categoryId}
-                  items={groupedItems}
-                  save={save}
-                  onOwned={onOwned}
-                  onChecked={onChecked}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                />
-              </section>
-            )
-          ))}
-        </div>
+      {useLetterIndex && (
+        <>
+          <p className="alphabetical-help">Choose a letter to browse {items.length} items.</p>
+          <div className="letter-tile-grid persistent-letter-bar" aria-label="Letters">
+            {letters.map(([letter, letterGroup]) => (
+              <button key={letter} className={selectedLetter === letter ? 'active' : ''}
+                aria-pressed={selectedLetter === letter} onClick={() => chooseLetter(letter)}>
+                <strong>{letter}</strong><span>{letterGroup.length}</span>
+              </button>
+            ))}
+          </div>
+        </>
       )}
+      {(!useLetterIndex || selectedLetter) && renderWordGroups()}
     </section>
   );
 }
