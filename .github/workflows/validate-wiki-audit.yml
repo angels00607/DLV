@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/wiki_audit.py'
       - 'tests/test_wiki_audit.py'
+      - 'tests/fixtures/wiki-snapshot-example.json'
       - '.github/workflows/wiki-audit.yml'
       - '.github/workflows/validate-wiki-audit.yml'
   workflow_dispatch:
@@ -20,3 +21,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: Test offline snapshot comparison
         run: python3 -m unittest discover -s tests -p 'test_wiki_audit.py' -v
+      - name: Validate complete offline audit against real catalog and synthetic snapshot
+        run: |
+          python3 scripts/wiki_audit.py --catalog public/data.json --snapshot tests/fixtures/wiki-snapshot-example.json --output /tmp/wiki-audit-smoke.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/wiki-audit-smoke.json').read_text())
+          assert report['snapshotMode'] is True
+          assert report['categories']['clothing']['status'] == 'CHECKED'
+          assert report['categories']['furniture']['status'] == 'NOT_CHECKED'
+          assert report['categories']['meals']['status'] == 'NOT_CHECKED'
+          assert report['categories']['crafting']['status'] == 'NOT_CHECKED'
+          assert report['categories']['clothing']['wikiPagesFound'] == 2
+          print('Offline audit smoke test passed; synthetic fixture only, no wiki data imported.')
+          PY
