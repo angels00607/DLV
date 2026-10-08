@@ -46,6 +46,7 @@ const DIRECT_RENDER_LIMIT = 6;
 const ALPHABETICAL_NAV_LIMIT = 15;
 const FIRST_WORD_ACCORDION_LIMIT = 3;
 const GH_STORAGE_KEY = 'dlv_gh_config';
+const CLOUD_COLLECTION_PATH = 'collection-sync.json';
 const NAV_STORAGE_KEY = 'dlv_iphone_nav_v1';
 type StarFilter = 'all' | 1 | 2 | 3 | 4 | 5;
 const ZONES: Array<{ value: ActiveZone; label: string }> = [
