@@ -802,7 +802,7 @@ function SubcategoryGrid({
             </button>
             {isActive && (
               <section id="active-group-results" className="active-group-results" aria-live="polite">
-                <div className="universe-total-editors">{Array.from(new Set(items.map((item) => normalizeZone(item.zone ?? '') || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
+                <div className="universe-total-editors">{Array.from(new Set(items.map((item) => normalizeZone(item.meta2 ?? '') || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
                   <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={group} value={manualTotals[universeTotalKey(categoryId, zone, group)]} onChange={onSetTotal} />
                 ))}</div>
                 {renderActiveGroup()}
@@ -1798,7 +1798,7 @@ function universeTotalKey(category: CategoryId, zone: string, universe: string) 
 function getUniverseProgress(items: GameItem[], save: SavePayload | null, category: CategoryId, totals: Record<string, number>) {
   const groups = new Map<string, GameItem[]>();
   for (const item of items) {
-    const key = universeTotalKey(category, item.zone ?? 'DREAMLIGHT VALLEY', item.meta || 'Other');
+    const key = universeTotalKey(category, item.meta2 ?? 'DREAMLIGHT VALLEY', item.meta || 'Other');
     groups.set(key, [...(groups.get(key) ?? []), item]);
   }
   let done = 0, total = 0;
