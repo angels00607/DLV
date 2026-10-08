@@ -67,6 +67,13 @@ def main():
         by_name = {}
         for item in existing:
             by_name.setdefault(normalized(item["name"]), []).append(item)
+        if snapshot is not None and not snapshot[key]:
+            report["categories"][key] = {
+                "wikiCategory": wiki_category, "catalogItems": len(existing),
+                "status": "NOT_CHECKED", "wikiPagesFound": None,
+                "reviewCandidates": [],
+            }
+            continue
         try:
             titles = sorted(set(snapshot[key]), key=str.casefold) if snapshot is not None else fetch_members(wiki_category)
             candidates = []
@@ -84,7 +91,7 @@ def main():
                         "note": "Requires item-page review, category, universe and zone confirmation; not approved for import.",
                     })
             report["categories"][key] = {
-                "wikiCategory": wiki_category, "wikiPagesFound": len(titles),
+                "wikiCategory": wiki_category, "status": "CHECKED", "wikiPagesFound": len(titles),
                 "catalogItems": len(existing), "exactNameMatches": matched,
                 "reviewCandidates": candidates,
             }

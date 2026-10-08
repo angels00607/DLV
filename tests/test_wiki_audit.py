@@ -32,7 +32,10 @@ class WikiAuditTests(unittest.TestCase):
         self.assertEqual(process.returncode, 0, process.stderr)
         self.assertEqual(before, after)
         self.assertTrue(report["snapshotMode"])
+        self.assertEqual(report["categories"]["furniture"]["status"], "NOT_CHECKED")
+        self.assertIsNone(report["categories"]["furniture"]["wikiPagesFound"])
         clothing = report["categories"]["clothing"]
+        self.assertEqual(clothing["status"], "CHECKED")
         self.assertEqual(clothing["exactNameMatches"], 1)
         self.assertEqual(len(clothing["reviewCandidates"]), 1)
         self.assertEqual(clothing["reviewCandidates"][0]["status"], "POSSIBLE_NEW")
