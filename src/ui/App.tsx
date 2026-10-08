@@ -858,9 +858,17 @@ function AlphabeticalCollection({
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
   const [openWords, setOpenWords] = useState<Set<string>>(() => new Set());
   const listTopRef = useRef<HTMLDivElement>(null);
+  const availableLetters = letters.map(([letter]) => letter).join('|');
+  const activeLetter = selectedLetter && letters.some(([letter]) => letter === selectedLetter)
+    ? selectedLetter : null;
+
+  useEffect(() => {
+    setOpenWords(new Set());
+    setSelectedLetter(null);
+  }, [availableLetters, categoryId]);
 
   function chooseLetter(letter: string) {
-    if (letter !== selectedLetter) setOpenWords(new Set());
+    if (letter !== activeLetter) setOpenWords(new Set());
     setSelectedLetter(letter);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -890,7 +898,7 @@ function AlphabeticalCollection({
 
   const useLetterIndex = items.length > ALPHABETICAL_NAV_LIMIT;
   const visibleItems = useLetterIndex
-    ? (selectedLetter ? letters.find(([letter]) => letter === selectedLetter)?.[1] ?? [] : [])
+    ? (activeLetter ? letters.find(([letter]) => letter === activeLetter)?.[1] ?? [] : [])
     : sortedItems;
   const wordGroups = buildFirstWordGroups(visibleItems);
 
@@ -926,15 +934,15 @@ function AlphabeticalCollection({
           <p className="alphabetical-help">Choose a letter to browse {items.length} items.</p>
           <div className="letter-tile-grid persistent-letter-bar" aria-label="Letters">
             {letters.map(([letter, letterGroup]) => (
-              <button key={letter} className={selectedLetter === letter ? 'active' : ''}
-                aria-pressed={selectedLetter === letter} onClick={() => chooseLetter(letter)}>
+              <button key={letter} className={activeLetter === letter ? 'active' : ''}
+                aria-pressed={activeLetter === letter} onClick={() => chooseLetter(letter)}>
                 <strong>{letter}</strong><span>{letterGroup.length}</span>
               </button>
             ))}
           </div>
         </>
       )}
-      {(!useLetterIndex || selectedLetter) && renderWordGroups()}
+      {(!useLetterIndex || activeLetter) && renderWordGroups()}
     </section>
   );
 }
