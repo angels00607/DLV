@@ -101,6 +101,11 @@ export function App() {
     () => filterItems(zoneItems, filters, save, categoryId),
     [zoneItems, filters, save, categoryId],
   );
+  const universeOptions = useMemo(
+    () => Array.from(new Set(zoneItems.map((item) => item.meta?.trim()).filter((value): value is string => !!value)))
+      .sort((a, b) => a.localeCompare(b)),
+    [zoneItems],
+  );
   const groupedItems = useMemo(
     () => groupItems(baseFilteredItems, currentCategory.groupBy[0] ?? 'meta'),
     [baseFilteredItems, currentCategory.groupBy],
@@ -309,14 +314,14 @@ export function App() {
             </div>
             <button className="filter-trigger" onClick={() => setFilterOpen(true)}>
               <SlidersHorizontal size={17} />
-              Filters{filters.status !== 'all' || starFilter !== 'all' ? ' •' : ''}
+              Filters{filters.status !== 'all' || starFilter !== 'all' || filters.universe !== 'all' ? ' •' : ''}
             </button>
           </div>
-          {(filters.query || filters.status !== 'all' || starFilter !== 'all') && (
+          {(filters.query || filters.status !== 'all' || starFilter !== 'all' || filters.universe !== 'all') && (
             <button
               type="button"
               className="filter-trigger"
-              onClick={() => { setFilters(initialFilters); setStarFilter('all'); }}
+              onClick={() => { setFilters(initialFilters); setStarFilter('all'); setActiveGroup('all'); }}
             >
               <X size={16} /> Clear filters
             </button>
@@ -402,6 +407,24 @@ export function App() {
               <Chip active={filters.status === 'owned'} onClick={() => setFilters({ ...filters, status: 'owned' })}>Collected</Chip>
               <Chip active={filters.status === 'missing'} onClick={() => setFilters({ ...filters, status: 'missing' })}>Missing</Chip>
             </div>
+          </div>
+          <div className="sheet-filter-group">
+            <label htmlFor="collection-group-filter">
+              {categoryId === 'clothing' || categoryId === 'furniture' ? 'Universe' : 'Category'}
+            </label>
+            <select
+              id="collection-group-filter"
+              value={filters.universe}
+              onChange={(event) => {
+                setFilters((current) => ({ ...current, universe: event.target.value }));
+                setActiveGroup('all');
+              }}
+            >
+              <option value="all">{categoryId === 'clothing' || categoryId === 'furniture' ? 'All universes' : 'All categories'}</option>
+              {universeOptions.map((universe) => (
+                <option key={universe} value={universe}>{universe}</option>
+              ))}
+            </select>
           </div>
           {categoryId === 'meals' && (
             <div className="sheet-filter-group">
@@ -1373,7 +1396,7 @@ function filterItems(items: GameItem[], filters: FilterState, save: SavePayload 
     if (filters.status === 'owned' && owned !== 'owned') return false;
     if (filters.status === 'missing' && owned !== 'missing') return false;
     if (filters.status === 'unchecked' && checked) return false;
-    if (filters.universe !== 'all' && item.meta2 !== filters.universe) return false;
+    if (filters.universe !== 'all' && item.meta?.trim() !== filters.universe) return false;
     if (filters.group !== 'all' && item.meta !== filters.group) return false;
     return true;
   });
