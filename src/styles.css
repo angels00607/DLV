@@ -2039,5 +2039,11 @@ h1 {
 .universe-inline-items { padding:8px 4px 12px; border:1px solid var(--line); border-top:0; border-radius:0 0 12px 12px; }
 
 .universe-rename-button,.universe-remove-button { display:inline-flex; align-items:center; gap:6px; justify-content:center; min-height:38px; padding:6px 10px; border:1px solid var(--line); border-radius:9px; background:var(--surface-strong); color:var(--ink); font-size:.8rem; font-weight:650; }
-.universe-compact-entry > .universe-rename-button { margin:4px 4px 8px; }
+
 .universe-remove-button { justify-self:start; color:var(--plum); }
+
+/* Compact edit icon inside each universe row, without nested buttons. */
+.universe-compact-entry { position:relative; }
+.universe-compact-entry > .universe-compact-row { padding-right:54px; }
+.universe-inline-pencil { position:absolute; right:35px; top:8px; display:grid; place-items:center; width:36px; height:36px; padding:0; border:0; border-radius:9px; background:transparent; color:var(--muted); cursor:pointer; }
+.universe-inline-pencil:hover,.universe-inline-pencil:focus-visible { color:var(--plum); background:var(--surface); }
