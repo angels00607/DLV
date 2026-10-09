@@ -72,6 +72,7 @@ export function App() {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [editingItem, setEditingItem] = useState<GameItem | null>(null);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [isTotalsOpen, setTotalsOpen] = useState(false);
   const [migrationOpen, setMigrationOpen] = useState(false);
   const [migrationChecked, setMigrationChecked] = useState(false);
   const [migrationError, setMigrationError] = useState('');
@@ -304,6 +305,10 @@ export function App() {
         <button onClick={() => { if (activeView === 'home') { setChooseCategoryForAdd(true); setCategoryOpen(true); } else { setQuickAddOpen(true); } }} aria-label={activeView === 'home' ? 'Choose a collection to add an item' : 'Add an item'}>
           <Plus size={21} />
           <span>Add</span>
+        </button>
+        <button className={isTotalsOpen ? 'active' : ''} aria-label="Manage collection totals" onClick={() => setTotalsOpen(true)}>
+          <SlidersHorizontal size={21} />
+          <span>Totals</span>
         </button>
         <button onClick={() => setSettingsOpen(true)} aria-label="Open settings">
           <Settings size={21} />
@@ -567,6 +572,9 @@ export function App() {
           <AddItemRow category={currentCategory.label} activeZone={activeZone} existingItems={items} onAdd={addItem} />
         </ChoiceSheet>
       )}
+      {isTotalsOpen && (
+        <TotalsAdmin save={save} manualTotals={manualTotals} onSetTotal={setCategoryTotal} onClose={() => setTotalsOpen(false)} />
+      )}
       {isSettingsOpen && (
         <aside className="sheet" role="dialog" aria-modal="true" aria-label="Settings">
           <div className="sheet-card">
@@ -825,12 +833,6 @@ function SubcategoryGrid({
           <div className="selected-universe-heading">
             <h3>{activeGroup}</h3>
             <button type="button" onClick={() => onSelect(activeGroup)}>Close</button>
-          </div>
-          <div className="universe-total-editors">
-            {Array.from(new Set(selected[1].map((item) => normalizeZone(item.meta2) || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
-              <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={activeGroup}
-                value={manualTotals[universeTotalKey(categoryId, zone, activeGroup)]} onChange={onSetTotal} />
-            ))}
           </div>
           {renderActiveGroup()}
         </section>
@@ -1830,6 +1832,58 @@ function readManualTotals(): Record<string, number> {
     )) as Record<string, number>;
   } catch { return {}; }
 }
+function TotalsAdmin({ save, manualTotals, onSetTotal, onClose }: {
+  save: SavePayload;
+  manualTotals: Record<string, number>;
+  onSetTotal: (category: CategoryId, zone: string, universe: string, value: number | null) => void;
+  onClose: () => void;
+}) {
+  const [category, setCategory] = useState<CategoryId>(CATEGORIES[0].id);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const groups = groupItems(save.data[category] ?? [], 'meta');
+  const entries = groups.flatMap(([universe, items]) =>
+    Array.from(new Set(items.map((item) => normalizeZone(item.meta2) || 'DREAMLIGHT VALLEY')))
+      .map((zone) => ({ universe, zone }))
+  ).filter(({ universe, zone }) => normalizeText(`${universe} ${zone}`).includes(normalizeText(query)));
+  const pageCount = Math.max(1, Math.ceil(entries.length / 12));
+  const currentPage = Math.min(page, pageCount);
+  return (
+    <aside className="sheet totals-admin-sheet" role="dialog" aria-modal="true" aria-label="Manage totals">
+      <div className="sheet-card totals-admin-card">
+        <div className="sheet-head"><div><p className="eyebrow">Collection management</p><h2>Manage totals</h2></div>
+          <button className="icon-button" aria-label="Close totals" onClick={onClose}><X size={20}/></button>
+        </div>
+        <p className="totals-admin-description">Edit the expected number of items for each universe and zone. Your collection stays unchanged.</p>
+        <label className="totals-admin-field">Category
+          <select value={category} onChange={(event) => { setCategory(event.target.value as CategoryId); setPage(1); }}>
+            {CATEGORIES.map((entry) => <option key={entry.id} value={entry.id}>{entry.label}</option>)}
+          </select>
+        </label>
+        <label className="totals-admin-field">Find a universe or zone
+          <input type="search" value={query} placeholder="Search…" onChange={(event) => { setQuery(event.target.value); setPage(1); }}/>
+        </label>
+        <p className="totals-admin-description">{entries.length} universe/zone totals</p>
+        <div className="totals-admin-entries">
+          {entries.slice((currentPage - 1) * 12, currentPage * 12).map(({ universe, zone }) => (
+            <div className="totals-admin-entry" key={universeTotalKey(category, zone, universe)}>
+              <strong>{universe}</strong>
+              <ManualTotalEditor category={category} zone={zone} universe={universe}
+                value={manualTotals[universeTotalKey(category, zone, universe)]} onChange={onSetTotal} />
+            </div>
+          ))}
+          {entries.length === 0 && <p className="empty-collection">No matching universes.</p>}
+        </div>
+        {pageCount > 1 && <nav className="collection-pagination" aria-label="Total editor pages">
+          <button disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button>
+          <span>Page {currentPage} of {pageCount}</span>
+          <button disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Next</button>
+        </nav>}
+      </div>
+    </aside>
+  );
+}
+
 function ManualTotalEditor({ category, zone, universe, value, onChange }: {
   category: CategoryId; zone: string; universe: string; value: number | undefined;
   onChange: (category: CategoryId, zone: string, universe: string, value: number | null) => void;
