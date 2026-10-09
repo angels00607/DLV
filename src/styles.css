@@ -2013,3 +2013,15 @@ h1 {
 .totals-admin-entry .manual-total-editor { display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:.78rem; }
 .totals-admin-entry .manual-total-editor input { width:88px; min-height:44px; }
 @media(max-width:390px) { .tab-bar { padding:6px; gap:1px; } .tab-bar button { min-width:0; padding:4px 1px; } .tab-bar button span { font-size:.65rem; } }
+
+/* Space-efficient two-level universe browser: no card grid or bottom-of-page details. */
+.universe-compact-list { display:grid; gap:5px; }
+.universe-compact-row { display:grid; grid-template-columns:minmax(0,1fr) auto 18px; align-items:center; gap:12px; width:100%; min-height:52px; padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:var(--surface-strong); color:var(--ink); text-align:left; }
+.universe-compact-name { min-width:0; font-size:.88rem; font-weight:650; line-height:1.3; overflow-wrap:anywhere; }
+.universe-compact-progress { color:var(--muted); font-size:.78rem; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.universe-compact-row svg { color:var(--muted); transform:rotate(-90deg); }
+.universe-detail-view { display:grid; gap:12px; }
+.universe-back-button { justify-self:start; min-height:44px; padding:9px 12px; border:1px solid var(--line); border-radius:12px; background:var(--surface-strong); color:var(--plum); font-weight:700; }
+.universe-detail-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.universe-detail-heading h3 { margin:0; font-size:1.15rem; overflow-wrap:anywhere; }
+.universe-detail-heading span { flex:0 0 auto; font-size:.78rem; color:var(--muted); }
