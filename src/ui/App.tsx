@@ -73,6 +73,9 @@ export function App() {
   const [editingItem, setEditingItem] = useState<GameItem | null>(null);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [isTotalsOpen, setTotalsOpen] = useState(false);
+  const [isNewUniverseOpen, setNewUniverseOpen] = useState(false);
+  const [newUniverseName, setNewUniverseName] = useState('');
+  const [newUniverseZone, setNewUniverseZone] = useState<ActiveZone>('DREAMLIGHT VALLEY');
   const [migrationOpen, setMigrationOpen] = useState(false);
   const [migrationChecked, setMigrationChecked] = useState(false);
   const [migrationError, setMigrationError] = useState('');
@@ -119,10 +122,16 @@ export function App() {
       .sort((a, b) => a.localeCompare(b)),
     [zoneItems],
   );
-  const groupedItems = useMemo(
-    () => groupItems(baseFilteredItems, currentCategory.groupBy[0] ?? 'meta'),
-    [baseFilteredItems, currentCategory.groupBy],
-  );
+  const groupedItems = useMemo(() => {
+    const groups = groupItems(baseFilteredItems, currentCategory.groupBy[0] ?? 'meta');
+    const extras = save?.customUniverses?.[categoryId] ?? [];
+    if (filters.query || filters.status !== 'all' || filters.universe !== 'all' || filters.group !== 'all') return groups;
+    for (const entry of extras) {
+      if (activeZone !== 'all' && entry.zone !== activeZone) continue;
+      if (!groups.some(([name]) => name === entry.name)) groups.push([entry.name, []]);
+    }
+    return groups.sort(([a], [b]) => a.localeCompare(b));
+  }, [baseFilteredItems, currentCategory.groupBy, save?.customUniverses, categoryId, activeZone, filters]);
   const visibleItems = useMemo(
     () => baseFilteredItems.filter((item) =>
       (activeGroup === 'all' || (item.meta || 'Other') === activeGroup) &&
@@ -132,6 +141,25 @@ export function App() {
   );
   const progress = getUniverseProgress(zoneItems, save, categoryId, manualTotals);
   const totalProgress = getTotalProgress(save, activeZone, manualTotals);
+  function createUniverse() {
+    if (!save || activeView === 'home') return;
+    const name = newUniverseName.trim();
+    if (!name || name.toLowerCase() === 'all' || newUniverseZone === 'all') return;
+    const existing = [...(save.data[activeView] ?? []).map((item) => item.meta || 'Other'), ...(save.customUniverses?.[activeView] ?? []).map((entry) => entry.name)];
+    if (existing.some((entry) => normalizeText(entry) === normalizeText(name))) {
+      window.alert('This universe already exists in this category.');
+      return;
+    }
+    const next = structuredClone(save);
+    next.customUniverses ??= {};
+    next.customUniverses[activeView] = [...(next.customUniverses[activeView] ?? []), { name, zone: newUniverseZone }];
+    updateSave(next);
+    setNewUniverseOpen(false);
+    setNewUniverseName('');
+    setActiveZone(newUniverseZone);
+    setActiveGroup(name);
+  }
+
   function setCategoryTotal(category: CategoryId, zone: string, universe: string, value: number | null) {
     setManualTotals((current) => {
       const next = { ...current };
@@ -478,6 +506,7 @@ export function App() {
               categoryId={categoryId}
               manualTotals={manualTotals}
               onSelect={selectSubcategory}
+              onCreate={() => { setNewUniverseZone(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone); setNewUniverseOpen(true); }}
               renderActiveGroup={() => (
                 <AlphabeticalCollection
                   categoryId={categoryId}
@@ -561,6 +590,22 @@ export function App() {
         <ChoiceSheet title={`Add to ${currentCategory.label}`} onClose={() => setQuickAddOpen(false)}>
           <div className="quick-add-sheet-intro">Add an owned item. Save & add another keeps your universe and zone.</div>
           <AddItemRow category={currentCategory.label} activeZone={activeZone} existingItems={items} onAdd={addItem} />
+        </ChoiceSheet>
+      )}
+      {isNewUniverseOpen && activeView !== 'home' && (
+        <ChoiceSheet title="New universe" onClose={() => setNewUniverseOpen(false)}>
+          <form className="new-universe-form" onSubmit={(event) => { event.preventDefault(); createUniverse(); }}>
+            <label>Universe name
+              <input required maxLength={100} autoFocus value={newUniverseName} onChange={(event) => setNewUniverseName(event.target.value)} placeholder="Name of the universe" />
+            </label>
+            <label>Zone
+              <select value={newUniverseZone} onChange={(event) => setNewUniverseZone(event.target.value as ActiveZone)}>
+                {ZONES.filter((zone) => zone.value !== 'all').map((zone) => <option key={zone.value} value={zone.value}>{zone.label}</option>)}
+              </select>
+            </label>
+            <p>You can create an empty universe and add items later.</p>
+            <button type="submit" className="action-button primary">Create universe</button>
+          </form>
         </ChoiceSheet>
       )}
       {isTotalsOpen && (
@@ -767,7 +812,7 @@ function ChoiceSheet({
 }
 
 function SubcategoryGrid({
-  groups, activeGroup, save, categoryId, manualTotals, onSelect, renderActiveGroup,
+  groups, activeGroup, save, categoryId, manualTotals, onSelect, onCreate, renderActiveGroup,
 }: {
   groups: Array<[string, GameItem[]]>;
   activeGroup: string;
@@ -775,13 +820,13 @@ function SubcategoryGrid({
   categoryId: CategoryId;
   manualTotals: Record<string, number>;
   onSelect: (group: string) => void;
+  onCreate: () => void;
   renderActiveGroup: () => React.ReactNode;
 }) {
   const [query, setQuery] = useState('');
   const matching = groups.filter(([name]) => normalizeText(name).includes(normalizeText(query)));
   const selected = groups.find(([name]) => name === activeGroup);
 
-  if (!groups.length) return <div className="empty-collection">No universes match these filters.</div>;
   if (selected) {
     const progress = getUniverseProgress(selected[1], save, categoryId, manualTotals);
     return (
@@ -797,6 +842,7 @@ function SubcategoryGrid({
   }
   return (
     <section className="subcategory-browser" aria-label="Choose a universe">
+      <button type="button" className="universe-create-button" onClick={onCreate}><Plus size={17}/> New universe</button>
       <div className="universe-browser-toolbar">
         <label className="universe-search-label">Find a universe
           <input type="search" value={query} placeholder="Search universes…" onChange={(event) => setQuery(event.target.value)} />

@@ -11,6 +11,7 @@ const EMPTY_SAVE: SavePayload = {
   ingredients: {},
   owned: {},
   deletedIds: {},
+  customUniverses: {},
 };
 
 function cloneSave(payload: SavePayload): SavePayload {
@@ -31,6 +32,8 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     next.owned[id] ??= {};
     next.ingredients[id] ??= {};
     next.deletedIds[id] ??= {};
+    next.customUniverses ??= {};
+    next.customUniverses[id] ??= [];
 
     const localItems = next.data[id] ?? [];
     const localById = new Map(localItems.map((item) => [item.id, item]));
@@ -79,6 +82,7 @@ export function loadSave(defaults: Partial<SavePayload>): SavePayload {
         ingredients: parsed.ingredients ?? {},
         owned: parsed.owned ?? {},
         deletedIds: parsed.deletedIds ?? {},
+        customUniverses: parsed.customUniverses ?? {},
       },
       defaults,
     );
@@ -98,6 +102,7 @@ export function persistSave(save: SavePayload): void {
         ingredients: save.ingredients,
         owned: save.owned,
         deletedIds: save.deletedIds,
+        customUniverses: save.customUniverses ?? {},
       }),
     );
   } catch {
@@ -130,6 +135,7 @@ export function mergeImportedSave(current: SavePayload, imported: Partial<SavePa
       ingredients: imported.ingredients ?? current.ingredients,
       owned: imported.owned ?? current.owned,
       deletedIds: imported.deletedIds ?? current.deletedIds,
+      customUniverses: imported.customUniverses ?? current.customUniverses,
     },
     {},
   );
