@@ -34,6 +34,7 @@ export interface SavePayload {
   ingredients: IngredientsMap;
   owned: OwnedMap;
   deletedIds: DeletedMap;
+  customUniverses?: Partial<Record<CategoryId, Array<{ name: string; zone: string }>>>;
   savedAt?: string;
 }
 
