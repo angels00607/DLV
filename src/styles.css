@@ -2000,3 +2000,16 @@ h1 {
   .collection-pagination { gap:6px; }
   .collection-pagination button { padding:8px 10px; }
 }
+
+/* Dedicated management area for manual totals, separate from browsing. */
+.tab-bar { grid-template-columns:repeat(5,minmax(0,1fr)); }
+.totals-admin-sheet .totals-admin-card { max-height: min(92dvh, 900px); overflow-y:auto; }
+.totals-admin-description { color:var(--muted); font-size:.82rem; line-height:1.45; margin: 0 0 12px; }
+.totals-admin-field { display:grid; gap:6px; margin-bottom:12px; font-size:.8rem; font-weight:650; }
+.totals-admin-field select, .totals-admin-field input { width:100%; min-height:44px; border:1px solid var(--line); border-radius:12px; padding:9px 11px; background:var(--surface-strong); color:var(--ink); font-size:1rem; }
+.totals-admin-entries { display:grid; gap:8px; }
+.totals-admin-entry { display:grid; gap:8px; padding:12px; border:1px solid var(--line); border-radius:14px; background:var(--surface-strong); }
+.totals-admin-entry > strong { font-size:.88rem; overflow-wrap:anywhere; }
+.totals-admin-entry .manual-total-editor { display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:.78rem; }
+.totals-admin-entry .manual-total-editor input { width:88px; min-height:44px; }
+@media(max-width:390px) { .tab-bar { padding:6px; gap:1px; } .tab-bar button { min-width:0; padding:4px 1px; } .tab-bar button span { font-size:.65rem; } }
