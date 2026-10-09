@@ -198,7 +198,14 @@ export function App() {
     if (!save) return;
     const next = structuredClone(save);
     next.checked[categoryId] ??= {};
-    next.checked[categoryId]![item.id] = !next.checked[categoryId]?.[item.id];
+    if (categoryId === 'meals' || categoryId === 'crafting') {
+      const wasChecked = !!next.checked[categoryId]?.[item.id] || next.owned[categoryId]?.[item.id] === 'owned';
+      next.checked[categoryId]![item.id] = !wasChecked;
+      // Legacy owned-only state is folded into the checklist on the first toggle.
+      if (next.owned[categoryId]) delete next.owned[categoryId]![item.id];
+    } else {
+      next.checked[categoryId]![item.id] = !next.checked[categoryId]?.[item.id];
+    }
     updateSave(next);
   }
 
@@ -1269,7 +1276,8 @@ function ItemCards({
           item={item}
           showSearchContext={showSearchContext}
           owned={save.owned[categoryId]?.[item.id]}
-          checked={!!save.checked[categoryId]?.[item.id]}
+          checklist={categoryId === 'meals' || categoryId === 'crafting'}
+          checked={!!save.checked[categoryId]?.[item.id] || ((categoryId === 'meals' || categoryId === 'crafting') && save.owned[categoryId]?.[item.id] === 'owned')}
           ingredients={save.ingredients[categoryId]?.[item.id] ?? []}
           stars={categoryId === 'meals' ? item.stars : undefined}
           onOwned={() => onOwned(item)}
@@ -1294,6 +1302,7 @@ function ItemCard({
   item,
   showSearchContext = false,
   owned,
+  checklist = false,
   checked,
   ingredients,
   stars,
@@ -1305,6 +1314,7 @@ function ItemCard({
   item: GameItem;
   showSearchContext?: boolean;
   owned?: 'owned' | 'missing';
+  checklist?: boolean;
   checked: boolean;
   ingredients: string[];
   stars?: number;
@@ -1317,9 +1327,15 @@ function ItemCard({
 
   return (
     <article className={`item-card ${owned ?? ''} ${checked ? 'checked' : ''}`}>
+      {checklist ? (
+        <button className="state-button" aria-pressed={checked} aria-label={`${item.name}: ${checked ? 'checked' : 'unchecked'}. Toggle check`} title={checked ? 'Checked' : 'Unchecked'} onClick={onChecked}>
+          {checked ? <Check size={17} /> : null}
+        </button>
+      ) : (
       <button className="state-button" aria-label={`${item.name}: ${owned === 'owned' ? 'collected' : owned === 'missing' ? 'marked missing' : 'not marked'}. Change collection status`} title={owned === 'owned' ? 'Collected' : owned === 'missing' ? 'Missing' : 'Not marked'} onClick={onOwned}>
         {owned === 'owned' ? <Check size={17} /> : owned === 'missing' ? <X size={17} /> : null}
       </button>
+      )}
       <div className="item-body">
         <button className="item-title-button" aria-pressed={checked} aria-label={`${item.name}: ${checked ? 'checked' : 'unchecked'}. Toggle check`} onClick={onChecked}>
         <strong>{item.name}</strong>
@@ -1844,7 +1860,7 @@ function getUniverseProgress(items: GameItem[], save: SavePayload | null, catego
   }
   let done = 0, total = 0;
   for (const [key, entries] of groups) {
-    done += entries.filter((item) => save?.owned[category]?.[item.id] === 'owned').length;
+    done += entries.filter((item) => category === 'meals' || category === 'crafting' ? !!save?.checked[category]?.[item.id] || save?.owned[category]?.[item.id] === 'owned' : save?.owned[category]?.[item.id] === 'owned').length;
     total += totals[key] ?? entries.length;
   }
   return { done, total, percent: total ? Math.min(100, done / total * 100) : 0 };
