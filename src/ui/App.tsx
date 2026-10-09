@@ -1884,10 +1884,21 @@ function TotalsAdmin({ save, manualTotals, onSetTotal, onClose }: {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const groups = groupItems(save.data[category] ?? [], 'meta');
-  const entries = groups.flatMap(([universe, items]) =>
+  const catalogEntries = groups.flatMap(([universe, items]) =>
     Array.from(new Set(items.map((item) => normalizeZone(item.meta2) || 'DREAMLIGHT VALLEY')))
       .map((zone) => ({ universe, zone }))
-  ).filter(({ universe, zone }) => normalizeText(`${universe} ${zone}`).includes(normalizeText(query)));
+  );
+  // Empty custom universes have no items, but must still be editable in Totals.
+  const customEntries = (save.customUniverses?.[category] ?? []).map(({ name, zone }) => ({
+    universe: name,
+    zone: normalizeZone(zone),
+  }));
+  const entries = Array.from(
+    new Map([...catalogEntries, ...customEntries].map((entry) => [
+      universeTotalKey(category, entry.zone, entry.universe), entry,
+    ])).values(),
+  ).sort((a, b) => a.universe.localeCompare(b.universe) || a.zone.localeCompare(b.zone))
+    .filter(({ universe, zone }) => normalizeText(`${universe} ${zone}`).includes(normalizeText(query)));
   const pageCount = Math.max(1, Math.ceil(entries.length / 12));
   const currentPage = Math.min(page, pageCount);
   return (
