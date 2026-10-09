@@ -38,7 +38,23 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     const localItems = next.data[id] ?? [];
     const localById = new Map(localItems.map((item) => [item.id, item]));
 
-    for (const item of collectionMode ? [] : (defaultData[id] ?? [])) {
+    // Meals and Crafting retain the complete bundled checklist even in owned-only mode.
+    // Match by name + universe + zone to avoid overwriting custom entries or reusing IDs.
+    const checklist = id === 'meals' || id === 'crafting';
+    const identity = (item: GameItem) => [item.name, item.meta ?? '', item.meta2 ?? ''].map((value) => value.trim().toLocaleLowerCase()).join('\\u0000');
+    const known = new Set(localItems.map(identity));
+    let nextAvailableId = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
+    for (const item of checklist ? (defaultData[id] ?? []) : collectionMode ? [] : (defaultData[id] ?? [])) {
+      if (checklist) {
+        if (known.has(identity(item))) continue;
+        // Preserve the original ID only when it is free; never replace a user's item.
+        const newId = localById.has(item.id) || item.id < nextAvailableId ? nextAvailableId++ : item.id;
+        localItems.push({ ...item, id: newId });
+        localById.set(newId, item);
+        known.add(identity(item));
+        nextAvailableId = Math.max(nextAvailableId, newId + 1);
+        continue;
+      }
       if (!localById.has(item.id) && !next.deletedIds[id]?.[item.id]) {
         localItems.push({ ...item });
       } else {
