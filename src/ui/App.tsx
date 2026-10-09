@@ -798,7 +798,7 @@ function SubcategoryGrid({
 }) {
   if (!groups.length) return <div className="empty-collection">No subcategories match these filters.</div>;
   return (
-    <section className={`subcategory-grid ${activeGroup !== 'all' ? 'compact' : ''}`} aria-label="Choose a subcategory">
+    <section className="subcategory-grid" aria-label="Choose a subcategory">
       {groups.map(([group, items]) => {
         const progress = getUniverseProgress(items, save, categoryId, manualTotals);
         const isActive = activeGroup === group;
