@@ -477,7 +477,6 @@ export function App() {
               save={save}
               categoryId={categoryId}
               manualTotals={manualTotals}
-              onSetTotal={setCategoryTotal}
               onSelect={selectSubcategory}
               renderActiveGroup={() => (
                 <AlphabeticalCollection
