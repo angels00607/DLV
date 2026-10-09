@@ -1227,9 +1227,15 @@ function ItemCards({
   onEdit: (item: GameItem) => void;
   onDelete: (item: GameItem) => void;
 }) {
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
+  const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
+  const currentPage = Math.min(page, pageCount);
+  const visibleItems = items.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   return (
-    <div className="item-grid direct-item-grid">
-      {items.map((item) => (
+    <div className="paged-item-collection">
+      <div className="item-grid direct-item-grid">
+      {visibleItems.map((item) => (
         <ItemCard
           key={item.id}
           item={item}
@@ -1244,6 +1250,14 @@ function ItemCards({
           onDelete={() => onDelete(item)}
         />
       ))}
+      </div>
+      {pageCount > 1 && (
+        <nav className="collection-pagination" aria-label="Item pages">
+          <button type="button" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button>
+          <span>Page {currentPage} of {pageCount}</span>
+          <button type="button" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Next</button>
+        </nav>
+      )}
     </div>
   );
 }
