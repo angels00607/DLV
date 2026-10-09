@@ -778,12 +778,7 @@ function SubcategoryGrid({
   renderActiveGroup: () => React.ReactNode;
 }) {
   const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const pageSize = 12;
   const matching = groups.filter(([name]) => normalizeText(name).includes(normalizeText(query)));
-  const pageCount = Math.max(1, Math.ceil(matching.length / pageSize));
-  const currentPage = Math.min(page, pageCount);
-  const shown = matching.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const selected = groups.find(([name]) => name === activeGroup);
 
   if (!groups.length) return <div className="empty-collection">No universes match these filters.</div>;
@@ -804,12 +799,12 @@ function SubcategoryGrid({
     <section className="subcategory-browser" aria-label="Choose a universe">
       <div className="universe-browser-toolbar">
         <label className="universe-search-label">Find a universe
-          <input type="search" value={query} placeholder="Search universes…" onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
+          <input type="search" value={query} placeholder="Search universes…" onChange={(event) => setQuery(event.target.value)} />
         </label>
         <span>{matching.length} universes</span>
       </div>
       <div className="universe-compact-list">
-        {shown.map(([group, items]) => {
+        {matching.map(([group, items]) => {
           const progress = getUniverseProgress(items, save, categoryId, manualTotals);
           return (
             <button key={group} type="button" className="universe-compact-row" onClick={() => onSelect(group)}>
@@ -821,13 +816,7 @@ function SubcategoryGrid({
         })}
       </div>
       {matching.length === 0 && <p className="empty-collection">No universes match this search.</p>}
-      {pageCount > 1 && (
-        <nav className="collection-pagination" aria-label="Universe pages">
-          <button type="button" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button>
-          <span>Page {currentPage} of {pageCount}</span>
-          <button type="button" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Next</button>
-        </nav>
-      )}
+
     </section>
   );
 }
