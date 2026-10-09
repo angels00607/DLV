@@ -950,7 +950,7 @@ function SubcategoryGrid({
                 <span className="universe-compact-progress">{progress.done}/{progress.total}</span>
                 <ChevronDown className={isExpanded ? 'universe-chevron-open' : ''} size={17} aria-hidden="true" />
               </button>
-              <button type="button" className="universe-rename-button" onClick={() => onRename(group)} aria-label={`Rename ${group}`}><Edit3 size={15}/> Rename</button>
+              <button type="button" className="universe-inline-pencil" onClick={() => onRename(group)} aria-label={`Rename ${group}`} title={`Rename ${group}`}><Edit3 size={16}/></button>
               {isExpanded && (
                 <div id={`universe-inline-${categoryId}-${groups.findIndex(([name]) => name === group)}`} className="universe-inline-items">
                   {items.length ? (
