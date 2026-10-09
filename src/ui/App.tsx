@@ -198,7 +198,14 @@ export function App() {
     if (!save) return;
     const next = structuredClone(save);
     next.checked[categoryId] ??= {};
-    next.checked[categoryId]![item.id] = !next.checked[categoryId]?.[item.id];
+    if (categoryId === 'meals' || categoryId === 'crafting') {
+      const wasChecked = !!next.checked[categoryId]?.[item.id] || next.owned[categoryId]?.[item.id] === 'owned';
+      next.checked[categoryId]![item.id] = !wasChecked;
+      // Legacy owned-only state is folded into the checklist on the first toggle.
+      if (next.owned[categoryId]) delete next.owned[categoryId]![item.id];
+    } else {
+      next.checked[categoryId]![item.id] = !next.checked[categoryId]?.[item.id];
+    }
     updateSave(next);
   }
 
