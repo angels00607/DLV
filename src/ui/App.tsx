@@ -379,9 +379,6 @@ export function App() {
           </div>
         );
       })()}
-      {activeView === 'home' && localStorage.getItem(COLLECTION_MODE_KEY) !== '1' && (
-        <button className="migration-home-trigger" onClick={() => setMigrationOpen(true)}>Preview My Collection migration</button>
-      )}
       {activeView === 'home' ? (
         <HomeView
           save={save}
@@ -433,13 +430,6 @@ export function App() {
               Filters{filters.status !== 'all' || starFilter !== 'all' || filters.universe !== 'all' ? ' •' : ''}
             </button>
           </div>
-          {localStorage.getItem(COLLECTION_MODE_KEY) !== '1' && (
-            <section className="add-item-panel" aria-label="Owned-only migration">
-              <strong>Switch to My Collection</strong>
-              <p>Keep only items explicitly marked Owned. Checked-only items will need your review.</p>
-              <button type="button" onClick={() => setMigrationOpen(true)}>Preview migration</button>
-            </section>
-          )}
           <button className="inline-add-trigger" onClick={() => setQuickAddOpen(true)}><Plus size={18} /> Add an item to {currentCategory.label}</button>
 
           {filters.query.trim() ? (
