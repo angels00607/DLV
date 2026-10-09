@@ -518,6 +518,8 @@ export function App() {
                 <AlphabeticalCollection
                   categoryId={categoryId}
                   items={visibleItems}
+                  directItemsLimit={20}
+                  pageSize={20}
                   save={save}
                   onOwned={toggleOwned}
                   onChecked={toggleChecked}
@@ -877,6 +879,8 @@ function SubcategoryGrid({
 function AlphabeticalCollection({
   categoryId,
   items,
+  directItemsLimit = DIRECT_ITEMS_LIMIT,
+  pageSize = 12,
   save,
   onOwned,
   onChecked,
@@ -885,6 +889,8 @@ function AlphabeticalCollection({
 }: {
   categoryId: CategoryId;
   items: GameItem[];
+  directItemsLimit?: number;
+  pageSize?: number;
   showSearchContext?: boolean;
   save: SavePayload;
   onOwned: (item: GameItem) => void;
@@ -934,8 +940,8 @@ function AlphabeticalCollection({
 
   if (!letters.length) return <div className="empty-collection">No items match these filters.</div>;
 
-  if (items.length <= DIRECT_ITEMS_LIMIT) {
-    return <ItemCards categoryId={categoryId} items={sortedItems} save={save}
+  if (items.length <= directItemsLimit) {
+    return <ItemCards pageSize={pageSize} categoryId={categoryId} items={sortedItems} save={save}
       onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />;
   }
 
@@ -956,13 +962,13 @@ function AlphabeticalCollection({
               <span>{groupedItems.length} items</span>
               <ChevronDown size={16} aria-hidden="true" />
             </summary>
-            <ItemCards categoryId={categoryId} items={groupedItems} save={save}
+            <ItemCards pageSize={pageSize} categoryId={categoryId} items={groupedItems} save={save}
               onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
           </details>
         ) : (
           <section className="direct-word-group" key={word}>
             {wordGroups.length > 1 && <h4>{word}</h4>}
-            <ItemCards categoryId={categoryId} items={groupedItems} save={save}
+            <ItemCards pageSize={pageSize} categoryId={categoryId} items={groupedItems} save={save}
               onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
           </section>
         )
@@ -1246,6 +1252,7 @@ function GithubSaveSheet({ save, onClose, onRestore }: {
 function ItemCards({
   categoryId,
   items,
+  pageSize = 12,
   showSearchContext = false,
   save,
   onOwned,
@@ -1255,6 +1262,7 @@ function ItemCards({
 }: {
   categoryId: CategoryId;
   items: GameItem[];
+  pageSize?: number;
   showSearchContext?: boolean;
   save: SavePayload;
   onOwned: (item: GameItem) => void;
@@ -1263,7 +1271,6 @@ function ItemCards({
   onDelete: (item: GameItem) => void;
 }) {
   const [page, setPage] = useState(1);
-  const pageSize = 12;
   const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
   const currentPage = Math.min(page, pageCount);
   const visibleItems = items.slice((currentPage - 1) * pageSize, currentPage * pageSize);
