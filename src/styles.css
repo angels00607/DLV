@@ -2031,3 +2031,9 @@ h1 {
 .new-universe-form label { display:grid; gap:6px; font-weight:650; font-size:.88rem; }
 .new-universe-form input,.new-universe-form select { width:100%; min-height:44px; border:1px solid var(--line); border-radius:12px; background:var(--surface-strong); color:var(--ink); padding:10px; }
 .new-universe-form p { margin:0; color:var(--muted); font-size:.85rem; }
+
+/* Small universes expand in the universe list without a separate detail page. */
+.universe-compact-entry { min-width:0; }
+.universe-compact-row[aria-expanded="true"] { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+.universe-compact-row svg.universe-chevron-open { transform:rotate(0deg); }
+.universe-inline-items { padding:8px 4px 12px; border:1px solid var(--line); border-top:0; border-radius:0 0 12px 12px; }
