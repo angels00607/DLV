@@ -735,7 +735,7 @@ h1 {
 }
 
 .item-card.checked {
-  opacity: 0.55;
+  opacity: 1;
 }
 
 .item-card.owned {
