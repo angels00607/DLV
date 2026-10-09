@@ -913,7 +913,7 @@ function SubcategoryGrid({
   const selected = groups.find(([name]) => name === activeGroup);
 
   if (selected) {
-    const progress = getUniverseProgress(selected[1], save, categoryId, manualTotals);
+    const progress = getUniverseDisplayProgress(selected[0], selected[1], save, categoryId, manualTotals);
     return (
       <section className="subcategory-browser universe-detail-view" aria-label={`Items in ${activeGroup}`}>
         <button type="button" className="universe-back-button" onClick={() => onSelect('all')}>← All universes</button>
@@ -937,7 +937,7 @@ function SubcategoryGrid({
       </div>
       <div className="universe-compact-list">
         {matching.map(([group, items]) => {
-          const progress = getUniverseProgress(items, save, categoryId, manualTotals);
+          const progress = getUniverseDisplayProgress(group, items, save, categoryId, manualTotals);
           const inline = items.length < 15;
           const isExpanded = inline && expanded === group;
           return (
@@ -1951,6 +1951,15 @@ function toggleAccordion(
 const MANUAL_TOTALS_KEY = 'dlv_manual_collection_totals_v1';
 function universeTotalKey(category: CategoryId, zone: string, universe: string) {
   return JSON.stringify([category, normalizeZone(zone), universe.trim()]);
+}
+function getUniverseDisplayProgress(universe: string, items: GameItem[], save: SavePayload, category: CategoryId, totals: Record<string, number>) {
+  if (items.length) return getUniverseProgress(items, save, category, totals);
+  // Empty custom universes still have an expected total configured in Totals.
+  const zones = new Set((save.customUniverses?.[category] ?? [])
+    .filter((entry) => entry.name === universe)
+    .map((entry) => normalizeZone(entry.zone)));
+  const total = [...zones].reduce((sum, zone) => sum + (totals[universeTotalKey(category, zone, universe)] ?? 0), 0);
+  return { done: 0, total, percent: 0 };
 }
 function getUniverseProgress(items: GameItem[], save: SavePayload | null, category: CategoryId, totals: Record<string, number>) {
   const groups = new Map<string, GameItem[]>();
