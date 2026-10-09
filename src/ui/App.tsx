@@ -125,7 +125,7 @@ export function App() {
   const groupedItems = useMemo(() => {
     const groups = groupItems(baseFilteredItems, currentCategory.groupBy[0] ?? 'meta');
     const extras = save?.customUniverses?.[categoryId] ?? [];
-    if (filters.query || filters.status !== 'all' || filters.universe !== 'all' || filters.group !== 'all') return groups;
+    // Keep manually created empty universes visible in the universe picker even when filters are active.
     for (const entry of extras) {
       if (activeZone !== 'all' && entry.zone !== activeZone) continue;
       if (!groups.some(([name]) => name === entry.name)) groups.push([entry.name, []]);
@@ -157,7 +157,8 @@ export function App() {
     setNewUniverseOpen(false);
     setNewUniverseName('');
     setActiveZone(newUniverseZone);
-    setActiveGroup(name);
+    // Stay on the universe list so an empty universe is immediately visible and expandable.
+    setActiveGroup('all');
   }
 
   function setCategoryTotal(category: CategoryId, zone: string, universe: string, value: number | null) {
