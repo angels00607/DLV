@@ -204,14 +204,6 @@ export function App() {
 
   function selectSubcategory(group: string) {
     setActiveGroup(group);
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        document.getElementById('active-group-results')?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      });
-    });
   }
 
   function addItem(item: Omit<GameItem, 'id'>) {
@@ -776,14 +768,13 @@ function ChoiceSheet({
 }
 
 function SubcategoryGrid({
-  groups, activeGroup, save, categoryId, manualTotals, onSetTotal, onSelect, renderActiveGroup,
+  groups, activeGroup, save, categoryId, manualTotals, onSelect, renderActiveGroup,
 }: {
   groups: Array<[string, GameItem[]]>;
   activeGroup: string;
   save: SavePayload;
   categoryId: CategoryId;
   manualTotals: Record<string, number>;
-  onSetTotal: (category: CategoryId, zone: string, universe: string, value: number | null) => void;
   onSelect: (group: string) => void;
   renderActiveGroup: () => React.ReactNode;
 }) {
@@ -797,6 +788,19 @@ function SubcategoryGrid({
   const selected = groups.find(([name]) => name === activeGroup);
 
   if (!groups.length) return <div className="empty-collection">No universes match these filters.</div>;
+  if (selected) {
+    const progress = getUniverseProgress(selected[1], save, categoryId, manualTotals);
+    return (
+      <section className="subcategory-browser universe-detail-view" aria-label={`Items in ${activeGroup}`}>
+        <button type="button" className="universe-back-button" onClick={() => onSelect('all')}>← All universes</button>
+        <div className="universe-detail-heading">
+          <h3>{activeGroup}</h3>
+          <span>{progress.done}/{progress.total} collected</span>
+        </div>
+        {renderActiveGroup()}
+      </section>
+    );
+  }
   return (
     <section className="subcategory-browser" aria-label="Choose a universe">
       <div className="universe-browser-toolbar">
@@ -805,18 +809,15 @@ function SubcategoryGrid({
         </label>
         <span>{matching.length} universes</span>
       </div>
-      <div className="subcategory-grid compact">
+      <div className="universe-compact-list">
         {shown.map(([group, items]) => {
           const progress = getUniverseProgress(items, save, categoryId, manualTotals);
-          const isActive = activeGroup === group;
           return (
-            <div key={group} className={isActive ? 'universe-card active' : 'universe-card'}>
-              <button className="universe-card-open" aria-pressed={isActive} onClick={() => onSelect(group)}>
-                <span className="universe-card-heading"><strong>{group}</strong><ChevronDown size={17} aria-hidden="true" /></span>
-                <span className="universe-card-count"><strong>{progress.done}/{progress.total}</strong><small>collected</small></span>
-                <span className="universe-card-bar"><i style={{ width: `${progress.percent}%` }} /></span>
-              </button>
-            </div>
+            <button key={group} type="button" className="universe-compact-row" onClick={() => onSelect(group)}>
+              <span className="universe-compact-name">{group}</span>
+              <span className="universe-compact-progress">{progress.done}/{progress.total}</span>
+              <ChevronDown size={17} aria-hidden="true" />
+            </button>
           );
         })}
       </div>
@@ -827,15 +828,6 @@ function SubcategoryGrid({
           <span>Page {currentPage} of {pageCount}</span>
           <button type="button" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Next</button>
         </nav>
-      )}
-      {selected && (
-        <section className="selected-universe-panel" aria-label={`Items in ${activeGroup}`}>
-          <div className="selected-universe-heading">
-            <h3>{activeGroup}</h3>
-            <button type="button" onClick={() => onSelect(activeGroup)}>Close</button>
-          </div>
-          {renderActiveGroup()}
-        </section>
       )}
     </section>
   );
