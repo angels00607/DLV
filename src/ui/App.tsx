@@ -768,14 +768,7 @@ function ChoiceSheet({
 }
 
 function SubcategoryGrid({
-  groups,
-  activeGroup,
-  save,
-  categoryId,
-  manualTotals,
-  onSetTotal,
-  onSelect,
-  renderActiveGroup,
+  groups, activeGroup, save, categoryId, manualTotals, onSetTotal, onSelect, renderActiveGroup,
 }: {
   groups: Array<[string, GameItem[]]>;
   activeGroup: string;
@@ -786,38 +779,62 @@ function SubcategoryGrid({
   onSelect: (group: string) => void;
   renderActiveGroup: () => React.ReactNode;
 }) {
-  if (!groups.length) return <div className="empty-collection">No subcategories match these filters.</div>;
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
+  const matching = groups.filter(([name]) => normalizeText(name).includes(normalizeText(query)));
+  const pageCount = Math.max(1, Math.ceil(matching.length / pageSize));
+  const currentPage = Math.min(page, pageCount);
+  const shown = matching.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const selected = groups.find(([name]) => name === activeGroup);
+
+  if (!groups.length) return <div className="empty-collection">No universes match these filters.</div>;
   return (
-    <section className={`subcategory-grid ${activeGroup !== 'all' ? 'compact' : ''}`} aria-label="Choose a subcategory">
-      {groups.map(([group, items]) => {
-        const progress = getUniverseProgress(items, save, categoryId, manualTotals);
-        const isActive = activeGroup === group;
-        return (
-          <Fragment key={group}>
-            <div className={isActive ? 'universe-card active' : 'universe-card'}>
+    <section className="subcategory-browser" aria-label="Choose a universe">
+      <div className="universe-browser-toolbar">
+        <label className="universe-search-label">Find a universe
+          <input type="search" value={query} placeholder="Search universes…" onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
+        </label>
+        <span>{matching.length} universes</span>
+      </div>
+      <div className="subcategory-grid compact">
+        {shown.map(([group, items]) => {
+          const progress = getUniverseProgress(items, save, categoryId, manualTotals);
+          const isActive = activeGroup === group;
+          return (
+            <div key={group} className={isActive ? 'universe-card active' : 'universe-card'}>
               <button className="universe-card-open" aria-pressed={isActive} onClick={() => onSelect(group)}>
-                <span className="universe-card-heading">
-                  <strong>{group}</strong>
-                  <ChevronDown size={17} aria-hidden="true" />
-                </span>
+                <span className="universe-card-heading"><strong>{group}</strong><ChevronDown size={17} aria-hidden="true" /></span>
                 <span className="universe-card-count"><strong>{progress.done}/{progress.total}</strong><small>collected</small></span>
                 <span className="universe-card-bar"><i style={{ width: `${progress.percent}%` }} /></span>
               </button>
-              <div className="universe-total-editors">
-                {Array.from(new Set(items.map((item) => normalizeZone(item.meta2) || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
-                  <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={group}
-                    value={manualTotals[universeTotalKey(categoryId, zone, group)]} onChange={onSetTotal} />
-                ))}
-              </div>
             </div>
-            {isActive && (
-              <section id="active-group-results" className="active-group-results" aria-live="polite">
-                {renderActiveGroup()}
-              </section>
-            )}
-          </Fragment>
-        );
-      })}
+          );
+        })}
+      </div>
+      {matching.length === 0 && <p className="empty-collection">No universes match this search.</p>}
+      {pageCount > 1 && (
+        <nav className="collection-pagination" aria-label="Universe pages">
+          <button type="button" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button>
+          <span>Page {currentPage} of {pageCount}</span>
+          <button type="button" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Next</button>
+        </nav>
+      )}
+      {selected && (
+        <section className="selected-universe-panel" aria-label={`Items in ${activeGroup}`}>
+          <div className="selected-universe-heading">
+            <h3>{activeGroup}</h3>
+            <button type="button" onClick={() => onSelect(activeGroup)}>Close</button>
+          </div>
+          <div className="universe-total-editors">
+            {Array.from(new Set(selected[1].map((item) => normalizeZone(item.meta2) || 'DREAMLIGHT VALLEY'))).sort().map((zone) => (
+              <ManualTotalEditor key={zone} category={categoryId} zone={zone} universe={activeGroup}
+                value={manualTotals[universeTotalKey(categoryId, zone, activeGroup)]} onChange={onSetTotal} />
+            ))}
+          </div>
+          {renderActiveGroup()}
+        </section>
+      )}
     </section>
   );
 }
@@ -1210,9 +1227,15 @@ function ItemCards({
   onEdit: (item: GameItem) => void;
   onDelete: (item: GameItem) => void;
 }) {
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
+  const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
+  const currentPage = Math.min(page, pageCount);
+  const visibleItems = items.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   return (
-    <div className="item-grid direct-item-grid">
-      {items.map((item) => (
+    <div className="paged-item-collection">
+      <div className="item-grid direct-item-grid">
+      {visibleItems.map((item) => (
         <ItemCard
           key={item.id}
           item={item}
@@ -1227,6 +1250,14 @@ function ItemCards({
           onDelete={() => onDelete(item)}
         />
       ))}
+      </div>
+      {pageCount > 1 && (
+        <nav className="collection-pagination" aria-label="Item pages">
+          <button type="button" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button>
+          <span>Page {currentPage} of {pageCount}</span>
+          <button type="button" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Next</button>
+        </nav>
+      )}
     </div>
   );
 }

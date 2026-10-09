@@ -1972,3 +1972,31 @@ h1 {
 .drill-browser .alphabetical-word-list { gap: 10px; }
 .drill-browser .word-accordion summary { min-height: 48px; }
 .drill-browser .letter-tile-grid button { min-height: 44px; }
+
+/* Compact browsing: universe overview and selected detail are separate. */
+.universe-browser-toolbar { display:flex; align-items:end; justify-content:space-between; gap:12px; margin: 0 0 12px; }
+.universe-browser-toolbar > span { flex:0 0 auto; font-size:.75rem; color:var(--muted); padding-bottom:12px; }
+.universe-search-label { display:grid; gap:5px; flex:1; min-width:0; font-size:.76rem; color:var(--muted); }
+.universe-search-label input { width:100%; min-height:44px; border:1px solid var(--line); border-radius:13px; padding:9px 12px; background:var(--surface-strong); color:var(--ink); font-size:1rem; }
+.subcategory-browser .subcategory-grid { margin-bottom:12px; }
+.subcategory-browser .universe-card-open { min-height:76px; padding:11px; gap:7px; }
+.subcategory-browser .universe-card-heading strong { font-size:.82rem; }
+.subcategory-browser .universe-card-count strong { font-size:1rem; }
+.selected-universe-panel { margin-top:15px; padding:13px 10px; border:1px solid var(--line); border-radius:18px; background:var(--surface); min-width:0; }
+.selected-universe-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+.selected-universe-heading h3 { margin:0; font-size:1.05rem; overflow-wrap:anywhere; }
+.selected-universe-heading button, .collection-pagination button { min-height:44px; padding:8px 12px; border:1px solid var(--line); border-radius:12px; background:var(--surface-strong); color:var(--plum); font-weight:650; }
+.collection-pagination { display:flex; align-items:center; justify-content:center; gap:10px; margin:10px 0 14px; }
+.collection-pagination span { font-size:.78rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+.collection-pagination button:disabled { opacity:.35; cursor:default; }
+.selected-universe-panel .universe-total-editors { display:grid; gap:7px; margin-bottom:13px; }
+.selected-universe-panel .manual-total-editor { display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:.76rem; }
+.selected-universe-panel .manual-total-editor input { width:84px; min-height:44px; }
+.paged-item-collection { min-width:0; }
+.word-accordion > .paged-item-collection { padding:0 9px 9px; }
+@media (max-width:390px) {
+  .subcategory-browser .subcategory-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .subcategory-browser .universe-card-count small { display:none; }
+  .collection-pagination { gap:6px; }
+  .collection-pagination button { padding:8px 10px; }
+}
