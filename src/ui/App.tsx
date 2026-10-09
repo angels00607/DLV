@@ -185,8 +185,6 @@ export function App() {
     setManualTotals((current) => {
       const updated = { ...current };
       for (const [key, value] of Object.entries(current)) {
-        const prefix = `${category}::`;
-        if (!key.startsWith(prefix)) continue;
         // Only migrate totals whose key exactly matches a known zone and old universe.
         const zones = new Set([
           ...(save.data[category] ?? []).filter((item) => (item.meta || 'Other') === oldName).map((item) => normalizeZone(item.meta2)),
