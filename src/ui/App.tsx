@@ -514,6 +514,10 @@ export function App() {
               manualTotals={manualTotals}
               onSelect={selectSubcategory}
               onCreate={() => { setNewUniverseZone(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone); setNewUniverseOpen(true); }}
+              onOwned={toggleOwned}
+              onChecked={toggleChecked}
+              onEdit={setEditingItem}
+              onDelete={deleteItem}
               renderActiveGroup={() => (
                 <AlphabeticalCollection
                   categoryId={categoryId}
@@ -821,7 +825,7 @@ function ChoiceSheet({
 }
 
 function SubcategoryGrid({
-  groups, activeGroup, save, categoryId, manualTotals, onSelect, onCreate, renderActiveGroup,
+  groups, activeGroup, save, categoryId, manualTotals, onSelect, onCreate, onOwned, onChecked, onEdit, onDelete, renderActiveGroup,
 }: {
   groups: Array<[string, GameItem[]]>;
   activeGroup: string;
@@ -830,9 +834,14 @@ function SubcategoryGrid({
   manualTotals: Record<string, number>;
   onSelect: (group: string) => void;
   onCreate: () => void;
+  onOwned: (item: GameItem) => void;
+  onChecked: (item: GameItem) => void;
+  onEdit: (item: GameItem) => void;
+  onDelete: (item: GameItem) => void;
   renderActiveGroup: () => React.ReactNode;
 }) {
   const [query, setQuery] = useState('');
+  const [expanded, setExpanded] = useState<string | null>(null);
   const matching = groups.filter(([name]) => normalizeText(name).includes(normalizeText(query)));
   const selected = groups.find(([name]) => name === activeGroup);
 
@@ -861,12 +870,27 @@ function SubcategoryGrid({
       <div className="universe-compact-list">
         {matching.map(([group, items]) => {
           const progress = getUniverseProgress(items, save, categoryId, manualTotals);
+          const inline = items.length < 15;
+          const isExpanded = inline && expanded === group;
           return (
-            <button key={group} type="button" className="universe-compact-row" onClick={() => onSelect(group)}>
-              <span className="universe-compact-name">{group}</span>
-              <span className="universe-compact-progress">{progress.done}/{progress.total}</span>
-              <ChevronDown size={17} aria-hidden="true" />
-            </button>
+            <div key={group} className="universe-compact-entry">
+              <button type="button" className="universe-compact-row"
+                aria-expanded={inline ? isExpanded : undefined}
+                aria-controls={inline ? `universe-inline-${categoryId}-${groups.findIndex(([name]) => name === group)}` : undefined}
+                onClick={() => inline ? setExpanded(isExpanded ? null : group) : onSelect(group)}>
+                <span className="universe-compact-name">{group}</span>
+                <span className="universe-compact-progress">{progress.done}/{progress.total}</span>
+                <ChevronDown className={isExpanded ? 'universe-chevron-open' : ''} size={17} aria-hidden="true" />
+              </button>
+              {isExpanded && (
+                <div id={`universe-inline-${categoryId}-${groups.findIndex(([name]) => name === group)}`} className="universe-inline-items">
+                  {items.length ? (
+                    <ItemCards categoryId={categoryId} items={[...items].sort((a, b) => a.name.localeCompare(b.name))}
+                      save={save} onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
+                  ) : <p className="empty-collection">No items in this universe yet.</p>}
+                </div>
+              )}
+            </div>
           );
         })}
       </div>
