@@ -161,6 +161,72 @@ export function App() {
     setActiveGroup('all');
   }
 
+  function renameUniverse(category: CategoryId, oldName: string) {
+    if (!save) return;
+    const proposed = window.prompt('New universe name', oldName)?.trim();
+    if (!proposed || proposed === oldName || normalizeText(proposed) === 'all') return;
+    const existing = new Set([
+      ...(save.data[category] ?? []).map((item) => normalizeText(item.meta || 'Other')),
+      ...(save.customUniverses?.[category] ?? []).map((entry) => normalizeText(entry.name)),
+    ]);
+    if (existing.has(normalizeText(proposed))) {
+      window.alert('An universe with this name already exists.');
+      return;
+    }
+    const next = structuredClone(save);
+    next.data[category] = (next.data[category] ?? []).map((item) =>
+      (item.meta || 'Other') === oldName ? { ...item, meta: proposed } : item,
+    );
+    if (next.customUniverses?.[category]) {
+      next.customUniverses[category] = next.customUniverses[category]!.map((entry) =>
+        entry.name === oldName ? { ...entry, name: proposed } : entry,
+      );
+    }
+    setManualTotals((current) => {
+      const updated = { ...current };
+      for (const [key, value] of Object.entries(current)) {
+        const prefix = `${category}::`;
+        if (!key.startsWith(prefix)) continue;
+        // Only migrate totals whose key exactly matches a known zone and old universe.
+        const zones = new Set([
+          ...(save.data[category] ?? []).filter((item) => (item.meta || 'Other') === oldName).map((item) => normalizeZone(item.meta2)),
+          ...(save.customUniverses?.[category] ?? []).filter((entry) => entry.name === oldName).map((entry) => normalizeZone(entry.zone)),
+        ]);
+        for (const zone of zones) {
+          if (key === universeTotalKey(category, zone, oldName)) {
+            delete updated[key];
+            updated[universeTotalKey(category, zone, proposed)] = value;
+          }
+        }
+      }
+      localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+    updateSave(next);
+    if (activeView === category && activeGroup === oldName) setActiveGroup(proposed);
+  }
+
+  function removeEmptyUniverse(category: CategoryId, zone: string, universe: string) {
+    if (!save) return;
+    const isCustom = (save.customUniverses?.[category] ?? []).some((entry) =>
+      entry.name === universe && normalizeZone(entry.zone) === normalizeZone(zone));
+    const hasItems = (save.data[category] ?? []).some((item) =>
+      (item.meta || 'Other') === universe && normalizeZone(item.meta2) === normalizeZone(zone));
+    if (!isCustom || hasItems) return;
+    if (!window.confirm(`Delete empty universe "${universe}" from ${formatZoneLabel(zone)}? This cannot be undone.`)) return;
+    const next = structuredClone(save);
+    next.customUniverses![category] = next.customUniverses![category]!.filter((entry) =>
+      !(entry.name === universe && normalizeZone(entry.zone) === normalizeZone(zone)));
+    updateSave(next);
+    setManualTotals((current) => {
+      const updated = { ...current };
+      delete updated[universeTotalKey(category, zone, universe)];
+      localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+    if (activeView === category && activeGroup === universe) setActiveGroup('all');
+  }
+
   function setCategoryTotal(category: CategoryId, zone: string, universe: string, value: number | null) {
     setManualTotals((current) => {
       const next = { ...current };
@@ -514,6 +580,7 @@ export function App() {
               categoryId={categoryId}
               manualTotals={manualTotals}
               onSelect={selectSubcategory}
+              onRename={(group) => renameUniverse(categoryId, group)}
               onCreate={() => { setNewUniverseZone(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone); setNewUniverseOpen(true); }}
               onOwned={toggleOwned}
               onChecked={toggleChecked}
@@ -623,7 +690,7 @@ export function App() {
         </ChoiceSheet>
       )}
       {isTotalsOpen && (
-        <TotalsAdmin save={save} manualTotals={manualTotals} onSetTotal={setCategoryTotal} onClose={() => setTotalsOpen(false)} />
+        <TotalsAdmin save={save} manualTotals={manualTotals} onSetTotal={setCategoryTotal} onRemove={removeEmptyUniverse} onClose={() => setTotalsOpen(false)} />
       )}
       {isSettingsOpen && (
         <aside className="sheet" role="dialog" aria-modal="true" aria-label="Settings">
@@ -826,7 +893,7 @@ function ChoiceSheet({
 }
 
 function SubcategoryGrid({
-  groups, activeGroup, save, categoryId, manualTotals, onSelect, onCreate, onOwned, onChecked, onEdit, onDelete, renderActiveGroup,
+  groups, activeGroup, save, categoryId, manualTotals, onSelect, onCreate, onRename, onOwned, onChecked, onEdit, onDelete, renderActiveGroup,
 }: {
   groups: Array<[string, GameItem[]]>;
   activeGroup: string;
@@ -835,6 +902,7 @@ function SubcategoryGrid({
   manualTotals: Record<string, number>;
   onSelect: (group: string) => void;
   onCreate: () => void;
+  onRename: (group: string) => void;
   onOwned: (item: GameItem) => void;
   onChecked: (item: GameItem) => void;
   onEdit: (item: GameItem) => void;
@@ -853,6 +921,7 @@ function SubcategoryGrid({
         <button type="button" className="universe-back-button" onClick={() => onSelect('all')}>← All universes</button>
         <div className="universe-detail-heading">
           <h3>{activeGroup}</h3>
+          <button type="button" className="universe-rename-button" onClick={() => onRename(activeGroup)} aria-label={`Rename ${activeGroup}`}><Edit3 size={16}/> Rename</button>
           <span>{progress.done}/{progress.total} collected</span>
         </div>
         {renderActiveGroup()}
@@ -883,6 +952,7 @@ function SubcategoryGrid({
                 <span className="universe-compact-progress">{progress.done}/{progress.total}</span>
                 <ChevronDown className={isExpanded ? 'universe-chevron-open' : ''} size={17} aria-hidden="true" />
               </button>
+              <button type="button" className="universe-rename-button" onClick={() => onRename(group)} aria-label={`Rename ${group}`}><Edit3 size={15}/> Rename</button>
               {isExpanded && (
                 <div id={`universe-inline-${categoryId}-${groups.findIndex(([name]) => name === group)}`} className="universe-inline-items">
                   {items.length ? (
@@ -1906,10 +1976,11 @@ function readManualTotals(): Record<string, number> {
     )) as Record<string, number>;
   } catch { return {}; }
 }
-function TotalsAdmin({ save, manualTotals, onSetTotal, onClose }: {
+function TotalsAdmin({ save, manualTotals, onSetTotal, onRemove, onClose }: {
   save: SavePayload;
   manualTotals: Record<string, number>;
   onSetTotal: (category: CategoryId, zone: string, universe: string, value: number | null) => void;
+  onRemove: (category: CategoryId, zone: string, universe: string) => void;
   onClose: () => void;
 }) {
   const [category, setCategory] = useState<CategoryId>(CATEGORIES[0].id);
@@ -1953,6 +2024,9 @@ function TotalsAdmin({ save, manualTotals, onSetTotal, onClose }: {
           {entries.slice((currentPage - 1) * 12, currentPage * 12).map(({ universe, zone }) => (
             <div className="totals-admin-entry" key={universeTotalKey(category, zone, universe)}>
               <strong>{universe}</strong>
+              {(save.customUniverses?.[category] ?? []).some((entry) => entry.name === universe && normalizeZone(entry.zone) === zone) && !(save.data[category] ?? []).some((item) => (item.meta || 'Other') === universe && normalizeZone(item.meta2) === zone) && (
+                <button type="button" className="universe-remove-button" onClick={() => onRemove(category, zone, universe)}><Trash2 size={15}/> Delete empty universe</button>
+              )}
               <ManualTotalEditor category={category} zone={zone} universe={universe}
                 value={manualTotals[universeTotalKey(category, zone, universe)]} onChange={onSetTotal} />
             </div>
