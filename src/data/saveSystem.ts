@@ -102,7 +102,6 @@ export function persistSave(save: SavePayload): void {
         ingredients: save.ingredients,
         owned: save.owned,
         deletedIds: save.deletedIds,
-      customUniverses: save.customUniverses ?? {},
         customUniverses: save.customUniverses ?? {},
       }),
     );
