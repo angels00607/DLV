@@ -2037,3 +2037,7 @@ h1 {
 .universe-compact-row[aria-expanded="true"] { border-bottom-left-radius:0; border-bottom-right-radius:0; }
 .universe-compact-row svg.universe-chevron-open { transform:rotate(0deg); }
 .universe-inline-items { padding:8px 4px 12px; border:1px solid var(--line); border-top:0; border-radius:0 0 12px 12px; }
+
+.universe-rename-button,.universe-remove-button { display:inline-flex; align-items:center; gap:6px; justify-content:center; min-height:38px; padding:6px 10px; border:1px solid var(--line); border-radius:9px; background:var(--surface-strong); color:var(--ink); font-size:.8rem; font-weight:650; }
+.universe-compact-entry > .universe-rename-button { margin:4px 4px 8px; }
+.universe-remove-button { justify-self:start; color:var(--plum); }
