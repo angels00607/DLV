@@ -203,7 +203,14 @@ export function App() {
         setCloudBaseline(null);
         throw new Error('Cloud has changed on another device. Upload blocked; compare again and resolve manually.');
       }
-      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      // Freeze the persisted snapshot, not React state: a recently edited item can
+      // reach localStorage before a pending render updates the state closure.
+      const storedAtStart = localStorage.getItem(STORAGE_KEY);
+      if (!storedAtStart) throw new Error('Local collection is not saved yet. Reload and compare again.');
+      const totalsAtStart = localStorage.getItem(MANUAL_TOTALS_KEY);
+      const modeAtStart = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
+      const backup = createMigrationBackup(JSON.parse(storedAtStart) as SavePayload,
+        totalsAtStart ? JSON.parse(totalsAtStart) as Record<string, number> : {}, modeAtStart);
       // Local edits are allowed after a matching baseline. The remote snapshot must
       // still be exactly the one that was compared, even if its revision is unchanged.
       if (localFingerprint(remote.collection, remote.manual_totals, remote.owned_only) !== cloudBaseline.remoteFingerprint) {
@@ -219,9 +226,7 @@ export function App() {
       const latestStored = localStorage.getItem(STORAGE_KEY);
       const latestTotals = localStorage.getItem(MANUAL_TOTALS_KEY);
       const latestMode = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
-      if (!latestStored || JSON.stringify(JSON.parse(latestStored)) !== JSON.stringify(backup.collection) ||
-          JSON.stringify(latestTotals ? JSON.parse(latestTotals) : {}) !== JSON.stringify(backup.manualTotals) ||
-          latestMode !== backup.ownedOnly) {
+      if (latestStored !== storedAtStart || latestTotals !== totalsAtStart || latestMode !== modeAtStart) {
         setCloudBaseline(null);
         throw new Error('Local collection changed during upload confirmation. Upload cancelled; compare again.');
       }
@@ -254,7 +259,18 @@ export function App() {
         setCloudMessage('Restore cancelled. Local data unchanged.');
         return;
       }
-      const latest = await readOwnCloudSnapshot(config, session.access_token);
+      // Mobile Safari may transiently fail a second fetch after opening the
+      // native download/confirmation UI. Retry read-only verification safely.
+      let latest: Awaited<ReturnType<typeof readOwnCloudSnapshot>> = null;
+      try {
+        latest = await readOwnCloudSnapshot(config, session.access_token);
+      } catch {
+        try {
+          latest = await readOwnCloudSnapshot(config, session.access_token);
+        } catch {
+          throw new Error('Cloud verification could not load after confirmation. No local data was replaced. Check connection and retry later.');
+        }
+      }
       if (!latest || latest.revision !== remote.revision || latest.updated_at !== remote.updated_at) {
         throw new Error('Cloud backup changed during confirmation. Restore cancelled.');
       }
