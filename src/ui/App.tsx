@@ -118,7 +118,7 @@ export function App() {
       }
     })();
     return () => { cancelled = true; };
-  }, [save, cloudSession]);
+  }, [Boolean(save), cloudSession?.user.id]);
 
   async function importFullBackup(file: File | undefined) {
     if (!file || !save) { setCloudMessage('Local collection or backup file unavailable.'); return; }
