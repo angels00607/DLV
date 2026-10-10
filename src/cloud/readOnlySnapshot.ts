@@ -17,8 +17,8 @@ export interface CloudConfiguration {
 }
 
 export function readCloudConfiguration(): CloudConfiguration | null {
-  const url = import.meta.env.VITE_SUPABASE_URL?.trim();
-  const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
+  const url = (import.meta.env.VITE_SUPABASE_URL || 'https://skenuigulnonrshkwelu.supabase.co').trim();
+  const publishableKey = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_fch6NSx050hyF61mInrQPQ_hzlWW1-_').trim();
   if (!url || !publishableKey) return null;
   try {
     const parsed = new URL(url);
