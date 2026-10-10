@@ -1,4 +1,5 @@
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { readCloudConfiguration } from '../cloud/readOnlySnapshot';
 import {
   Check,
   ChevronDown,
@@ -721,6 +722,13 @@ export function App() {
                 <X size={20} />
               </button>
             </div>
+            <section aria-label="Cloud sync preparation" className="cloud-preparation-status">
+              <strong>Cloud sync — preparation</strong>
+              <p>{readCloudConfiguration()
+                ? 'Supabase configuration detected. Account login and automatic synchronization are not enabled yet.'
+                : 'Not connected. Your collection is still saved only on this device unless you use a manual backup.'}</p>
+              <p>No automatic cloud uploads or restores will happen in this version.</p>
+            </section>
             <button
               className="action-button primary"
               onClick={() => {
