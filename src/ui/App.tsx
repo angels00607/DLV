@@ -1,5 +1,6 @@
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { readCloudConfiguration } from '../cloud/readOnlySnapshot';
+import { loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
 import { createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
 import {
   Check,
@@ -74,6 +75,30 @@ export function App() {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [editingItem, setEditingItem] = useState<GameItem | null>(null);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [cloudSession, setCloudSession] = useState(() => loadCloudSession());
+  const [cloudEmail, setCloudEmail] = useState('');
+  const [cloudPassword, setCloudPassword] = useState('');
+  const [cloudBusy, setCloudBusy] = useState(false);
+  const [cloudMessage, setCloudMessage] = useState('');
+  async function submitCloudAccount(mode: 'login' | 'signup') {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration is not available in this build.'); return; }
+    setCloudBusy(true);
+    setCloudMessage('');
+    try {
+      if (mode === 'signup') {
+        await signUpCloud(config, cloudEmail, cloudPassword);
+        setCloudMessage('Account request submitted. Check your email for a confirmation link, then sign in.');
+      } else {
+        setCloudSession(await signInCloud(config, cloudEmail, cloudPassword));
+        setCloudMessage('Signed in. Cloud sync is not enabled yet; your local collection is unchanged.');
+      }
+      setCloudPassword('');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Account request failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   const [isTotalsOpen, setTotalsOpen] = useState(false);
   const [isNewUniverseOpen, setNewUniverseOpen] = useState(false);
   const [newUniverseName, setNewUniverseName] = useState('');
@@ -723,12 +748,25 @@ export function App() {
                 <X size={20} />
               </button>
             </div>
-            <section aria-label="Cloud sync preparation" className="cloud-preparation-status">
-              <strong>Cloud sync — preparation</strong>
-              <p>{readCloudConfiguration()
-                ? 'Supabase configuration detected. Account login and automatic synchronization are not enabled yet.'
-                : 'Not connected. Your collection is still saved only on this device unless you use a manual backup.'}</p>
-              <p>No automatic cloud uploads or restores will happen in this version.</p>
+            <section aria-label="Cloud account" className="cloud-preparation-status">
+              <strong>Cloud account — setup only</strong>
+              <p>{readCloudConfiguration() ? 'Supabase is configured.' : 'Supabase is not configured in this build.'} No automatic uploads, downloads or restores occur here.</p>
+              {cloudSession ? (
+                <>
+                  <p>Signed in as {cloudSession.user.email || cloudSession.user.id}.</p>
+                  <button className="action-button" onClick={() => { signOutCloud(); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
+                </>
+              ) : (
+                <>
+                  <label htmlFor="dlv-cloud-email">Email</label>
+                  <input id="dlv-cloud-email" type="email" autoComplete="email" value={cloudEmail} onChange={event => setCloudEmail(event.target.value)} />
+                  <label htmlFor="dlv-cloud-password">Password</label>
+                  <input id="dlv-cloud-password" type="password" autoComplete="current-password" value={cloudPassword} onChange={event => setCloudPassword(event.target.value)} />
+                  <button className="action-button" disabled={cloudBusy || !cloudEmail.trim() || !cloudPassword} onClick={() => void submitCloudAccount('login')}>Sign in</button>
+                  <button className="action-button" disabled={cloudBusy || !cloudEmail.trim() || cloudPassword.length < 6} onClick={() => void submitCloudAccount('signup')}>Create account</button>
+                </>
+              )}
+              {cloudMessage && <p role="status">{cloudMessage}</p>}
             </section>
             <button
               className="action-button primary"
