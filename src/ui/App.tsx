@@ -1,6 +1,6 @@
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { readCloudConfiguration } from '../cloud/readOnlySnapshot';
-import { loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
+import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
 import { createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
 import {
   Check,
@@ -80,6 +80,19 @@ export function App() {
   const [cloudPassword, setCloudPassword] = useState('');
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
+  async function verifyCloudSession() {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      setCloudMessage(session ? 'Cloud account session is valid. Local collection unchanged.' : 'Please sign in.');
+    } catch (error) {
+      setCloudSession(null);
+      setCloudMessage(error instanceof Error ? error.message : 'Session verification failed.');
+    } finally { setCloudBusy(false); }
+  }
   async function submitCloudAccount(mode: 'login' | 'signup') {
     const config = readCloudConfiguration();
     if (!config) { setCloudMessage('Cloud configuration is not available in this build.'); return; }
@@ -754,6 +767,7 @@ export function App() {
               {cloudSession ? (
                 <>
                   <p>Signed in as {cloudSession.user.email || cloudSession.user.id}.</p>
+                  <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
                   <button className="action-button" onClick={() => { signOutCloud(); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
                 </>
               ) : (
