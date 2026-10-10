@@ -309,13 +309,8 @@ export function App() {
           (localStorage.getItem(COLLECTION_MODE_KEY) === '1') !== ownedOnly) {
         throw new Error('Local collection changed during confirmation. Save cancelled; try again.');
       }
-      // Check that the cloud has not changed during confirmation, then CAS protects
-      // against concurrent writes between this check and the actual update.
-      const latest = await readOwnCloudSnapshot(config, session.access_token);
-      if ((latest?.revision ?? 0) !== (remote?.revision ?? 0) ||
-          (latest?.updated_at ?? null) !== (remote?.updated_at ?? null)) {
-        throw new Error('Cloud changed on another device. Save cancelled to protect newer data.');
-      }
+      // The revision-checked RPC rejects concurrent writes atomically. Avoid a
+      // redundant network request after Safari's native confirmation/download UI.
       const revision = remote
         ? await updateCloudBackup(config, session.access_token, backup, remote.revision)
         : await uploadFirstCloudBackup(config, session.access_token, backup);
