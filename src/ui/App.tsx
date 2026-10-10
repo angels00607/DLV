@@ -183,7 +183,10 @@ export function App() {
     } finally { setCloudBusy(false); }
   }
 
-  const [cloudBaseline, setCloudBaseline] = useState<{ revision: number; userId: string } | null>(null);
+  const [cloudBaseline, setCloudBaseline] = useState<{ revision: number; userId: string; localFingerprint: string } | null>(null);
+  function localFingerprint(collection: SavePayload, totals: Record<string, number>, ownedOnly: boolean) {
+    return JSON.stringify([collection, totals, ownedOnly]);
+  }
   async function updateCloudManually() {
     const config = readCloudConfiguration();
     if (!config || !save || !cloudBaseline) {
@@ -201,6 +204,10 @@ export function App() {
         throw new Error('Cloud has changed on another device. Upload blocked; compare again and resolve manually.');
       }
       const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      if (localFingerprint(backup.collection, backup.manualTotals, backup.ownedOnly) !== cloudBaseline.localFingerprint) {
+        setCloudBaseline(null);
+        throw new Error('Local collection changed since comparison. Compare again before uploading.');
+      }
       downloadMigrationBackup(backup);
       if (!window.confirm(`A full local backup download was started. Confirm it is saved. Upload local changes over cloud revision ${remote.revision}? This will archive the previous cloud revision.`)) {
         setCloudMessage('Cloud update cancelled.'); return;
@@ -292,7 +299,7 @@ export function App() {
         ownedOnly: remote.owned_only,
       };
       const comparison = compareCollections(localBackup, remoteBackup);
-      setCloudBaseline(comparison.identical ? { revision: remote.revision, userId: session.user.id } : null);
+      setCloudBaseline(comparison.identical ? { revision: remote.revision, userId: session.user.id, localFingerprint: localFingerprint(localBackup.collection, localBackup.manualTotals, localBackup.ownedOnly) } : null);
       setCloudPreview(`Local: ${comparison.localItems} items; cloud: ${comparison.remoteItems} items. ${comparison.identical ? 'Snapshots match.' : 'Snapshots differ. Automatic restore is blocked to prevent data loss.'} Cloud revision: ${remote.revision}.`);
       setCloudMessage('Comparison complete. No collection data was modified.');
     } catch (error) {
