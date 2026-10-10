@@ -4,6 +4,7 @@ import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, sign
 import { compareCollections, createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
 import { uploadFirstCloudBackup } from '../cloud/firstUpload';
 import { updateCloudBackup } from '../cloud/updateSnapshot';
+import { readOwnCloudHistory } from '../cloud/history';
 import {
   Check,
   ChevronDown,
@@ -83,6 +84,29 @@ export function App() {
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  async function previewCloudHistory() {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const history = await readOwnCloudHistory(config, session.access_token);
+      setCloudPreview(history.length
+        ? history.map(entry => {
+          const items = Object.values(entry.collection.data).reduce((sum, value) =>
+            sum + (Array.isArray(value) ? value.length : 0), 0);
+          return `Revision ${entry.revision}: ${items} items (archived ${entry.archived_at})`;
+        }).join(' | ')
+        : 'No previous cloud revisions are archived yet.');
+      setCloudMessage('Cloud history is read only. No data was restored.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud history unavailable.');
+    } finally { setCloudBusy(false); }
+  }
+
   const [cloudBaseline, setCloudBaseline] = useState<{ revision: number; userId: string } | null>(null);
   async function updateCloudManually() {
     const config = readCloudConfiguration();
@@ -928,6 +952,7 @@ export function App() {
                   <p>Signed in as {cloudSession.user.email || cloudSession.user.id}.</p>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Check cloud backup (read only)</button>
+                  <button className="action-button" disabled={cloudBusy} onClick={() => void previewCloudHistory()}>View previous cloud revisions (read only)</button>
                   <button className="action-button" disabled={cloudBusy || !save} onClick={() => void compareCloudWithLocal()}>Compare cloud with this device (read only)</button>
                   <button className="action-button" disabled={cloudBusy || !save || !cloudBaseline} onClick={() => void updateCloudManually()}>Upload local changes (only after matching baseline)</button>
                   <button className="action-button" disabled={cloudBusy || !save} onClick={() => void restoreCloudManually()}>Restore cloud to this device (replaces local data)</button>
