@@ -295,6 +295,12 @@ export function App() {
       if (count === 0) {
         throw new Error('This device has no collection items. Cloud save is blocked to prevent overwriting your collection. Use View or Recover instead.');
       }
+      // Never allow an empty local device to overwrite a non-empty cloud backup.
+      const remoteCount = remote ? Object.values(remote.collection.data)
+        .reduce((sum, entries) => sum + (entries?.length ?? 0), 0) : 0;
+      if (remoteCount > 0 && count === 0) {
+        throw new Error('This device has 0 items but the cloud has saved items. Recover the cloud collection instead of overwriting it.');
+      }
       const matches = remote && compareCollections(backup, {
         ...backup, collection: remote.collection,
         manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
@@ -1138,6 +1144,7 @@ export function App() {
             <section aria-label="Cloud backup" className="cloud-preparation-status">
               <strong>My cloud backup</strong>
               <p>Save or recover your collection. Changes are not synchronized automatically yet.</p>
+              <p>On your main computer, verify your full collection before saving. On another device, view the cloud backup and choose Recover. Never save an empty device over your main collection.</p>
               {cloudSession ? (
                 <>
                   <p>Account: {cloudSession.user.email || cloudSession.user.id}</p>
