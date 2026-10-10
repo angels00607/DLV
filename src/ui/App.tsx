@@ -290,6 +290,16 @@ export function App() {
       const backup = createMigrationBackup(JSON.parse(stored) as SavePayload,
         totalsStored ? JSON.parse(totalsStored) as Record<string, number> : {}, ownedOnly);
       const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      // A fresh device can start with an empty collection. Never let a
+      // one-click save replace a populated cloud backup with that empty state.
+      if (count === 0 && remote) {
+        const remoteCount = Object.values(remote.collection.data)
+          .reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+        if (remoteCount > 0) throw new Error(
+          'This device has 0 items but the cloud has ' + remoteCount +
+          ' items. Save blocked to protect your collection. Recover the cloud backup first.',
+        );
+      }
       const matches = remote && compareCollections(backup, {
         ...backup, collection: remote.collection,
         manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
@@ -300,6 +310,9 @@ export function App() {
       }
       // The local recovery JSON is downloaded before any overwrite.
       downloadMigrationBackup(backup);
+      if (count === 0 && !remote) throw new Error(
+        'Your local collection is empty. First cloud backup cancelled. Open the device with your real collection first.',
+      );
       const warning = remote
         ? `Cloud revision ${remote.revision} differs from this device. Save ${count} local items and replace that cloud version? The previous cloud revision will be archived. Confirm your JSON recovery file was downloaded.`
         : `Create your first cloud backup with ${count} items? Confirm your JSON recovery file was downloaded.`;
