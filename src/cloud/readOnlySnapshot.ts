@@ -17,6 +17,18 @@ export interface CloudConfiguration {
 }
 
 export function readCloudConfiguration(): CloudConfiguration | null {
+  // Test builds must never silently fall back to the live Supabase project.
+  if (import.meta.env.VITE_DLV_TEST_MODE === 'true') {
+    const testUrl = (import.meta.env.VITE_SUPABASE_URL || '').trim();
+    const testKey = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '').trim();
+    if (!testUrl || !testKey) return null;
+    try {
+      const parsed = new URL(testUrl);
+      if (parsed.protocol !== 'https:' || !parsed.hostname.endsWith('.supabase.co') ||
+          parsed.hostname === 'skenuigulnonrshkwelu.supabase.co') return null;
+      return { url: parsed.origin, publishableKey: testKey };
+    } catch { return null; }
+  }
   const url = (import.meta.env.VITE_SUPABASE_URL || 'https://skenuigulnonrshkwelu.supabase.co').trim();
   const publishableKey = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_fch6NSx050hyF61mInrQPQ_hzlWW1-_').trim();
   if (!url || !publishableKey) return null;
