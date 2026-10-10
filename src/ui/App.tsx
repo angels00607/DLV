@@ -1106,6 +1106,8 @@ export function App() {
                   onChange={event => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ''; void importFullBackup(file); }} />
               </section>
             </details>
+            <details className="cloud-preparation-status">
+              <summary>Other backup tools (GitHub and files)</summary>
             <button
               className="action-button primary"
               onClick={() => {
@@ -1133,6 +1135,7 @@ export function App() {
               Import collection file
             </button>
             <input ref={fileInput} className="hidden" type="file" accept="application/json" onChange={importFile} />
+            </details>
           </div>
         </aside>
       )}
