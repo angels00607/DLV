@@ -3,6 +3,7 @@ import { readCloudConfiguration, readOwnCloudSnapshot } from '../cloud/readOnlyS
 import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
 import { createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
 import { uploadFirstCloudBackup } from '../cloud/firstUpload';
+import { parseMigrationBackup } from '../cloud/restoreBackup';
 import {
   Check,
   ChevronDown,
@@ -82,6 +83,36 @@ export function App() {
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  const fullBackupInput = useRef<HTMLInputElement>(null);
+  async function restoreFullBackup(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    try {
+      if (!save) throw new Error('Local collection is not loaded.');
+      const backup = parseMigrationBackup(JSON.parse(await file.text()) as unknown);
+      const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      if (!window.confirm(`Restore ${count} items from ${backup.createdAt}? This replaces the local collection, totals and display mode on this device. A safety copy of your current data will be downloaded first.`)) return;
+      downloadMigrationBackup(createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1'));
+      const previous = [STORAGE_KEY, MANUAL_TOTALS_KEY, COLLECTION_MODE_KEY].map(key => [key, localStorage.getItem(key)] as const);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(backup.collection));
+        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(backup.manualTotals));
+        localStorage.setItem(COLLECTION_MODE_KEY, backup.ownedOnly ? '1' : '0');
+      } catch (error) {
+        for (const [key, value] of previous) {
+          try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch { /* storage unavailable */ }
+        }
+        throw error;
+      }
+      setSave(backup.collection);
+      setManualTotals(backup.manualTotals);
+      setCloudMessage('Full local backup restored. Reload the page to apply the display mode. Cloud data unchanged.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Restore failed. No cloud data changed.');
+    }
+  }
+
   async function firstCloudUpload() {
     const config = readCloudConfiguration();
     if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
@@ -853,6 +884,11 @@ export function App() {
               <Download size={18} />
               Export complete pre-sync backup (including totals)
             </button>
+            <button className="action-button" onClick={() => fullBackupInput.current?.click()}>
+              <Upload size={18} />
+              Restore complete pre-sync backup (confirmation required)
+            </button>
+            <input ref={fullBackupInput} className="hidden" type="file" accept="application/json" onChange={event => void restoreFullBackup(event)} />
             <button className="action-button" onClick={() => downloadSave(save)}>
               <Download size={18} />
               Export collection file
