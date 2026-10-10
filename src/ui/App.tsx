@@ -239,60 +239,71 @@ export function App() {
     } finally { setCloudBusy(false); }
   }
 
+  const [restorePrepared, setRestorePrepared] = useState<{ localFingerprint: string; userId: string } | null>(null);
+  function prepareCloudRestore() {
+    if (!save) { setCloudMessage('Local collection unavailable.'); return; }
+    const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+    downloadMigrationBackup(backup);
+    setRestorePrepared({ localFingerprint: localFingerprint(backup.collection, backup.manualTotals, backup.ownedOnly), userId: cloudSession?.user.id ?? '' });
+    setCloudMessage('Local backup download started. Save the JSON file, then tap Restore cloud to this device again to confirm replacement.');
+  }
   async function restoreCloudManually() {
     const config = readCloudConfiguration();
     if (!config || !save) { setCloudMessage('Local collection or cloud configuration unavailable.'); return; }
+    if (!restorePrepared) { prepareCloudRestore(); return; }
     setCloudBusy(true);
     setCloudPreview(null);
     setCloudBaseline(null);
     try {
       const session = await getValidCloudSession(config);
       setCloudSession(session);
-      if (!session) throw new Error('Sign in first.');
+      if (!session || session.user.id !== restorePrepared.userId) throw new Error('Account changed. Download a new backup before restoring.');
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const totals = localStorage.getItem(MANUAL_TOTALS_KEY);
+      const currentFingerprint = stored ? localFingerprint(JSON.parse(stored) as SavePayload,
+        totals ? JSON.parse(totals) as Record<string, number> : {}, localStorage.getItem(COLLECTION_MODE_KEY) === '1') : '';
+      if (currentFingerprint !== restorePrepared.localFingerprint) {
+        setRestorePrepared(null);
+        throw new Error('Local collection changed since backup. Download a new backup before restoring.');
+      }
+      // Read before the native confirmation dialog. Mobile Safari can suspend
+      // requests after dialogs or downloads; never fetch again after confirmation.
       const remote = await readOwnCloudSnapshot(config, session.access_token);
       if (!remote) throw new Error('No cloud backup exists for this account.');
-      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
-      downloadMigrationBackup(backup);
       const localCount = Object.values(save.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
       const remoteCount = Object.values(remote.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
-      if (!window.confirm(`A local backup download was started. Confirm it is safely saved. Replace ${localCount} local items with ${remoteCount} cloud items (revision ${remote.revision})? This cannot be automatically undone.`)) {
+      if (!window.confirm(`Confirm your downloaded JSON backup is saved. Replace ${localCount} local items with ${remoteCount} cloud items (revision ${remote.revision})? This cannot be automatically undone.`)) {
         setCloudMessage('Restore cancelled. Local data unchanged.');
         return;
       }
-      // Mobile Safari may transiently fail a second fetch after opening the
-      // native download/confirmation UI. Retry read-only verification safely.
-      let latest: Awaited<ReturnType<typeof readOwnCloudSnapshot>> = null;
-      try {
-        latest = await readOwnCloudSnapshot(config, session.access_token);
-      } catch {
-        try {
-          latest = await readOwnCloudSnapshot(config, session.access_token);
-        } catch {
-          throw new Error('Cloud verification could not load after confirmation. No local data was replaced. Check connection and retry later.');
-        }
-      }
-      if (!latest || latest.revision !== remote.revision || latest.updated_at !== remote.updated_at) {
-        throw new Error('Cloud backup changed during confirmation. Restore cancelled.');
+      // A different tab may have edited the collection while the dialog was open.
+      const latestStored = localStorage.getItem(STORAGE_KEY);
+      const latestTotals = localStorage.getItem(MANUAL_TOTALS_KEY);
+      const latestFingerprint = latestStored ? localFingerprint(JSON.parse(latestStored) as SavePayload,
+        latestTotals ? JSON.parse(latestTotals) as Record<string, number> : {}, localStorage.getItem(COLLECTION_MODE_KEY) === '1') : '';
+      if (latestFingerprint !== restorePrepared.localFingerprint) {
+        setRestorePrepared(null);
+        throw new Error('Local collection changed during confirmation. Restore cancelled.');
       }
       const previous = {
-        collection: localStorage.getItem(STORAGE_KEY),
-        totals: localStorage.getItem(MANUAL_TOTALS_KEY),
+        collection: latestStored,
+        totals: latestTotals,
         mode: localStorage.getItem(COLLECTION_MODE_KEY),
       };
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(latest.collection));
-        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(latest.manual_totals));
-        localStorage.setItem(COLLECTION_MODE_KEY, latest.owned_only ? '1' : '0');
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(remote.collection));
+        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(remote.manual_totals));
+        localStorage.setItem(COLLECTION_MODE_KEY, remote.owned_only ? '1' : '0');
       } catch (error) {
         for (const [key, value] of [[STORAGE_KEY, previous.collection], [MANUAL_TOTALS_KEY, previous.totals], [COLLECTION_MODE_KEY, previous.mode]] as const) {
           try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch { /* backup file remains available */ }
         }
         throw error;
       }
-      setCloudBaseline(null);
-      setSave(latest.collection);
-      setManualTotals(latest.manual_totals);
-      setCloudMessage('Cloud collection restored on this device. Your downloaded local backup is your recovery copy.');
+      setRestorePrepared(null);
+      setSave(remote.collection);
+      setManualTotals(remote.manual_totals);
+      setCloudMessage(`Cloud revision ${remote.revision} restored on this device. Your downloaded JSON backup is your recovery copy.`);
     } catch (error) {
       setCloudMessage(error instanceof Error ? error.message : 'Restore failed.');
     } finally { setCloudBusy(false); }
