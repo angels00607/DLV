@@ -153,6 +153,7 @@ export function App() {
         }
         throw error;
       }
+      setCloudBaseline(null);
       setSave(latest.collection);
       setManualTotals(latest.manual_totals);
       setCloudMessage('Cloud collection restored on this device. Your downloaded local backup is your recovery copy.');
@@ -208,6 +209,7 @@ export function App() {
         return;
       }
       const revision = await uploadFirstCloudBackup(config, session.access_token, backup);
+      setCloudBaseline(null);
       setCloudMessage(`First cloud backup saved as revision ${revision}. Local collection unchanged.`);
     } catch (error) {
       setCloudMessage(error instanceof Error ? error.message : 'Cloud upload failed.');
