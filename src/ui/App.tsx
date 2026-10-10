@@ -273,6 +273,61 @@ export function App() {
     } finally { setCloudBusy(false); }
   }
 
+  async function saveCloudSimply() {
+    const config = readCloudConfiguration();
+    if (!config || !save) { setCloudMessage('Cloud or local collection unavailable.'); return; }
+    setCloudBusy(true);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      // Capture the persisted version so the upload cannot silently use stale React state.
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) throw new Error('Local collection is not saved yet. Try again.');
+      const totalsStored = localStorage.getItem(MANUAL_TOTALS_KEY);
+      const ownedOnly = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
+      const backup = createMigrationBackup(JSON.parse(stored) as SavePayload,
+        totalsStored ? JSON.parse(totalsStored) as Record<string, number> : {}, ownedOnly);
+      const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      const matches = remote && compareCollections(backup, {
+        ...backup, collection: remote.collection,
+        manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
+      }).identical;
+      if (matches) {
+        setCloudMessage(`Already saved in cloud (revision ${remote.revision}; ${count} items). Nothing changed.`);
+        return;
+      }
+      // The local recovery JSON is downloaded before any overwrite.
+      downloadMigrationBackup(backup);
+      const warning = remote
+        ? `Cloud revision ${remote.revision} differs from this device. Save ${count} local items and replace that cloud version? The previous cloud revision will be archived. Confirm your JSON recovery file was downloaded.`
+        : `Create your first cloud backup with ${count} items? Confirm your JSON recovery file was downloaded.`;
+      if (!window.confirm(warning)) { setCloudMessage('Save cancelled. Cloud unchanged.'); return; }
+      if (localStorage.getItem(STORAGE_KEY) !== stored ||
+          localStorage.getItem(MANUAL_TOTALS_KEY) !== totalsStored ||
+          (localStorage.getItem(COLLECTION_MODE_KEY) === '1') !== ownedOnly) {
+        throw new Error('Local collection changed during confirmation. Save cancelled; try again.');
+      }
+      // Check that the cloud has not changed during confirmation, then CAS protects
+      // against concurrent writes between this check and the actual update.
+      const latest = await readOwnCloudSnapshot(config, session.access_token);
+      if ((latest?.revision ?? 0) !== (remote?.revision ?? 0) ||
+          (latest?.updated_at ?? null) !== (remote?.updated_at ?? null)) {
+        throw new Error('Cloud changed on another device. Save cancelled to protect newer data.');
+      }
+      const revision = remote
+        ? await updateCloudBackup(config, session.access_token, backup, remote.revision)
+        : await uploadFirstCloudBackup(config, session.access_token, backup);
+      if (revision === null) throw new Error('Cloud changed during save. No data overwritten.');
+      setCloudBaseline(null);
+      setCloudPreview(`Cloud revision ${revision}; ${count} items.`);
+      setCloudMessage(`Saved successfully! Your collection is available on any signed-in device (revision ${revision}).`);
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud save failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   async function restoreCloudManually() {
     const config = readCloudConfiguration();
     if (!config || !save) { setCloudMessage('Local collection or cloud configuration unavailable.'); return; }
@@ -1096,13 +1151,12 @@ export function App() {
               {cloudSession ? (
                 <>
                   <p>Account: {cloudSession.user.email || cloudSession.user.id}</p>
+                  <button className="action-button primary" disabled={cloudBusy || !save}
+                    onClick={() => void saveCloudSimply()}>Save my collection</button>
+                  <button className="action-button" disabled={cloudBusy}
+                    onClick={() => void previewOwnCloudBackup()}>View my cloud backup</button>
                   <button className="action-button" disabled={cloudBusy || !save}
-                    onClick={() => void compareCloudWithLocal()}>Check my backup</button>
-                  <button className="action-button" disabled={cloudBusy || !save || !cloudBaseline}
-                    onClick={() => void updateCloudManually()}>Save my changes to cloud</button>
-                  {!cloudBaseline && <p>To save changes, first establish a matching backup in Advanced options. This protects existing cloud data.</p>}
-                  <button className="action-button" disabled={cloudBusy || !save}
-                    onClick={() => void restoreCloudManually()}>Recover my collection from cloud</button>
+                    onClick={() => void restoreCloudManually()}>Recover my collection on this device</button>
                   {cloudPreview && <p role="status">{cloudPreview}</p>}
                   {cloudMessage && <p role="status">{cloudMessage}</p>}
                   <details>
