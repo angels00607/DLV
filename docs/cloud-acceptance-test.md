@@ -1,6 +1,10 @@
 # DLV — safe cloud acceptance test (desktop browser → iPhone)
 
-**Status:** Test plan only. This branch is NOT production and does not migrate data.
+**Status:** Test plan only. This branch is NOT production and does not migrate data. A test environment has NOT been deployed.
+
+## Test build configuration
+
+Set `VITE_DLV_TEST_MODE=true`, `VITE_SUPABASE_URL=https://<separate-test-project>.supabase.co`, and `VITE_SUPABASE_PUBLISHABLE_KEY=<test-project-publishable-key>` before building. Test mode rejects missing values and the known live Supabase project URL instead of falling back to production. Never use the production project's credentials. A separate hostname/browser storage context is also required; this guard alone does not isolate localStorage.
 
 ## Before testing
 
@@ -35,6 +39,6 @@
 
 - Run build/CI and tests; inspect migration schema and authorization (RLS) with a test user.
 - Test network loss, invalid payloads, browser storage quota errors, and interrupted restore.
-- Validate **recovery from the exported JSON** using a disposable environment. Current cloud UI downloads backups but does not yet provide a dedicated re-import for that backup format.
-- Confirm that local edits cannot be lost between baseline comparison and upload (the baseline must be invalidated on local edits or compared to a frozen snapshot).
+- Validate **recovery from the exported JSON** using a disposable environment. A draft JSON re-import UI now exists; verify it in a disposable environment before relying on it.
+- Confirm that local edits cannot be lost between baseline comparison and upload, including multi-tab edits and a frozen upload snapshot.
 - Do not merge the stacked PRs or activate auto-sync until all gates pass and the user approves.
