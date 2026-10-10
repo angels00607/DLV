@@ -70,3 +70,20 @@ export function compareCollections(
       same(local.manualTotals, remote.manualTotals) && local.ownedOnly === remote.ownedOnly,
   };
 }
+
+/** Refuse to replace a cloud backup with an empty or malformed browser collection. */
+export function assertNonEmptyCloudBackup(backup: MigrationBackup): void {
+  if (backup.schema !== MIGRATION_BACKUP_SCHEMA) throw new Error('Invalid backup schema.');
+  const data = backup.collection?.data;
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    throw new Error('Invalid local collection. Cloud unchanged.');
+  }
+  const groups = Object.values(data);
+  if (groups.some(entries => !Array.isArray(entries))) {
+    throw new Error('Invalid local collection entries. Cloud unchanged.');
+  }
+  const count = groups.reduce((sum, entries) => sum + entries.length, 0);
+  if (count === 0) {
+    throw new Error('Empty local collection cannot be uploaded. Recover your collection first; cloud unchanged.');
+  }
+}
