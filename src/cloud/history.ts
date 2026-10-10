@@ -1,10 +1,13 @@
 import type { CloudConfiguration } from './readOnlySnapshot';
+import type { SavePayload } from '../domain/types';
 
 export interface CloudHistoryEntry {
   revision: number;
   schema_version: number;
   archived_at: string;
-  collection: { data: Record<string, unknown[]> };
+  collection: SavePayload;
+  manual_totals: Record<string, number>;
+  owned_only: boolean;
 }
 
 export async function readOwnCloudHistory(
@@ -13,7 +16,7 @@ export async function readOwnCloudHistory(
 ): Promise<CloudHistoryEntry[]> {
   if (!accessToken.trim()) throw new Error('Sign in first.');
   const response = await fetch(
-    `${config.url}/rest/v1/dlv_collection_history?select=revision,schema_version,archived_at,collection&order=revision.desc&limit=20`,
+    `${config.url}/rest/v1/dlv_collection_history?select=revision,schema_version,archived_at,collection,manual_totals,owned_only&order=revision.desc&limit=20`,
     {
       headers: {
         apikey: config.publishableKey,
@@ -33,7 +36,10 @@ export async function readOwnCloudHistory(
       entry.schema_version !== 1 || typeof entry.archived_at !== 'string' ||
       !entry.collection || typeof entry.collection !== 'object' ||
       !entry.collection.data || typeof entry.collection.data !== 'object' ||
-      Array.isArray(entry.collection.data)) throw new Error('Unsupported history row.');
+      Array.isArray(entry.collection.data) ||
+      !entry.manual_totals || typeof entry.manual_totals !== 'object' || Array.isArray(entry.manual_totals) ||
+      Object.values(entry.manual_totals).some(value => !Number.isSafeInteger(value) || value < 0) ||
+      typeof entry.owned_only !== 'boolean') throw new Error('Unsupported history row.');
     return entry as CloudHistoryEntry;
   });
 }

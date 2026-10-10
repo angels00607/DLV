@@ -84,6 +84,49 @@ export function App() {
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  const [historyRevision, setHistoryRevision] = useState('');
+  async function restoreArchivedRevision() {
+    const config = readCloudConfiguration();
+    if (!config || !save) { setCloudMessage('Local collection or cloud configuration unavailable.'); return; }
+    const revision = Number(historyRevision);
+    if (!Number.isSafeInteger(revision) || revision < 1) { setCloudMessage('Enter a valid archived revision number.'); return; }
+    setCloudBusy(true);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const history = await readOwnCloudHistory(config, session.access_token);
+      const archived = history.find(entry => entry.revision === revision);
+      if (!archived) throw new Error('Revision not found in the latest 20 archived revisions.');
+      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(backup);
+      if (!window.confirm(`A local backup download was started. Confirm it is saved. Replace this device's collection with archived cloud revision ${revision}? Current cloud data will NOT be changed.`)) {
+        setCloudMessage('Archived restore cancelled.'); return;
+      }
+      const latestHistory = await readOwnCloudHistory(config, session.access_token);
+      const checked = latestHistory.find(entry => entry.revision === revision);
+      if (!checked || checked.archived_at !== archived.archived_at) throw new Error('Archive changed. Restore cancelled.');
+      const keys = [STORAGE_KEY, MANUAL_TOTALS_KEY, COLLECTION_MODE_KEY] as const;
+      const previous = keys.map(key => localStorage.getItem(key));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(checked.collection));
+        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(checked.manual_totals));
+        localStorage.setItem(COLLECTION_MODE_KEY, checked.owned_only ? '1' : '0');
+      } catch (error) {
+        keys.forEach((key, i) => {
+          try { if (previous[i] === null) localStorage.removeItem(key); else localStorage.setItem(key, previous[i]!); } catch { /* recovery backup was downloaded */ }
+        });
+        throw error;
+      }
+      setCloudBaseline(null);
+      setSave(checked.collection);
+      setManualTotals(checked.manual_totals);
+      setCloudMessage(`Archived revision ${revision} restored locally. Current cloud backup remains unchanged.`);
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Archived restore failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   async function previewCloudHistory() {
     const config = readCloudConfiguration();
     if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
@@ -953,6 +996,9 @@ export function App() {
                   <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Check cloud backup (read only)</button>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void previewCloudHistory()}>View previous cloud revisions (read only)</button>
+                  <label htmlFor="dlv-history-revision">Archived revision to restore</label>
+                  <input id="dlv-history-revision" type="number" min="1" step="1" value={historyRevision} onChange={event => setHistoryRevision(event.target.value)} />
+                  <button className="action-button" disabled={cloudBusy || !save || !historyRevision} onClick={() => void restoreArchivedRevision()}>Restore selected archived revision to this device</button>
                   <button className="action-button" disabled={cloudBusy || !save} onClick={() => void compareCloudWithLocal()}>Compare cloud with this device (read only)</button>
                   <button className="action-button" disabled={cloudBusy || !save || !cloudBaseline} onClick={() => void updateCloudManually()}>Upload local changes (only after matching baseline)</button>
                   <button className="action-button" disabled={cloudBusy || !save} onClick={() => void restoreCloudManually()}>Restore cloud to this device (replaces local data)</button>
