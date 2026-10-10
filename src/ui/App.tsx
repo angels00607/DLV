@@ -1,7 +1,7 @@
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { readCloudConfiguration, readOwnCloudSnapshot } from '../cloud/readOnlySnapshot';
 import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
-import { createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
+import { compareCollections, createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
 import { uploadFirstCloudBackup } from '../cloud/firstUpload';
 import {
   Check,
@@ -82,6 +82,32 @@ export function App() {
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  async function compareCloudWithLocal() {
+    const config = readCloudConfiguration();
+    if (!config || !save) { setCloudMessage('Cloud configuration or local collection unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      if (!remote) { setCloudPreview('No cloud backup exists. Nothing to restore.'); return; }
+      const localBackup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      const remoteBackup = {
+        ...localBackup,
+        collection: remote.collection,
+        manualTotals: remote.manual_totals,
+        ownedOnly: remote.owned_only,
+      };
+      const comparison = compareCollections(localBackup, remoteBackup);
+      setCloudPreview(`Local: ${comparison.localItems} items; cloud: ${comparison.remoteItems} items. ${comparison.identical ? 'Snapshots match.' : 'Snapshots differ. Automatic restore is blocked to prevent data loss.'} Cloud revision: ${remote.revision}.`);
+      setCloudMessage('Comparison complete. No collection data was modified.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Comparison failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   async function firstCloudUpload() {
     const config = readCloudConfiguration();
     if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
@@ -819,6 +845,7 @@ export function App() {
                   <p>Signed in as {cloudSession.user.email || cloudSession.user.id}.</p>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Check cloud backup (read only)</button>
+                  <button className="action-button" disabled={cloudBusy || !save} onClick={() => void compareCloudWithLocal()}>Compare cloud with this device (read only)</button>
                   {cloudPreview && <p role="status">{cloudPreview}</p>}
                   <button className="action-button" disabled={cloudBusy} onClick={() => void firstCloudUpload()}>Create first cloud backup (confirmation required)</button>
                   <button className="action-button" onClick={() => { signOutCloud(); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
