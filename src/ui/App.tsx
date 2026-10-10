@@ -1,5 +1,6 @@
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { readCloudConfiguration } from '../cloud/readOnlySnapshot';
+import { createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
 import {
   Check,
   ChevronDown,
@@ -738,6 +739,14 @@ export function App() {
             >
               <Github size={18} />
               GitHub backup & restore
+            </button>
+            <button className="action-button" onClick={() =>
+              downloadMigrationBackup(createMigrationBackup(
+                save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1',
+              ))
+            }>
+              <Download size={18} />
+              Export complete pre-sync backup (including totals)
             </button>
             <button className="action-button" onClick={() => downloadSave(save)}>
               <Download size={18} />
