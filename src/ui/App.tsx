@@ -172,6 +172,17 @@ export function App() {
       if (!window.confirm(`A full local backup download was started. Confirm it is saved. Upload local changes over cloud revision ${remote.revision}? This will archive the previous cloud revision.`)) {
         setCloudMessage('Cloud update cancelled.'); return;
       }
+      // Never upload a stale snapshot if another tab or the user changed local data
+      // while the confirmation dialog was open.
+      const latestStored = localStorage.getItem(STORAGE_KEY);
+      const latestTotals = localStorage.getItem(MANUAL_TOTALS_KEY);
+      const latestMode = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
+      if (!latestStored || JSON.stringify(JSON.parse(latestStored)) !== JSON.stringify(backup.collection) ||
+          JSON.stringify(latestTotals ? JSON.parse(latestTotals) : {}) !== JSON.stringify(backup.manualTotals) ||
+          latestMode !== backup.ownedOnly) {
+        setCloudBaseline(null);
+        throw new Error('Local collection changed during upload confirmation. Upload cancelled; compare again.');
+      }
       const revision = await updateCloudBackup(config, session.access_token, backup, cloudBaseline.revision);
       setCloudBaseline(null);
       if (revision === null) throw new Error('Cloud conflict detected during upload. No remote data overwritten.');
