@@ -4,6 +4,7 @@ export interface CloudSession {
   access_token: string;
   refresh_token: string;
   expires_at?: number;
+  expires_in?: number;
   user: { id: string; email?: string };
 }
 
@@ -23,8 +24,46 @@ export function loadCloudSession(): CloudSession | null {
 }
 
 function storeSession(session: CloudSession): CloudSession {
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  return session;
+  const normalized = {
+    ...session,
+    expires_at: session.expires_at ?? (session.expires_in ? Math.floor(Date.now() / 1000) + session.expires_in : undefined),
+  };
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(normalized));
+  return normalized;
+}
+
+let pendingRefresh: Promise<CloudSession> | null = null;
+
+export async function refreshCloudSession(config: CloudConfiguration): Promise<CloudSession> {
+  if (pendingRefresh) return pendingRefresh;
+  pendingRefresh = (async () => {
+    const session = loadCloudSession();
+    if (!session) throw new Error('Sign in before accessing the cloud.');
+    const response = await fetch(`${config.url}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: { apikey: config.publishableKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: session.refresh_token }),
+      cache: 'no-store',
+    });
+    if (!response.ok) {
+      signOutCloud();
+      throw new Error('Cloud session expired. Sign in again; your local collection is unchanged.');
+    }
+    const result = await response.json() as Partial<CloudSession>;
+    if (!result.access_token || !result.refresh_token || !result.user?.id) {
+      signOutCloud();
+      throw new Error('Invalid cloud session response. Sign in again.');
+    }
+    return storeSession(result as CloudSession);
+  })();
+  try { return await pendingRefresh; } finally { pendingRefresh = null; }
+}
+
+export async function getValidCloudSession(config: CloudConfiguration): Promise<CloudSession | null> {
+  const session = loadCloudSession();
+  if (!session) return null;
+  if (session.expires_at && session.expires_at > Math.floor(Date.now() / 1000) + 90) return session;
+  return refreshCloudSession(config);
 }
 
 export async function signInCloud(config: CloudConfiguration, email: string, password: string): Promise<CloudSession> {
