@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { parseMigrationBackup } from '../src/cloud/importBackup.ts';
 import { createMigrationBackup, compareCollections } from '../src/cloud/migrationSafety.ts';
 import { updateCloudBackup } from '../src/cloud/updateSnapshot.ts';
+import { uploadFirstCloudBackup } from '../src/cloud/firstUpload.ts';
 
 function fixture() {
   return {
@@ -98,5 +99,30 @@ test('invalid revision or absent token cannot send data', async () => {
   try {
     await assert.rejects(updateCloudBackup(config, 'test-token', backup(), 0), /Invalid expected revision/);
     await assert.rejects(updateCloudBackup(config, '', backup(), 1), /Sign in first/);
+  } finally { globalThis.fetch = previous; }
+});
+
+test('empty browser cannot initialize or overwrite a cloud backup', async () => {
+  const previous = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; throw new Error('Network must not be called'); };
+  const empty = backup();
+  empty.collection.data = { characters: [] };
+  try {
+    await assert.rejects(uploadFirstCloudBackup(config, 'test-token', empty), /Empty local collection/);
+    await assert.rejects(updateCloudBackup(config, 'test-token', empty, 3), /Empty local collection/);
+    assert.equal(calls, 0);
+  } finally { globalThis.fetch = previous; }
+});
+
+test('malformed local entries cannot reach the cloud RPC', async () => {
+  const previous = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; throw new Error('Network must not be called'); };
+  const invalid = backup();
+  invalid.collection.data.characters = null;
+  try {
+    await assert.rejects(updateCloudBackup(config, 'test-token', invalid, 3), /Invalid local collection entries/);
+    assert.equal(calls, 0);
   } finally { globalThis.fetch = previous; }
 });
