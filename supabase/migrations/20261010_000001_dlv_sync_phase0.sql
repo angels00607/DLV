@@ -12,7 +12,8 @@ create table if not exists public.dlv_collection_snapshots (
 
 alter table public.dlv_collection_snapshots enable row level security;
 revoke all on public.dlv_collection_snapshots from anon;
-grant select, insert, update on public.dlv_collection_snapshots to authenticated;
+-- Clients can read their own snapshot; writes must go through the CAS RPC only.
+grant select on public.dlv_collection_snapshots to authenticated;
 
 drop policy if exists "read own dlv snapshot" on public.dlv_collection_snapshots;
 create policy "read own dlv snapshot" on public.dlv_collection_snapshots
