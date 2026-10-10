@@ -1,4 +1,11 @@
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { readCloudConfiguration, readOwnCloudSnapshot } from '../cloud/readOnlySnapshot';
+import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
+import { compareCollections, createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
+import { uploadFirstCloudBackup } from '../cloud/firstUpload';
+import { updateCloudBackup } from '../cloud/updateSnapshot';
+import { readOwnCloudHistory } from '../cloud/history';
+import { parseMigrationBackup } from '../cloud/importBackup';
 import {
   Check,
   ChevronDown,
@@ -72,6 +79,408 @@ export function App() {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [editingItem, setEditingItem] = useState<GameItem | null>(null);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [cloudSession, setCloudSession] = useState(() => loadCloudSession());
+  const [cloudEmail, setCloudEmail] = useState('');
+  const [cloudPassword, setCloudPassword] = useState('');
+  const [cloudBusy, setCloudBusy] = useState(false);
+  const [cloudMessage, setCloudMessage] = useState('');
+  const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  const [historyRevision, setHistoryRevision] = useState('');
+  const startupCloudCheckStarted = useRef(false);
+  // Phase 1 of automatic sync: detect the remote revision on startup without
+  // ever overwriting local data or uploading changes without consent.
+  useEffect(() => {
+    if (!save || !cloudSession || startupCloudCheckStarted.current ||
+        import.meta.env.VITE_DLV_TEST_MODE !== 'true') return;
+    const config = readCloudConfiguration();
+    if (!config) return;
+    startupCloudCheckStarted.current = true;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const session = await getValidCloudSession(config);
+        if (!session || cancelled) return;
+        const remote = await readOwnCloudSnapshot(config, session.access_token);
+        if (cancelled) return;
+        if (!remote) {
+          setCloudMessage('No cloud backup yet. Your local collection was not changed.');
+          return;
+        }
+        const localBackup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+        const comparison = compareCollections(localBackup, {
+          ...localBackup, collection: remote.collection,
+          manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
+        });
+        setCloudPreview(`Automatic cloud check: revision ${remote.revision}; ${comparison.identical
+          ? 'this device matches the cloud.' : 'this device differs from the cloud. Review before restoring or uploading.'}`);
+      } catch {
+        if (!cancelled) setCloudPreview('Automatic cloud check unavailable. No local data was changed.');
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [Boolean(save), cloudSession?.user.id]);
+
+  async function importFullBackup(file: File | undefined) {
+    if (!file || !save) { setCloudMessage('Local collection or backup file unavailable.'); return; }
+    setCloudBusy(true);
+    try {
+      if (file.size > 20_000_000) throw new Error('Backup exceeds the 20 MB safety limit.');
+      const imported = parseMigrationBackup(await file.text());
+      const recovery = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(recovery);
+      if (!window.confirm('A recovery backup download was started. Confirm it is saved. Replace ALL local collection data with the selected JSON file? This will not change Supabase.')) {
+        setCloudMessage('Backup import cancelled.'); return;
+      }
+      const keys = [STORAGE_KEY, MANUAL_TOTALS_KEY, COLLECTION_MODE_KEY] as const;
+      const previous = keys.map(key => localStorage.getItem(key));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(imported.collection));
+        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(imported.manualTotals));
+        localStorage.setItem(COLLECTION_MODE_KEY, imported.ownedOnly ? '1' : '0');
+      } catch (error) {
+        keys.forEach((key, i) => {
+          try { if (previous[i] === null) localStorage.removeItem(key); else localStorage.setItem(key, previous[i]!); } catch { /* downloaded recovery copy remains */ }
+        });
+        throw error;
+      }
+      setCloudBaseline(null);
+      setSave(imported.collection);
+      setManualTotals(imported.manualTotals);
+      setCloudMessage('Full JSON backup imported locally. Supabase was not modified.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Backup import failed.');
+    } finally { setCloudBusy(false); }
+  }
+
+  async function restoreArchivedRevision() {
+    const config = readCloudConfiguration();
+    if (!config || !save) { setCloudMessage('Local collection or cloud configuration unavailable.'); return; }
+    const revision = Number(historyRevision);
+    if (!Number.isSafeInteger(revision) || revision < 1) { setCloudMessage('Enter a valid archived revision number.'); return; }
+    setCloudBusy(true);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const history = await readOwnCloudHistory(config, session.access_token);
+      const archived = history.find(entry => entry.revision === revision);
+      if (!archived) throw new Error('Revision not found in the latest 20 archived revisions.');
+      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(backup);
+      if (!window.confirm(`A local backup download was started. Confirm it is saved. Replace this device's collection with archived cloud revision ${revision}? Current cloud data will NOT be changed.`)) {
+        setCloudMessage('Archived restore cancelled.'); return;
+      }
+      const latestHistory = await readOwnCloudHistory(config, session.access_token);
+      const checked = latestHistory.find(entry => entry.revision === revision);
+      if (!checked || checked.archived_at !== archived.archived_at) throw new Error('Archive changed. Restore cancelled.');
+      const keys = [STORAGE_KEY, MANUAL_TOTALS_KEY, COLLECTION_MODE_KEY] as const;
+      const previous = keys.map(key => localStorage.getItem(key));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(checked.collection));
+        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(checked.manual_totals));
+        localStorage.setItem(COLLECTION_MODE_KEY, checked.owned_only ? '1' : '0');
+      } catch (error) {
+        keys.forEach((key, i) => {
+          try { if (previous[i] === null) localStorage.removeItem(key); else localStorage.setItem(key, previous[i]!); } catch { /* recovery backup was downloaded */ }
+        });
+        throw error;
+      }
+      setCloudBaseline(null);
+      setSave(checked.collection);
+      setManualTotals(checked.manual_totals);
+      setCloudMessage(`Archived revision ${revision} restored locally. Current cloud backup remains unchanged.`);
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Archived restore failed.');
+    } finally { setCloudBusy(false); }
+  }
+
+  async function previewCloudHistory() {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const history = await readOwnCloudHistory(config, session.access_token);
+      setCloudPreview(history.length
+        ? history.map(entry => {
+          const items = Object.values(entry.collection.data).reduce((sum, value) =>
+            sum + (Array.isArray(value) ? value.length : 0), 0);
+          return `Revision ${entry.revision}: ${items} items (archived ${entry.archived_at})`;
+        }).join(' | ')
+        : 'No previous cloud revisions are archived yet.');
+      setCloudMessage('Cloud history is read only. No data was restored.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud history unavailable.');
+    } finally { setCloudBusy(false); }
+  }
+
+  const [cloudBaseline, setCloudBaseline] = useState<{ revision: number; userId: string; remoteFingerprint: string } | null>(null);
+  function localFingerprint(collection: SavePayload, totals: Record<string, number>, ownedOnly: boolean) {
+    return JSON.stringify([collection, totals, ownedOnly]);
+  }
+  async function updateCloudManually() {
+    const config = readCloudConfiguration();
+    if (!config || !save || !cloudBaseline) {
+      setCloudMessage('First compare matching local and cloud collections to establish a safe baseline.');
+      return;
+    }
+    setCloudBusy(true);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session || session.user.id !== cloudBaseline.userId) throw new Error('Account changed. Compare again.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      if (!remote || remote.revision !== cloudBaseline.revision) {
+        setCloudBaseline(null);
+        throw new Error('Cloud has changed on another device. Upload blocked; compare again and resolve manually.');
+      }
+      // Freeze the persisted snapshot, not React state: a recently edited item can
+      // reach localStorage before a pending render updates the state closure.
+      const storedAtStart = localStorage.getItem(STORAGE_KEY);
+      if (!storedAtStart) throw new Error('Local collection is not saved yet. Reload and compare again.');
+      const totalsAtStart = localStorage.getItem(MANUAL_TOTALS_KEY);
+      const modeAtStart = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
+      const backup = createMigrationBackup(JSON.parse(storedAtStart) as SavePayload,
+        totalsAtStart ? JSON.parse(totalsAtStart) as Record<string, number> : {}, modeAtStart);
+      // Local edits are allowed after a matching baseline. The remote snapshot must
+      // still be exactly the one that was compared, even if its revision is unchanged.
+      if (localFingerprint(remote.collection, remote.manual_totals, remote.owned_only) !== cloudBaseline.remoteFingerprint) {
+        setCloudBaseline(null);
+        throw new Error('Cloud content changed since comparison. Upload blocked; compare again.');
+      }
+      downloadMigrationBackup(backup);
+      if (!window.confirm(`A full local backup download was started. Confirm it is saved. Upload local changes over cloud revision ${remote.revision}? This will archive the previous cloud revision.`)) {
+        setCloudMessage('Cloud update cancelled.'); return;
+      }
+      // Never upload a stale snapshot if another tab or the user changed local data
+      // while the confirmation dialog was open.
+      const latestStored = localStorage.getItem(STORAGE_KEY);
+      const latestTotals = localStorage.getItem(MANUAL_TOTALS_KEY);
+      const latestMode = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
+      if (latestStored !== storedAtStart || latestTotals !== totalsAtStart || latestMode !== modeAtStart) {
+        setCloudBaseline(null);
+        throw new Error('Local collection changed during upload confirmation. Upload cancelled; compare again.');
+      }
+      const revision = await updateCloudBackup(config, session.access_token, backup, cloudBaseline.revision);
+      setCloudBaseline(null);
+      if (revision === null) throw new Error('Cloud conflict detected during upload. No remote data overwritten.');
+      setCloudMessage(`Cloud updated to revision ${revision}. Compare again before your next update.`);
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud update failed.');
+    } finally { setCloudBusy(false); }
+  }
+
+  async function saveCloudSimply() {
+    const config = readCloudConfiguration();
+    if (!config || !save) { setCloudMessage('Cloud or local collection unavailable.'); return; }
+    setCloudBusy(true);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      // Capture the persisted version so the upload cannot silently use stale React state.
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) throw new Error('Local collection is not saved yet. Try again.');
+      const totalsStored = localStorage.getItem(MANUAL_TOTALS_KEY);
+      const ownedOnly = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
+      const backup = createMigrationBackup(JSON.parse(stored) as SavePayload,
+        totalsStored ? JSON.parse(totalsStored) as Record<string, number> : {}, ownedOnly);
+      const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      const matches = remote && compareCollections(backup, {
+        ...backup, collection: remote.collection,
+        manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
+      }).identical;
+      if (matches) {
+        setCloudMessage(`Already saved in cloud (revision ${remote.revision}; ${count} items). Nothing changed.`);
+        return;
+      }
+      // The local recovery JSON is downloaded before any overwrite.
+      downloadMigrationBackup(backup);
+      const warning = remote
+        ? `Cloud revision ${remote.revision} differs from this device. Save ${count} local items and replace that cloud version? The previous cloud revision will be archived. Confirm your JSON recovery file was downloaded.`
+        : `Create your first cloud backup with ${count} items? Confirm your JSON recovery file was downloaded.`;
+      if (!window.confirm(warning)) { setCloudMessage('Save cancelled. Cloud unchanged.'); return; }
+      if (localStorage.getItem(STORAGE_KEY) !== stored ||
+          localStorage.getItem(MANUAL_TOTALS_KEY) !== totalsStored ||
+          (localStorage.getItem(COLLECTION_MODE_KEY) === '1') !== ownedOnly) {
+        throw new Error('Local collection changed during confirmation. Save cancelled; try again.');
+      }
+      // The revision-checked RPC rejects concurrent writes atomically. Avoid a
+      // redundant network request after Safari's native confirmation/download UI.
+      const revision = remote
+        ? await updateCloudBackup(config, session.access_token, backup, remote.revision)
+        : await uploadFirstCloudBackup(config, session.access_token, backup);
+      if (revision === null) throw new Error('Cloud changed during save. No data overwritten.');
+      setCloudBaseline(null);
+      setCloudPreview(`Cloud revision ${revision}; ${count} items.`);
+      setCloudMessage(`Saved successfully! Your collection is available on any signed-in device (revision ${revision}).`);
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud save failed.');
+    } finally { setCloudBusy(false); }
+  }
+
+  async function restoreCloudManually() {
+    const config = readCloudConfiguration();
+    if (!config || !save) { setCloudMessage('Local collection or cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    setCloudBaseline(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      if (!remote) throw new Error('No cloud backup exists for this account.');
+      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(backup);
+      const localCount = Object.values(save.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      const remoteCount = Object.values(remote.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      if (!window.confirm(`A local backup download was started. Confirm it is safely saved. Replace ${localCount} local items with ${remoteCount} cloud items (revision ${remote.revision})? This cannot be automatically undone.`)) {
+        setCloudMessage('Restore cancelled. Local data unchanged.');
+        return;
+      }
+      // Use the already authenticated, read-only snapshot that was shown to the
+      // user before confirmation. A second network read after Safari's native
+      // download/confirm dialogs can fail even when the first read succeeded.
+      // The user's pre-restore JSON recovery copy is retained.
+      const latest = remote;
+      const previous = {
+        collection: localStorage.getItem(STORAGE_KEY),
+        totals: localStorage.getItem(MANUAL_TOTALS_KEY),
+        mode: localStorage.getItem(COLLECTION_MODE_KEY),
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(latest.collection));
+        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(latest.manual_totals));
+        localStorage.setItem(COLLECTION_MODE_KEY, latest.owned_only ? '1' : '0');
+      } catch (error) {
+        for (const [key, value] of [[STORAGE_KEY, previous.collection], [MANUAL_TOTALS_KEY, previous.totals], [COLLECTION_MODE_KEY, previous.mode]] as const) {
+          try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch { /* backup file remains available */ }
+        }
+        throw error;
+      }
+      setCloudBaseline(null);
+      setSave(latest.collection);
+      setManualTotals(latest.manual_totals);
+      setCloudMessage('Cloud collection restored on this device. Your downloaded local backup is your recovery copy.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Restore failed.');
+    } finally { setCloudBusy(false); }
+  }
+
+  async function compareCloudWithLocal() {
+    const config = readCloudConfiguration();
+    if (!config || !save) { setCloudMessage('Cloud configuration or local collection unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      if (!remote) { setCloudPreview('No cloud backup exists. Nothing to restore.'); return; }
+      const localBackup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      const remoteBackup = {
+        ...localBackup,
+        collection: remote.collection,
+        manualTotals: remote.manual_totals,
+        ownedOnly: remote.owned_only,
+      };
+      const comparison = compareCollections(localBackup, remoteBackup);
+      setCloudBaseline(comparison.identical ? { revision: remote.revision, userId: session.user.id, remoteFingerprint: localFingerprint(remote.collection, remote.manual_totals, remote.owned_only) } : null);
+      setCloudPreview(`Local: ${comparison.localItems} items; cloud: ${comparison.remoteItems} items. ${comparison.identical ? 'Snapshots match.' : 'Snapshots differ. Automatic restore is blocked to prevent data loss.'} Cloud revision: ${remote.revision}.`);
+      setCloudMessage('Comparison complete. No collection data was modified.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Comparison failed.');
+    } finally { setCloudBusy(false); }
+  }
+
+  async function firstCloudUpload() {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const existing = await readOwnCloudSnapshot(config, session.access_token);
+      if (existing) throw new Error('Cloud backup already exists. First upload is blocked to protect it.');
+      if (!save) throw new Error('Local collection is not loaded. Upload cancelled.');
+      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(backup);
+      const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      if (!window.confirm(`A full backup download was started. Confirm it is saved before continuing. Upload ${count} local items as your FIRST cloud backup? This does not replace local data.`)) {
+        setCloudMessage('Upload cancelled. Local data unchanged.');
+        return;
+      }
+      const revision = await uploadFirstCloudBackup(config, session.access_token, backup);
+      setCloudBaseline(null);
+      setCloudMessage(`First cloud backup saved as revision ${revision}. Local collection unchanged.`);
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud upload failed.');
+    } finally { setCloudBusy(false); }
+  }
+
+  async function previewOwnCloudBackup() {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) { setCloudMessage('Sign in first.'); return; }
+      const snapshot = await readOwnCloudSnapshot(config, session.access_token);
+      if (!snapshot) {
+        setCloudPreview('No cloud backup exists for this account yet. Your local collection has not changed.');
+      } else {
+        const items = Object.values(snapshot.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+        setCloudPreview(`Cloud revision ${snapshot.revision}; ${items} items; last updated ${snapshot.updated_at}. Read-only preview: no changes made locally.`);
+      }
+      setCloudMessage('');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud preview failed.');
+    } finally { setCloudBusy(false); }
+  }
+
+  async function verifyCloudSession() {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      setCloudMessage(session ? 'Cloud account session is valid. Local collection unchanged.' : 'Please sign in.');
+    } catch (error) {
+      setCloudSession(null);
+      setCloudMessage(error instanceof Error ? error.message : 'Session verification failed.');
+    } finally { setCloudBusy(false); }
+  }
+  async function submitCloudAccount(mode: 'login' | 'signup') {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration is not available in this build.'); return; }
+    setCloudBusy(true);
+    setCloudMessage('');
+    try {
+      if (mode === 'signup') {
+        await signUpCloud(config, cloudEmail, cloudPassword);
+        setCloudMessage('Account request submitted. Check your email for a confirmation link, then sign in.');
+      } else {
+        setCloudBaseline(null);
+        setCloudSession(await signInCloud(config, cloudEmail, cloudPassword));
+        setCloudMessage('Signed in. Cloud sync is not enabled yet; your local collection is unchanged.');
+      }
+      setCloudPassword('');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Account request failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   const [isTotalsOpen, setTotalsOpen] = useState(false);
   const [isNewUniverseOpen, setNewUniverseOpen] = useState(false);
   const [newUniverseName, setNewUniverseName] = useState('');
@@ -721,6 +1130,57 @@ export function App() {
                 <X size={20} />
               </button>
             </div>
+            <section aria-label="Cloud backup" className="cloud-preparation-status">
+              <strong>My cloud backup</strong>
+              <p>Save or recover your collection. Changes are not synchronized automatically yet.</p>
+              {cloudSession ? (
+                <>
+                  <p>Account: {cloudSession.user.email || cloudSession.user.id}</p>
+                  <button className="action-button primary" disabled={cloudBusy || !save}
+                    onClick={() => void saveCloudSimply()}>Save my collection</button>
+                  <button className="action-button" disabled={cloudBusy}
+                    onClick={() => void previewOwnCloudBackup()}>View my cloud backup</button>
+                  <button className="action-button" disabled={cloudBusy || !save}
+                    onClick={() => void restoreCloudManually()}>Recover my collection on this device</button>
+                  {cloudPreview && <p role="status">{cloudPreview}</p>}
+                  {cloudMessage && <p role="status">{cloudMessage}</p>}
+                  <details>
+                    <summary>History and advanced options</summary>
+                    <button className="action-button" disabled={cloudBusy} onClick={() => void previewCloudHistory()}>View backup history</button>
+                    <label htmlFor="dlv-history-revision">Revision to recover</label>
+                    <input id="dlv-history-revision" type="number" min="1" step="1" value={historyRevision} onChange={event => setHistoryRevision(event.target.value)} />
+                    <button className="action-button" disabled={cloudBusy || !save || !historyRevision}
+                      onClick={() => void restoreArchivedRevision()}>Recover selected revision</button>
+                    <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify account connection</button>
+                    <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Inspect cloud backup (read only)</button>
+                    <button className="action-button" disabled={cloudBusy} onClick={() => void firstCloudUpload()}>Create first cloud backup</button>
+                    <button className="action-button" onClick={() => { signOutCloud(); setCloudBaseline(null); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
+                  </details>
+                </>
+              ) : (
+                <>
+                  <label htmlFor="dlv-cloud-email">Email</label>
+                  <input id="dlv-cloud-email" type="email" autoComplete="email" value={cloudEmail} onChange={event => setCloudEmail(event.target.value)} />
+                  <label htmlFor="dlv-cloud-password">Password</label>
+                  <input id="dlv-cloud-password" type="password" autoComplete="current-password" value={cloudPassword} onChange={event => setCloudPassword(event.target.value)} />
+                  <button className="action-button" disabled={cloudBusy || !cloudEmail.trim() || !cloudPassword} onClick={() => void submitCloudAccount('login')}>Sign in</button>
+                  <button className="action-button" disabled={cloudBusy || !cloudEmail.trim() || cloudPassword.length < 6} onClick={() => void submitCloudAccount('signup')}>Create account</button>
+                  {cloudMessage && <p role="status">{cloudMessage}</p>}
+                </>
+              )}
+            </section>
+            <details className="cloud-preparation-status">
+              <summary>File backups and imports</summary>
+              <section aria-label="Full JSON backup recovery">
+                <strong>Recover from a full JSON backup</strong>
+                <p>This replaces this device's collection. Keep a recovery copy.</p>
+                <input type="file" accept=".json,application/json" disabled={cloudBusy || !save}
+                  aria-label="Select a full DLV backup JSON file"
+                  onChange={event => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ''; void importFullBackup(file); }} />
+              </section>
+            </details>
+            <details className="cloud-preparation-status">
+              <summary>Other backup tools (GitHub and files)</summary>
             <button
               className="action-button primary"
               onClick={() => {
@@ -731,6 +1191,14 @@ export function App() {
               <Github size={18} />
               GitHub backup & restore
             </button>
+            <button className="action-button" onClick={() =>
+              downloadMigrationBackup(createMigrationBackup(
+                save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1',
+              ))
+            }>
+              <Download size={18} />
+              Export complete pre-sync backup (including totals)
+            </button>
             <button className="action-button" onClick={() => downloadSave(save)}>
               <Download size={18} />
               Export collection file
@@ -740,6 +1208,7 @@ export function App() {
               Import collection file
             </button>
             <input ref={fileInput} className="hidden" type="file" accept="application/json" onChange={importFile} />
+            </details>
           </div>
         </aside>
       )}

@@ -1,0 +1,31 @@
+name: Cloud backup tests
+
+on:
+  pull_request:
+    paths:
+      - 'src/cloud/**'
+      - 'tests/**'
+      - 'package.json'
+      - '.github/workflows/cloud-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cloud-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: |
+          corepack enable
+          corepack prepare pnpm@11 --activate
+          pnpm install --frozen-lockfile
+      - name: Run backup validation tests
+        run: pnpm run test:cloud
+      - name: TypeScript and Vite build
+        run: pnpm run build
