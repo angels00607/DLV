@@ -298,10 +298,11 @@ export function App() {
         setCloudMessage(`Already saved in cloud (revision ${remote.revision}; ${count} items). Nothing changed.`);
         return;
       }
-      // The local recovery JSON is downloaded before any overwrite.
-      downloadMigrationBackup(backup);
+      // On iOS standalone web apps, triggering a download immediately before a
+      // confirmation and network POST can suspend the web view and abort fetch.
+      // Ask for consent first and let the user export a recovery JSON separately.
       const warning = remote
-        ? `Cloud revision ${remote.revision} differs from this device. Save ${count} local items and replace that cloud version? The previous cloud revision will be archived. Confirm your JSON recovery file was downloaded.`
+        ? `Cloud revision ${remote.revision} differs from this device. Save ${count} local items and replace that cloud version? The previous cloud revision will be archived. Before continuing, export a JSON recovery file separately from the backup tools.`
         : `Create your first cloud backup with ${count} items? Confirm your JSON recovery file was downloaded.`;
       if (!window.confirm(warning)) { setCloudMessage('Save cancelled. Cloud unchanged.'); return; }
       if (localStorage.getItem(STORAGE_KEY) !== stored ||
