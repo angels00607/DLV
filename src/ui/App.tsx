@@ -1,5 +1,5 @@
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import { readCloudConfiguration } from '../cloud/readOnlySnapshot';
+import { readCloudConfiguration, readOwnCloudSnapshot } from '../cloud/readOnlySnapshot';
 import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
 import { createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
 import {
@@ -80,6 +80,29 @@ export function App() {
   const [cloudPassword, setCloudPassword] = useState('');
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
+  const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  async function previewOwnCloudBackup() {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) { setCloudMessage('Sign in first.'); return; }
+      const snapshot = await readOwnCloudSnapshot(config, session.access_token);
+      if (!snapshot) {
+        setCloudPreview('No cloud backup exists for this account yet. Your local collection has not changed.');
+      } else {
+        const items = Object.values(snapshot.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+        setCloudPreview(`Cloud revision ${snapshot.revision}; ${items} items; last updated ${snapshot.updated_at}. Read-only preview: no changes made locally.`);
+      }
+      setCloudMessage('');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud preview failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   async function verifyCloudSession() {
     const config = readCloudConfiguration();
     if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
@@ -768,6 +791,8 @@ export function App() {
                 <>
                   <p>Signed in as {cloudSession.user.email || cloudSession.user.id}.</p>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
+                  <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Check cloud backup (read only)</button>
+                  {cloudPreview && <p role="status">{cloudPreview}</p>}
                   <button className="action-button" onClick={() => { signOutCloud(); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
                 </>
               ) : (
