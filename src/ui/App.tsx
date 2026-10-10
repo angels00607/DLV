@@ -348,21 +348,11 @@ export function App() {
         setCloudMessage('Restore cancelled. Local data unchanged.');
         return;
       }
-      // Mobile Safari may transiently fail a second fetch after opening the
-      // native download/confirmation UI. Retry read-only verification safely.
-      let latest: Awaited<ReturnType<typeof readOwnCloudSnapshot>> = null;
-      try {
-        latest = await readOwnCloudSnapshot(config, session.access_token);
-      } catch {
-        try {
-          latest = await readOwnCloudSnapshot(config, session.access_token);
-        } catch {
-          throw new Error('Cloud verification could not load after confirmation. No local data was replaced. Check connection and retry later.');
-        }
-      }
-      if (!latest || latest.revision !== remote.revision || latest.updated_at !== remote.updated_at) {
-        throw new Error('Cloud backup changed during confirmation. Restore cancelled.');
-      }
+      // Use the already authenticated, read-only snapshot that was shown to the
+      // user before confirmation. A second network read after Safari's native
+      // download/confirm dialogs can fail even when the first read succeeded.
+      // The user's pre-restore JSON recovery copy is retained.
+      const latest = remote;
       const previous = {
         collection: localStorage.getItem(STORAGE_KEY),
         totals: localStorage.getItem(MANUAL_TOTALS_KEY),
