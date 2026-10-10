@@ -290,6 +290,23 @@ export function App() {
       const backup = createMigrationBackup(JSON.parse(stored) as SavePayload,
         totalsStored ? JSON.parse(totalsStored) as Record<string, number> : {}, ownedOnly);
       const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      // An empty browser profile must never silently replace a real cloud backup.
+      // Users can still inspect or restore the cloud backup from this device.
+      if (count === 0) {
+        throw new Error('This device has no collection items. Cloud save is blocked to prevent overwriting your collection. Use View or Recover instead.');
+      }
+      // Never allow an empty local device to overwrite a non-empty cloud backup.
+      const remoteCount = remote ? Object.values(remote.collection.data)
+        .reduce((sum, entries) => sum + (entries?.length ?? 0), 0) : 0;
+      if (remoteCount > 0 && count === 0) {
+        throw new Error('This device has 0 items but the cloud has saved items. Recover the cloud collection instead of overwriting it.');
+      }
+      if (count === 0 && !remote) {
+        throw new Error('First cloud backup blocked: this device has no collection items. Open your complete collection on your computer before saving.');
+      }
+      if (remote && count === 0) {
+        throw new Error('Empty collection upload blocked to protect your existing cloud backup.');
+      }
       const matches = remote && compareCollections(backup, {
         ...backup, collection: remote.collection,
         manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
@@ -1133,6 +1150,10 @@ export function App() {
             <section aria-label="Cloud backup" className="cloud-preparation-status">
               <strong>My cloud backup</strong>
               <p>Save or recover your collection. Changes are not synchronized automatically yet.</p>
+              {import.meta.env.VITE_DLV_TEST_MODE !== 'true' && (
+                <p>Before your first cloud save, verify your complete collection is visible on this device and keep a downloaded JSON recovery backup. Cloud saves are manual.</p>
+              )}
+              <p>On your main computer, verify your full collection before saving. On another device, view the cloud backup and choose Recover. Never save an empty device over your main collection.</p>
               {cloudSession ? (
                 <>
                   <p>Account: {cloudSession.user.email || cloudSession.user.id}</p>
