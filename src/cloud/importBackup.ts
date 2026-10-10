@@ -1,5 +1,5 @@
-import { MIGRATION_BACKUP_SCHEMA, type MigrationBackup } from './migrationSafety';
-import { validateCloudSnapshot } from './readOnlySnapshot';
+import { MIGRATION_BACKUP_SCHEMA, type MigrationBackup } from './migrationSafety.ts';
+import { validateCloudSnapshot } from './readOnlySnapshot.ts';
 
 export function parseMigrationBackup(text: string): MigrationBackup {
   if (text.length > 20_000_000) throw new Error('Backup exceeds the 20 MB safety limit.');
