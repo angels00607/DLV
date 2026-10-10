@@ -1,5 +1,5 @@
 import type { CloudConfiguration } from './readOnlySnapshot';
-import { assertNonEmptyCloudBackup, type MigrationBackup } from './migrationSafety';
+import { assertNonEmptyCloudBackup, type MigrationBackup } from './migrationSafety.ts';
 
 export async function updateCloudBackup(
   config: CloudConfiguration,
