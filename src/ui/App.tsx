@@ -2,6 +2,7 @@ import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'rea
 import { readCloudConfiguration, readOwnCloudSnapshot } from '../cloud/readOnlySnapshot';
 import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
 import { createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
+import { uploadFirstCloudBackup } from '../cloud/firstUpload';
 import {
   Check,
   ChevronDown,
@@ -81,6 +82,31 @@ export function App() {
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  async function firstCloudUpload() {
+    const config = readCloudConfiguration();
+    if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const existing = await readOwnCloudSnapshot(config, session.access_token);
+      if (existing) throw new Error('Cloud backup already exists. First upload is blocked to protect it.');
+      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(backup);
+      const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      if (!window.confirm(`A full backup download was started. Confirm it is saved before continuing. Upload ${count} local items as your FIRST cloud backup? This does not replace local data.`)) {
+        setCloudMessage('Upload cancelled. Local data unchanged.');
+        return;
+      }
+      const revision = await uploadFirstCloudBackup(config, session.access_token, backup);
+      setCloudMessage(`First cloud backup saved as revision ${revision}. Local collection unchanged.`);
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud upload failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   async function previewOwnCloudBackup() {
     const config = readCloudConfiguration();
     if (!config) { setCloudMessage('Cloud configuration unavailable.'); return; }
@@ -793,6 +819,7 @@ export function App() {
                   <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Check cloud backup (read only)</button>
                   {cloudPreview && <p role="status">{cloudPreview}</p>}
+                  <button className="action-button" disabled={cloudBusy} onClick={() => void firstCloudUpload()}>Create first cloud backup (confirmation required)</button>
                   <button className="action-button" onClick={() => { signOutCloud(); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
                 </>
               ) : (
