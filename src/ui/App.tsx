@@ -1132,7 +1132,10 @@ export function App() {
             </div>
             <section aria-label="Cloud backup" className="cloud-preparation-status">
               <strong>My cloud backup</strong>
-              <p>Save or recover your collection. Changes are not synchronized automatically yet.</p>
+              <p>Save or recover your collection manually on devices signed into the same cloud account.</p>
+              {import.meta.env.VITE_DLV_TEST_MODE !== 'true' && (
+                <p role="note">Real collection: confirm all your items are visible on this device and keep a downloaded JSON backup before your first cloud save. This account uses the live cloud, separate from DLV Test.</p>
+              )}
               {cloudSession ? (
                 <>
                   <p>Account: {cloudSession.user.email || cloudSession.user.id}</p>
