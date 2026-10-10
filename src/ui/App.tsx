@@ -290,6 +290,11 @@ export function App() {
       const backup = createMigrationBackup(JSON.parse(stored) as SavePayload,
         totalsStored ? JSON.parse(totalsStored) as Record<string, number> : {}, ownedOnly);
       const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      // An empty browser profile must never silently replace a real cloud backup.
+      // Users can still inspect or restore the cloud backup from this device.
+      if (count === 0) {
+        throw new Error('This device has no collection items. Cloud save is blocked to prevent overwriting your collection. Use View or Recover instead.');
+      }
       const matches = remote && compareCollections(backup, {
         ...backup, collection: remote.collection,
         manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
