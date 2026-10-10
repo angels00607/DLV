@@ -2047,3 +2047,8 @@ h1 {
 .universe-compact-entry > .universe-compact-row { padding-right:54px; }
 .universe-inline-pencil { position:absolute; right:35px; top:8px; display:grid; place-items:center; width:36px; height:36px; padding:0; border:0; border-radius:9px; background:transparent; color:var(--muted); cursor:pointer; }
 .universe-inline-pencil:hover,.universe-inline-pencil:focus-visible { color:var(--plum); background:var(--surface); }
+
+/* Read-only cloud migration status; no credentials or actions in this phase. */
+.cloud-preparation-status { border:1px solid var(--line); border-radius:12px; padding:12px; background:var(--surface-strong); }
+.cloud-preparation-status strong { display:block; margin-bottom:6px; }
+.cloud-preparation-status p { margin:6px 0 0; font-size:.84rem; color:var(--muted); line-height:1.45; }
