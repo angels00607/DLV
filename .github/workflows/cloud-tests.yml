@@ -20,11 +20,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run backup validation tests
-        run: npm run test:cloud
-      - name: TypeScript and Vite build
+      - name: Install dependencies
         run: |
           corepack enable
           corepack prepare pnpm@11 --activate
           pnpm install --frozen-lockfile
-          pnpm run build
+      - name: Run backup validation tests
+        run: pnpm run test:cloud
+      - name: TypeScript and Vite build
+        run: pnpm run build
