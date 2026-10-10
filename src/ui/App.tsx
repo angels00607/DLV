@@ -1056,31 +1056,33 @@ export function App() {
                 <X size={20} />
               </button>
             </div>
-            <section aria-label="Full JSON backup recovery" className="cloud-preparation-status">
-              <strong>Restore a full JSON backup to this device</strong>
-              <p>This replaces local collection data only. Export and verify a recovery copy first.</p>
-              <input type="file" accept=".json,application/json" disabled={cloudBusy || !save}
-                aria-label="Select a full DLV backup JSON file"
-                onChange={event => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ''; void importFullBackup(file); }} />
-            </section>
-            <section aria-label="Cloud account" className="cloud-preparation-status">
-              <strong>Cloud account — setup only</strong>
-              <p>{readCloudConfiguration() ? 'Supabase is configured.' : 'Supabase is not configured in this build.'} No automatic uploads, downloads or restores occur here.</p>
+            <section aria-label="Cloud backup" className="cloud-preparation-status">
+              <strong>My cloud backup</strong>
+              <p>Save or recover your collection. Changes are not synchronized automatically yet.</p>
               {cloudSession ? (
                 <>
-                  <p>Signed in as {cloudSession.user.email || cloudSession.user.id}.</p>
-                  <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
-                  <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Check cloud backup (read only)</button>
-                  <button className="action-button" disabled={cloudBusy} onClick={() => void previewCloudHistory()}>View previous cloud revisions (read only)</button>
-                  <label htmlFor="dlv-history-revision">Archived revision to restore</label>
-                  <input id="dlv-history-revision" type="number" min="1" step="1" value={historyRevision} onChange={event => setHistoryRevision(event.target.value)} />
-                  <button className="action-button" disabled={cloudBusy || !save || !historyRevision} onClick={() => void restoreArchivedRevision()}>Restore selected archived revision to this device</button>
-                  <button className="action-button" disabled={cloudBusy || !save} onClick={() => void compareCloudWithLocal()}>Compare cloud with this device (read only)</button>
-                  <button className="action-button" disabled={cloudBusy || !save || !cloudBaseline} onClick={() => void updateCloudManually()}>Upload local changes (only after matching baseline)</button>
-                  <button className="action-button" disabled={cloudBusy || !save} onClick={() => void restoreCloudManually()}>Restore cloud to this device (replaces local data)</button>
+                  <p>Account: {cloudSession.user.email || cloudSession.user.id}</p>
+                  <button className="action-button" disabled={cloudBusy || !save}
+                    onClick={() => void compareCloudWithLocal()}>Check my backup</button>
+                  <button className="action-button" disabled={cloudBusy || !save || !cloudBaseline}
+                    onClick={() => void updateCloudManually()}>Save my changes to cloud</button>
+                  {!cloudBaseline && <p>To save changes, first establish a matching backup in Advanced options. This protects existing cloud data.</p>}
+                  <button className="action-button" disabled={cloudBusy || !save}
+                    onClick={() => void restoreCloudManually()}>Recover my collection from cloud</button>
                   {cloudPreview && <p role="status">{cloudPreview}</p>}
-                  <button className="action-button" disabled={cloudBusy} onClick={() => void firstCloudUpload()}>Create first cloud backup (confirmation required)</button>
-                  <button className="action-button" onClick={() => { signOutCloud(); setCloudBaseline(null); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
+                  {cloudMessage && <p role="status">{cloudMessage}</p>}
+                  <details>
+                    <summary>History and advanced options</summary>
+                    <button className="action-button" disabled={cloudBusy} onClick={() => void previewCloudHistory()}>View backup history</button>
+                    <label htmlFor="dlv-history-revision">Revision to recover</label>
+                    <input id="dlv-history-revision" type="number" min="1" step="1" value={historyRevision} onChange={event => setHistoryRevision(event.target.value)} />
+                    <button className="action-button" disabled={cloudBusy || !save || !historyRevision}
+                      onClick={() => void restoreArchivedRevision()}>Recover selected revision</button>
+                    <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify account connection</button>
+                    <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Inspect cloud backup (read only)</button>
+                    <button className="action-button" disabled={cloudBusy} onClick={() => void firstCloudUpload()}>Create first cloud backup</button>
+                    <button className="action-button" onClick={() => { signOutCloud(); setCloudBaseline(null); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
+                  </details>
                 </>
               ) : (
                 <>
@@ -1090,10 +1092,22 @@ export function App() {
                   <input id="dlv-cloud-password" type="password" autoComplete="current-password" value={cloudPassword} onChange={event => setCloudPassword(event.target.value)} />
                   <button className="action-button" disabled={cloudBusy || !cloudEmail.trim() || !cloudPassword} onClick={() => void submitCloudAccount('login')}>Sign in</button>
                   <button className="action-button" disabled={cloudBusy || !cloudEmail.trim() || cloudPassword.length < 6} onClick={() => void submitCloudAccount('signup')}>Create account</button>
+                  {cloudMessage && <p role="status">{cloudMessage}</p>}
                 </>
               )}
-              {cloudMessage && <p role="status">{cloudMessage}</p>}
             </section>
+            <details className="cloud-preparation-status">
+              <summary>File backups and imports</summary>
+              <section aria-label="Full JSON backup recovery">
+                <strong>Recover from a full JSON backup</strong>
+                <p>This replaces this device's collection. Keep a recovery copy.</p>
+                <input type="file" accept=".json,application/json" disabled={cloudBusy || !save}
+                  aria-label="Select a full DLV backup JSON file"
+                  onChange={event => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ''; void importFullBackup(file); }} />
+              </section>
+            </details>
+            <details className="cloud-preparation-status">
+              <summary>Other backup tools (GitHub and files)</summary>
             <button
               className="action-button primary"
               onClick={() => {
@@ -1121,6 +1135,7 @@ export function App() {
               Import collection file
             </button>
             <input ref={fileInput} className="hidden" type="file" accept="application/json" onChange={importFile} />
+            </details>
           </div>
         </aside>
       )}
