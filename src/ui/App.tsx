@@ -183,7 +183,7 @@ export function App() {
     } finally { setCloudBusy(false); }
   }
 
-  const [cloudBaseline, setCloudBaseline] = useState<{ revision: number; userId: string; localFingerprint: string } | null>(null);
+  const [cloudBaseline, setCloudBaseline] = useState<{ revision: number; userId: string; remoteFingerprint: string } | null>(null);
   function localFingerprint(collection: SavePayload, totals: Record<string, number>, ownedOnly: boolean) {
     return JSON.stringify([collection, totals, ownedOnly]);
   }
@@ -204,9 +204,11 @@ export function App() {
         throw new Error('Cloud has changed on another device. Upload blocked; compare again and resolve manually.');
       }
       const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
-      if (localFingerprint(backup.collection, backup.manualTotals, backup.ownedOnly) !== cloudBaseline.localFingerprint) {
+      // Local edits are allowed after a matching baseline. The remote snapshot must
+      // still be exactly the one that was compared, even if its revision is unchanged.
+      if (localFingerprint(remote.collection, remote.manual_totals, remote.owned_only) !== cloudBaseline.remoteFingerprint) {
         setCloudBaseline(null);
-        throw new Error('Local collection changed since comparison. Compare again before uploading.');
+        throw new Error('Cloud content changed since comparison. Upload blocked; compare again.');
       }
       downloadMigrationBackup(backup);
       if (!window.confirm(`A full local backup download was started. Confirm it is saved. Upload local changes over cloud revision ${remote.revision}? This will archive the previous cloud revision.`)) {
@@ -299,7 +301,7 @@ export function App() {
         ownedOnly: remote.owned_only,
       };
       const comparison = compareCollections(localBackup, remoteBackup);
-      setCloudBaseline(comparison.identical ? { revision: remote.revision, userId: session.user.id, localFingerprint: localFingerprint(localBackup.collection, localBackup.manualTotals, localBackup.ownedOnly) } : null);
+      setCloudBaseline(comparison.identical ? { revision: remote.revision, userId: session.user.id, remoteFingerprint: localFingerprint(remote.collection, remote.manual_totals, remote.owned_only) } : null);
       setCloudPreview(`Local: ${comparison.localItems} items; cloud: ${comparison.remoteItems} items. ${comparison.identical ? 'Snapshots match.' : 'Snapshots differ. Automatic restore is blocked to prevent data loss.'} Cloud revision: ${remote.revision}.`);
       setCloudMessage('Comparison complete. No collection data was modified.');
     } catch (error) {
