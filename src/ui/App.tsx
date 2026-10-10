@@ -86,6 +86,40 @@ export function App() {
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
   const [historyRevision, setHistoryRevision] = useState('');
+  const startupCloudCheckStarted = useRef(false);
+  // Phase 1 of automatic sync: detect the remote revision on startup without
+  // ever overwriting local data or uploading changes without consent.
+  useEffect(() => {
+    if (!save || !cloudSession || startupCloudCheckStarted.current ||
+        import.meta.env.VITE_DLV_TEST_MODE !== 'true') return;
+    const config = readCloudConfiguration();
+    if (!config) return;
+    startupCloudCheckStarted.current = true;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const session = await getValidCloudSession(config);
+        if (!session || cancelled) return;
+        const remote = await readOwnCloudSnapshot(config, session.access_token);
+        if (cancelled) return;
+        if (!remote) {
+          setCloudMessage('No cloud backup yet. Your local collection was not changed.');
+          return;
+        }
+        const localBackup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+        const comparison = compareCollections(localBackup, {
+          ...localBackup, collection: remote.collection,
+          manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
+        });
+        setCloudPreview(`Automatic cloud check: revision ${remote.revision}; ${comparison.identical
+          ? 'this device matches the cloud.' : 'this device differs from the cloud. Review before restoring or uploading.'}`);
+      } catch {
+        if (!cancelled) setCloudPreview('Automatic cloud check unavailable. No local data was changed.');
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [Boolean(save), cloudSession?.user.id]);
+
   async function importFullBackup(file: File | undefined) {
     if (!file || !save) { setCloudMessage('Local collection or backup file unavailable.'); return; }
     setCloudBusy(true);
