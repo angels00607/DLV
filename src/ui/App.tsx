@@ -82,6 +82,52 @@ export function App() {
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  async function restoreCloudManually() {
+    const config = readCloudConfiguration();
+    if (!config || !save) { setCloudMessage('Local collection or cloud configuration unavailable.'); return; }
+    setCloudBusy(true);
+    setCloudPreview(null);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      if (!remote) throw new Error('No cloud backup exists for this account.');
+      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(backup);
+      const localCount = Object.values(save.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      const remoteCount = Object.values(remote.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      if (!window.confirm(`A local backup download was started. Confirm it is safely saved. Replace ${localCount} local items with ${remoteCount} cloud items (revision ${remote.revision})? This cannot be automatically undone.`)) {
+        setCloudMessage('Restore cancelled. Local data unchanged.');
+        return;
+      }
+      const latest = await readOwnCloudSnapshot(config, session.access_token);
+      if (!latest || latest.revision !== remote.revision || latest.updated_at !== remote.updated_at) {
+        throw new Error('Cloud backup changed during confirmation. Restore cancelled.');
+      }
+      const previous = {
+        collection: localStorage.getItem(STORAGE_KEY),
+        totals: localStorage.getItem(MANUAL_TOTALS_KEY),
+        mode: localStorage.getItem(COLLECTION_MODE_KEY),
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(latest.collection));
+        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(latest.manual_totals));
+        localStorage.setItem(COLLECTION_MODE_KEY, latest.owned_only ? '1' : '0');
+      } catch (error) {
+        for (const [key, value] of [[STORAGE_KEY, previous.collection], [MANUAL_TOTALS_KEY, previous.totals], [COLLECTION_MODE_KEY, previous.mode]] as const) {
+          try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch { /* backup file remains available */ }
+        }
+        throw error;
+      }
+      setSave(latest.collection);
+      setManualTotals(latest.manual_totals);
+      setCloudMessage('Cloud collection restored on this device. Your downloaded local backup is your recovery copy.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Restore failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   async function compareCloudWithLocal() {
     const config = readCloudConfiguration();
     if (!config || !save) { setCloudMessage('Cloud configuration or local collection unavailable.'); return; }
@@ -846,6 +892,7 @@ export function App() {
                   <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Check cloud backup (read only)</button>
                   <button className="action-button" disabled={cloudBusy || !save} onClick={() => void compareCloudWithLocal()}>Compare cloud with this device (read only)</button>
+                  <button className="action-button" disabled={cloudBusy || !save} onClick={() => void restoreCloudManually()}>Restore cloud to this device (replaces local data)</button>
                   {cloudPreview && <p role="status">{cloudPreview}</p>}
                   <button className="action-button" disabled={cloudBusy} onClick={() => void firstCloudUpload()}>Create first cloud backup (confirmation required)</button>
                   <button className="action-button" onClick={() => { signOutCloud(); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
