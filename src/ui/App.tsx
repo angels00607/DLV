@@ -290,6 +290,14 @@ export function App() {
       const backup = createMigrationBackup(JSON.parse(stored) as SavePayload,
         totalsStored ? JSON.parse(totalsStored) as Record<string, number> : {}, ownedOnly);
       const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      // Never let an accidentally empty browser profile overwrite a populated
+      // real collection in the cloud.
+      const remoteCount = remote
+        ? Object.values(remote.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0)
+        : 0;
+      if (remoteCount > 0 && count === 0) {
+        throw new Error('This device has 0 items while your cloud backup contains items. Save blocked to protect your collection. Use Recover on this device if appropriate.');
+      }
       const matches = remote && compareCollections(backup, {
         ...backup, collection: remote.collection,
         manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
@@ -473,7 +481,7 @@ export function App() {
       } else {
         setCloudBaseline(null);
         setCloudSession(await signInCloud(config, cloudEmail, cloudPassword));
-        setCloudMessage('Signed in. Cloud sync is not enabled yet; your local collection is unchanged.');
+        setCloudMessage('Signed in. Use Save my collection to upload or Recover to download. No automatic changes were made.');
       }
       setCloudPassword('');
     } catch (error) {
