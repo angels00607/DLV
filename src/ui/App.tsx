@@ -5,6 +5,7 @@ import { compareCollections, createMigrationBackup, downloadMigrationBackup } fr
 import { uploadFirstCloudBackup } from '../cloud/firstUpload';
 import { updateCloudBackup } from '../cloud/updateSnapshot';
 import { readOwnCloudHistory } from '../cloud/history';
+import { parseMigrationBackup } from '../cloud/importBackup';
 import {
   Check,
   ChevronDown,
@@ -85,6 +86,38 @@ export function App() {
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
   const [historyRevision, setHistoryRevision] = useState('');
+  async function importFullBackup(file: File | undefined) {
+    if (!file || !save) { setCloudMessage('Local collection or backup file unavailable.'); return; }
+    setCloudBusy(true);
+    try {
+      if (file.size > 20_000_000) throw new Error('Backup exceeds the 20 MB safety limit.');
+      const imported = parseMigrationBackup(await file.text());
+      const recovery = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(recovery);
+      if (!window.confirm('A recovery backup download was started. Confirm it is saved. Replace ALL local collection data with the selected JSON file? This will not change Supabase.')) {
+        setCloudMessage('Backup import cancelled.'); return;
+      }
+      const keys = [STORAGE_KEY, MANUAL_TOTALS_KEY, COLLECTION_MODE_KEY] as const;
+      const previous = keys.map(key => localStorage.getItem(key));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(imported.collection));
+        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(imported.manualTotals));
+        localStorage.setItem(COLLECTION_MODE_KEY, imported.ownedOnly ? '1' : '0');
+      } catch (error) {
+        keys.forEach((key, i) => {
+          try { if (previous[i] === null) localStorage.removeItem(key); else localStorage.setItem(key, previous[i]!); } catch { /* downloaded recovery copy remains */ }
+        });
+        throw error;
+      }
+      setCloudBaseline(null);
+      setSave(imported.collection);
+      setManualTotals(imported.manualTotals);
+      setCloudMessage('Full JSON backup imported locally. Supabase was not modified.');
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Backup import failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   async function restoreArchivedRevision() {
     const config = readCloudConfiguration();
     if (!config || !save) { setCloudMessage('Local collection or cloud configuration unavailable.'); return; }
@@ -998,6 +1031,13 @@ export function App() {
                 <X size={20} />
               </button>
             </div>
+            <section aria-label="Full JSON backup recovery" className="cloud-preparation-status">
+              <strong>Restore a full JSON backup to this device</strong>
+              <p>This replaces local collection data only. Export and verify a recovery copy first.</p>
+              <input type="file" accept=".json,application/json" disabled={cloudBusy || !save}
+                aria-label="Select a full DLV backup JSON file"
+                onChange={event => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ''; void importFullBackup(file); }} />
+            </section>
             <section aria-label="Cloud account" className="cloud-preparation-status">
               <strong>Cloud account — setup only</strong>
               <p>{readCloudConfiguration() ? 'Supabase is configured.' : 'Supabase is not configured in this build.'} No automatic uploads, downloads or restores occur here.</p>
