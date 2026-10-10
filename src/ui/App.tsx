@@ -125,13 +125,22 @@ export function App() {
   const groupedItems = useMemo(() => {
     const groups = groupItems(baseFilteredItems, currentCategory.groupBy[0] ?? 'meta');
     const extras = save?.customUniverses?.[categoryId] ?? [];
-    // Keep manually created empty universes visible in the universe picker even when filters are active.
-    for (const entry of extras) {
-      if (activeZone !== 'all' && entry.zone !== activeZone) continue;
+    // Include empty universes, even when they have no remaining items.
+    // Previously configured totals can also restore universes from older saves.
+    const totalUniverses = Object.keys(manualTotals).flatMap((key) => {
+      try {
+        const parsed: unknown = JSON.parse(key);
+        if (!Array.isArray(parsed) || parsed.length !== 3 ||
+          parsed[0] !== categoryId || typeof parsed[1] !== 'string' || typeof parsed[2] !== 'string') return [];
+        return [{ zone: parsed[1], name: parsed[2] }];
+      } catch { return []; }
+    });
+    for (const entry of [...extras, ...totalUniverses]) {
+      if (activeZone !== 'all' && normalizeZone(entry.zone) !== normalizeZone(activeZone)) continue;
       if (!groups.some(([name]) => name === entry.name)) groups.push([entry.name, []]);
     }
     return groups.sort(([a], [b]) => a.localeCompare(b));
-  }, [baseFilteredItems, currentCategory.groupBy, save?.customUniverses, categoryId, activeZone, filters]);
+  }, [baseFilteredItems, currentCategory.groupBy, save?.customUniverses, categoryId, activeZone, filters, manualTotals]);
   const visibleItems = useMemo(
     () => baseFilteredItems.filter((item) =>
       (activeGroup === 'all' || (item.meta || 'Other') === activeGroup) &&
@@ -293,6 +302,19 @@ export function App() {
   function deleteItem(item: GameItem) {
     if (!save || activeView === 'home') return;
     const next = structuredClone(save);
+    const universe = item.meta?.trim() || 'Other';
+    const zone = normalizeZone(item.meta2);
+    const remainingInUniverse = (next.data[activeView] ?? []).some((entry) =>
+      entry.id !== item.id && (entry.meta?.trim() || 'Other') === universe && normalizeZone(entry.meta2) === zone);
+    // Register the universe before deleting its last item, so its name survives.
+    if (!remainingInUniverse) {
+      next.customUniverses ??= {};
+      next.customUniverses[activeView] ??= [];
+      if (!next.customUniverses[activeView]!.some((entry) =>
+        entry.name === universe && normalizeZone(entry.zone) === zone)) {
+        next.customUniverses[activeView]!.push({ name: universe, zone });
+      }
+    }
     next.data[activeView] = (next.data[activeView] ?? []).filter((entry) => entry.id !== item.id);
     delete next.checked[activeView]?.[item.id];
     delete next.owned[activeView]?.[item.id];
@@ -1954,10 +1976,16 @@ function universeTotalKey(category: CategoryId, zone: string, universe: string) 
 }
 function getUniverseDisplayProgress(universe: string, items: GameItem[], save: SavePayload, category: CategoryId, totals: Record<string, number>) {
   if (items.length) return getUniverseProgress(items, save, category, totals);
-  // Empty custom universes still have an expected total configured in Totals.
+  // Empty universes may come from custom entries or older manual totals.
   const zones = new Set((save.customUniverses?.[category] ?? [])
     .filter((entry) => entry.name === universe)
     .map((entry) => normalizeZone(entry.zone)));
+  for (const key of Object.keys(totals)) {
+    try {
+      const parsed: unknown = JSON.parse(key);
+      if (Array.isArray(parsed) && parsed[0] === category && parsed[2] === universe && typeof parsed[1] === 'string') zones.add(parsed[1]);
+    } catch { /* Ignore unrelated stored keys. */ }
+  }
   const total = [...zones].reduce((sum, zone) => sum + (totals[universeTotalKey(category, zone, universe)] ?? 0), 0);
   return { done: 0, total, percent: 0 };
 }
