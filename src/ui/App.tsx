@@ -93,6 +93,7 @@ export function App() {
       if (!session) throw new Error('Sign in first.');
       const existing = await readOwnCloudSnapshot(config, session.access_token);
       if (existing) throw new Error('Cloud backup already exists. First upload is blocked to protect it.');
+      if (!save) throw new Error('Local collection is not loaded. Upload cancelled.');
       const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
       downloadMigrationBackup(backup);
       const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
