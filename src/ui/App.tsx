@@ -3,6 +3,7 @@ import { readCloudConfiguration, readOwnCloudSnapshot } from '../cloud/readOnlyS
 import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
 import { compareCollections, createMigrationBackup, downloadMigrationBackup } from '../cloud/migrationSafety';
 import { uploadFirstCloudBackup } from '../cloud/firstUpload';
+import { updateCloudBackup } from '../cloud/updateSnapshot';
 import {
   Check,
   ChevronDown,
@@ -82,11 +83,43 @@ export function App() {
   const [cloudBusy, setCloudBusy] = useState(false);
   const [cloudMessage, setCloudMessage] = useState('');
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
+  const [cloudBaseline, setCloudBaseline] = useState<{ revision: number; userId: string } | null>(null);
+  async function updateCloudManually() {
+    const config = readCloudConfiguration();
+    if (!config || !save || !cloudBaseline) {
+      setCloudMessage('First compare matching local and cloud collections to establish a safe baseline.');
+      return;
+    }
+    setCloudBusy(true);
+    try {
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session || session.user.id !== cloudBaseline.userId) throw new Error('Account changed. Compare again.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      if (!remote || remote.revision !== cloudBaseline.revision) {
+        setCloudBaseline(null);
+        throw new Error('Cloud has changed on another device. Upload blocked; compare again and resolve manually.');
+      }
+      const backup = createMigrationBackup(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      downloadMigrationBackup(backup);
+      if (!window.confirm(`A full local backup download was started. Confirm it is saved. Upload local changes over cloud revision ${remote.revision}? This will archive the previous cloud revision.`)) {
+        setCloudMessage('Cloud update cancelled.'); return;
+      }
+      const revision = await updateCloudBackup(config, session.access_token, backup, cloudBaseline.revision);
+      setCloudBaseline(null);
+      if (revision === null) throw new Error('Cloud conflict detected during upload. No remote data overwritten.');
+      setCloudMessage(`Cloud updated to revision ${revision}. Compare again before your next update.`);
+    } catch (error) {
+      setCloudMessage(error instanceof Error ? error.message : 'Cloud update failed.');
+    } finally { setCloudBusy(false); }
+  }
+
   async function restoreCloudManually() {
     const config = readCloudConfiguration();
     if (!config || !save) { setCloudMessage('Local collection or cloud configuration unavailable.'); return; }
     setCloudBusy(true);
     setCloudPreview(null);
+    setCloudBaseline(null);
     try {
       const session = await getValidCloudSession(config);
       setCloudSession(session);
@@ -147,6 +180,7 @@ export function App() {
         ownedOnly: remote.owned_only,
       };
       const comparison = compareCollections(localBackup, remoteBackup);
+      setCloudBaseline(comparison.identical ? { revision: remote.revision, userId: session.user.id } : null);
       setCloudPreview(`Local: ${comparison.localItems} items; cloud: ${comparison.remoteItems} items. ${comparison.identical ? 'Snapshots match.' : 'Snapshots differ. Automatic restore is blocked to prevent data loss.'} Cloud revision: ${remote.revision}.`);
       setCloudMessage('Comparison complete. No collection data was modified.');
     } catch (error) {
@@ -225,6 +259,7 @@ export function App() {
         await signUpCloud(config, cloudEmail, cloudPassword);
         setCloudMessage('Account request submitted. Check your email for a confirmation link, then sign in.');
       } else {
+        setCloudBaseline(null);
         setCloudSession(await signInCloud(config, cloudEmail, cloudPassword));
         setCloudMessage('Signed in. Cloud sync is not enabled yet; your local collection is unchanged.');
       }
@@ -892,10 +927,11 @@ export function App() {
                   <button className="action-button" disabled={cloudBusy} onClick={() => void verifyCloudSession()}>Verify cloud session</button>
                   <button className="action-button" disabled={cloudBusy} onClick={() => void previewOwnCloudBackup()}>Check cloud backup (read only)</button>
                   <button className="action-button" disabled={cloudBusy || !save} onClick={() => void compareCloudWithLocal()}>Compare cloud with this device (read only)</button>
+                  <button className="action-button" disabled={cloudBusy || !save || !cloudBaseline} onClick={() => void updateCloudManually()}>Upload local changes (only after matching baseline)</button>
                   <button className="action-button" disabled={cloudBusy || !save} onClick={() => void restoreCloudManually()}>Restore cloud to this device (replaces local data)</button>
                   {cloudPreview && <p role="status">{cloudPreview}</p>}
                   <button className="action-button" disabled={cloudBusy} onClick={() => void firstCloudUpload()}>Create first cloud backup (confirmation required)</button>
-                  <button className="action-button" onClick={() => { signOutCloud(); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
+                  <button className="action-button" onClick={() => { signOutCloud(); setCloudBaseline(null); setCloudSession(null); setCloudMessage('Signed out on this device.'); }}>Sign out</button>
                 </>
               ) : (
                 <>
