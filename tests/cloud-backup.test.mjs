@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parseMigrationBackup } from '../src/cloud/importBackup.ts';
 import { createMigrationBackup, compareCollections } from '../src/cloud/migrationSafety.ts';
+import { updateCloudBackup } from '../src/cloud/updateSnapshot.ts';
 
 function fixture() {
   return {
@@ -52,4 +53,50 @@ test('backup creation snapshots nested collection objects', () => {
   const saved = createMigrationBackup(collection, {}, false);
   collection.data.characters[0].name = 'Changed';
   assert.equal(saved.collection.data.characters[0].name, 'Test Character');
+});
+
+const config = { url: 'https://example.supabase.co', publishableKey: 'test-public-key' };
+function mockResponse(value, status = 200) {
+  return { ok: status >= 200 && status < 300, status, json: async () => value };
+}
+test('cloud CAS conflict returns null and sends expected revision', async () => {
+  const previous = globalThis.fetch;
+  let request;
+  globalThis.fetch = async (_url, options) => {
+    request = options;
+    return mockResponse(null);
+  };
+  try {
+    const result = await updateCloudBackup(config, 'test-token', backup(), 4);
+    assert.equal(result, null);
+    assert.equal(JSON.parse(request.body).expected_revision, 4);
+    assert.equal(request.method, 'POST');
+  } finally { globalThis.fetch = previous; }
+});
+
+test('cloud update accepts exactly the next revision', async () => {
+  const previous = globalThis.fetch;
+  globalThis.fetch = async () => mockResponse(5);
+  try {
+    assert.equal(await updateCloudBackup(config, 'test-token', backup(), 4), 5);
+  } finally { globalThis.fetch = previous; }
+});
+
+test('cloud update rejects unexpected revision and HTTP errors', async () => {
+  const previous = globalThis.fetch;
+  try {
+    globalThis.fetch = async () => mockResponse(7);
+    await assert.rejects(updateCloudBackup(config, 'test-token', backup(), 4), /Unexpected cloud revision/);
+    globalThis.fetch = async () => mockResponse(null, 409);
+    await assert.rejects(updateCloudBackup(config, 'test-token', backup(), 4), /HTTP 409/);
+  } finally { globalThis.fetch = previous; }
+});
+
+test('invalid revision or absent token cannot send data', async () => {
+  const previous = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error('Fetch should not be called'); };
+  try {
+    await assert.rejects(updateCloudBackup(config, 'test-token', backup(), 0), /Invalid expected revision/);
+    await assert.rejects(updateCloudBackup(config, '', backup(), 1), /Sign in first/);
+  } finally { globalThis.fetch = previous; }
 });
