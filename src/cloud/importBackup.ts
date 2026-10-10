@@ -16,5 +16,12 @@ export function parseMigrationBackup(text: string): MigrationBackup {
     owned_only: backup.ownedOnly,
     updated_at: backup.createdAt,
   });
+  const collection = backup.collection!;
+  for (const entries of Object.values(collection.data)) {
+    if (!Array.isArray(entries) || entries.some(item => !item || typeof item !== 'object' ||
+      !Number.isSafeInteger(item.id) || typeof item.name !== 'string')) {
+      throw new Error('Invalid collection items in backup.');
+    }
+  }
   return backup as MigrationBackup;
 }
