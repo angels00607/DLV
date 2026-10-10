@@ -1,5 +1,5 @@
 import type { CloudConfiguration } from './readOnlySnapshot';
-import type { MigrationBackup } from './migrationSafety';
+import { assertNonEmptyCloudBackup, type MigrationBackup } from './migrationSafety';
 
 export async function updateCloudBackup(
   config: CloudConfiguration,
@@ -10,6 +10,7 @@ export async function updateCloudBackup(
   if (!accessToken.trim()) throw new Error('Sign in first.');
   if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 1) throw new Error('Invalid expected revision.');
   if (backup.schema !== 'dlv-supabase-preflight-v1') throw new Error('Invalid backup format.');
+  assertNonEmptyCloudBackup(backup);
   const response = await fetch(`${config.url}/rest/v1/rpc/dlv_write_snapshot`, {
     method: 'POST',
     headers: {
