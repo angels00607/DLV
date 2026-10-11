@@ -564,7 +564,11 @@ export function App() {
     if (!save || activeView === 'home') return;
     const name = newUniverseName.trim();
     if (!name || name.toLowerCase() === 'all' || newUniverseZone === 'all') return;
-    const existing = [...(save.data[activeView] ?? []).map((item) => item.meta || 'Other'), ...(save.customUniverses?.[activeView] ?? []).map((entry) => entry.name)];
+    // Universes are unique per category AND game/expansion, not globally by name.
+    const existing = [
+      ...(save.data[activeView] ?? []).filter((item) => normalizeZone(item.meta2) === normalizeZone(newUniverseZone)).map((item) => item.meta || 'Other'),
+      ...(save.customUniverses?.[activeView] ?? []).filter((entry) => normalizeZone(entry.zone) === normalizeZone(newUniverseZone)).map((entry) => entry.name),
+    ];
     if (existing.some((entry) => normalizeText(entry) === normalizeText(name))) {
       window.alert('This universe already exists in this category.');
       return;
@@ -2445,19 +2449,22 @@ function universeTotalKey(category: CategoryId, zone: string, universe: string) 
   return JSON.stringify([category, normalizeZone(zone), universe.trim()]);
 }
 function getUniverseDisplayProgress(universe: string, items: GameItem[], save: SavePayload, category: CategoryId, totals: Record<string, number>) {
-  if (items.length) return getUniverseProgress(items, save, category, totals);
-  // Empty universes may come from custom entries or older manual totals.
+  // Include manual totals from every zone, including zones with no items yet.
+  const progress = getUniverseProgress(items, save, category, totals);
+  const populatedZones = new Set(items.map((item) => normalizeZone(item.meta2)));
   const zones = new Set((save.customUniverses?.[category] ?? [])
     .filter((entry) => entry.name === universe)
     .map((entry) => normalizeZone(entry.zone)));
   for (const key of Object.keys(totals)) {
     try {
       const parsed: unknown = JSON.parse(key);
-      if (Array.isArray(parsed) && parsed[0] === category && parsed[2] === universe && typeof parsed[1] === 'string') zones.add(parsed[1]);
+      if (Array.isArray(parsed) && parsed[0] === category && parsed[2] === universe && typeof parsed[1] === 'string') zones.add(normalizeZone(parsed[1]));
     } catch { /* Ignore unrelated stored keys. */ }
   }
-  const total = [...zones].reduce((sum, zone) => sum + (totals[universeTotalKey(category, zone, universe)] ?? 0), 0);
-  return { done: 0, total, percent: 0 };
+  const emptyZoneTotal = [...zones].filter((zone) => !populatedZones.has(zone))
+    .reduce((sum, zone) => sum + (totals[universeTotalKey(category, zone, universe)] ?? 0), 0);
+  const total = progress.total + emptyZoneTotal;
+  return { done: progress.done, total, percent: total ? Math.min(100, progress.done / total * 100) : 0 };
 }
 function getUniverseProgress(items: GameItem[], save: SavePayload | null, category: CategoryId, totals: Record<string, number>) {
   const groups = new Map<string, GameItem[]>();
