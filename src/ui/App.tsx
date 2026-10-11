@@ -1012,7 +1012,7 @@ export function App() {
               activeGroup={activeGroup}
               save={save}
               categoryId={categoryId}
-              manualTotals={manualTotals}
+              manualTotals={manualTotals} activeZone={activeZone}
               onSelect={selectSubcategory}
               onRename={(group) => renameUniverse(categoryId, group)}
               onCreate={() => { setNewUniverseZone(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone); setNewUniverseOpen(true); }}
@@ -1387,13 +1387,14 @@ function ChoiceSheet({
 }
 
 function SubcategoryGrid({
-  groups, activeGroup, save, categoryId, manualTotals, onSelect, onCreate, onRename, onOwned, onChecked, onEdit, onDelete, renderActiveGroup,
+  groups, activeGroup, save, categoryId, manualTotals, activeZone, onSelect, onCreate, onRename, onOwned, onChecked, onEdit, onDelete, renderActiveGroup,
 }: {
   groups: Array<[string, GameItem[]]>;
   activeGroup: string;
   save: SavePayload;
   categoryId: CategoryId;
   manualTotals: Record<string, number>;
+  activeZone: ActiveZone;
   onSelect: (group: string) => void;
   onCreate: () => void;
   onRename: (group: string) => void;
@@ -1409,7 +1410,7 @@ function SubcategoryGrid({
   const selected = groups.find(([name]) => name === activeGroup);
 
   if (selected) {
-    const progress = getUniverseDisplayProgress(selected[0], selected[1], save, categoryId, manualTotals);
+    const progress = getUniverseDisplayProgress(selected[0], selected[1], save, categoryId, manualTotals, activeZone);
     return (
       <section className="subcategory-browser universe-detail-view" aria-label={`Items in ${activeGroup}`}>
         <button type="button" className="universe-back-button" onClick={() => onSelect('all')}>← All universes</button>
@@ -1433,7 +1434,7 @@ function SubcategoryGrid({
       </div>
       <div className="universe-compact-list">
         {matching.map(([group, items]) => {
-          const progress = getUniverseDisplayProgress(group, items, save, categoryId, manualTotals);
+          const progress = getUniverseDisplayProgress(group, items, save, categoryId, manualTotals, activeZone);
           const inline = items.length < 15;
           const isExpanded = inline && expanded === group;
           return (
@@ -2448,17 +2449,19 @@ const MANUAL_TOTALS_KEY = 'dlv_manual_collection_totals_v1';
 function universeTotalKey(category: CategoryId, zone: string, universe: string) {
   return JSON.stringify([category, normalizeZone(zone), universe.trim()]);
 }
-function getUniverseDisplayProgress(universe: string, items: GameItem[], save: SavePayload, category: CategoryId, totals: Record<string, number>) {
-  // Include manual totals from every zone, including zones with no items yet.
-  const progress = getUniverseProgress(items, save, category, totals);
-  const populatedZones = new Set(items.map((item) => normalizeZone(item.meta2)));
+function getUniverseDisplayProgress(universe: string, items: GameItem[], save: SavePayload, category: CategoryId, totals: Record<string, number>, activeZone: ActiveZone) {
+  // Each zone owns its total. Only the All zones view aggregates across zones.
+  const scopedItems = activeZone === 'all' ? items : items.filter((item) => normalizeZone(item.meta2) === normalizeZone(activeZone));
+  const progress = getUniverseProgress(scopedItems, save, category, totals);
+  const populatedZones = new Set(scopedItems.map((item) => normalizeZone(item.meta2)));
   const zones = new Set((save.customUniverses?.[category] ?? [])
-    .filter((entry) => entry.name === universe)
+    .filter((entry) => entry.name === universe && (activeZone === 'all' || normalizeZone(entry.zone) === normalizeZone(activeZone)))
     .map((entry) => normalizeZone(entry.zone)));
   for (const key of Object.keys(totals)) {
     try {
       const parsed: unknown = JSON.parse(key);
-      if (Array.isArray(parsed) && parsed[0] === category && parsed[2] === universe && typeof parsed[1] === 'string') zones.add(normalizeZone(parsed[1]));
+      if (Array.isArray(parsed) && parsed[0] === category && parsed[2] === universe && typeof parsed[1] === 'string' &&
+        (activeZone === 'all' || normalizeZone(parsed[1]) === normalizeZone(activeZone))) zones.add(normalizeZone(parsed[1]));
     } catch { /* Ignore unrelated stored keys. */ }
   }
   const emptyZoneTotal = [...zones].filter((zone) => !populatedZones.has(zone))
