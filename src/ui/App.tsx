@@ -564,7 +564,11 @@ export function App() {
     if (!save || activeView === 'home') return;
     const name = newUniverseName.trim();
     if (!name || name.toLowerCase() === 'all' || newUniverseZone === 'all') return;
-    const existing = [...(save.data[activeView] ?? []).map((item) => item.meta || 'Other'), ...(save.customUniverses?.[activeView] ?? []).map((entry) => entry.name)];
+    // Universes are unique per category AND game/expansion, not globally by name.
+    const existing = [
+      ...(save.data[activeView] ?? []).filter((item) => normalizeZone(item.meta2) === normalizeZone(newUniverseZone)).map((item) => item.meta || 'Other'),
+      ...(save.customUniverses?.[activeView] ?? []).filter((entry) => normalizeZone(entry.zone) === normalizeZone(newUniverseZone)).map((entry) => entry.name),
+    ];
     if (existing.some((entry) => normalizeText(entry) === normalizeText(name))) {
       window.alert('This universe already exists in this category.');
       return;
