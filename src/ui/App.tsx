@@ -2120,6 +2120,24 @@ function EditSheet({
           <span>Universe / zone</span>
           <input autoCapitalize="words" value={draft.meta2 ?? ''} onChange={(event) => setDraft({ ...draft, meta2: event.target.value })} />
         </label>
+        {categoryLabel === 'Meals' && (
+          <label>
+            <span>Recipe stars</span>
+            <select
+              aria-label="Recipe stars"
+              value={draft.stars ?? ''}
+              onChange={(event) => setDraft({
+                ...draft,
+                stars: event.target.value === '' ? undefined : Number(event.target.value),
+              })}
+            >
+              <option value="">Not set</option>
+              {([1, 2, 3, 4, 5] as const).map((stars) => (
+                <option key={stars} value={stars}>{stars} ★</option>
+              ))}
+            </select>
+          </label>
+        )}
         {supportsRecipe && (
           <fieldset className="recipe-editor">
             <div className="recipe-editor-head">
