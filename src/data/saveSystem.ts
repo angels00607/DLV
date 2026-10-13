@@ -126,7 +126,7 @@ export function persistSave(save: SavePayload): void {
   }
 }
 
-export function buildPortableData(save: SavePayload): string {
+export function buildPortableData(save: SavePayload, manualTotals: Record<string, number> = {}): string {
   return JSON.stringify(
     {
       data: Object.fromEntries(CATEGORIES.map((category) => [category.id, save.data[category.id] ?? []])),
@@ -135,6 +135,8 @@ export function buildPortableData(save: SavePayload): string {
       nextId: save.nextId,
       ingredients: save.ingredients,
       deletedIds: save.deletedIds,
+      customUniverses: save.customUniverses ?? {},
+      manualTotals,
       savedAt: new Date().toISOString(),
     },
     null,
