@@ -742,7 +742,7 @@ export function App() {
     setActiveGroup(group);
   }
 
-  function addItem(item: Omit<GameItem, 'id'>) {
+  function addItem(item: Omit<GameItem, 'id'>, owned: boolean) {
     if (!save || activeView === 'home' || !item.name.trim()) return;
     const next = structuredClone(save);
     const nextId = next.nextId[activeView] ?? getNextId(next.data[activeView] ?? []);
@@ -756,9 +756,11 @@ export function App() {
       },
     ];
     next.nextId[activeView] = nextId + 1;
-    if (localStorage.getItem(COLLECTION_MODE_KEY) === '1') {
-      next.owned[activeView] ??= {};
-      next.owned[activeView]![nextId] = 'owned';
+    next.owned[activeView] ??= {};
+    next.owned[activeView]![nextId] = owned ? 'owned' : 'missing';
+    if (activeView === 'meals' || activeView === 'crafting') {
+      next.checked[activeView] ??= {};
+      next.checked[activeView]![nextId] = owned;
     }
     updateSave(next);
   }
@@ -1601,9 +1603,10 @@ function AddItemRow({
   category: string;
   activeZone: ActiveZone;
   existingItems: GameItem[];
-  onAdd: (item: Omit<GameItem, 'id'>) => void;
+  onAdd: (item: Omit<GameItem, 'id'>, owned: boolean) => void;
 }) {
   const [name, setName] = useState('');
+  const [owned, setOwned] = useState(false);
   const [universe, setUniverse] = useState('');
   const [zone, setZone] = useState<string>(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone);
   const [newZone, setNewZone] = useState('');
@@ -1622,7 +1625,7 @@ function AddItemRow({
 
   function submit() {
     if (!name.trim() || !universe.trim() || !zone.trim() || duplicate) return;
-    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone });
+    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone }, owned);
     setNotice(`Added ${name.trim()}`);
     setName('');
     nameInput.current?.focus();
@@ -1643,6 +1646,10 @@ function AddItemRow({
         <select value={zone} onChange={(event) => setZone(event.target.value)}>
           {zones.map((value) => <option key={value} value={value}>{formatZoneLabel(value)}</option>)}
         </select>
+      </label>
+      <label className="quick-add-owned">
+        <input type="checkbox" checked={owned} onChange={(event) => setOwned(event.target.checked)} />
+        Owned
       </label>
       {creatingZone ? (
         <div className="quick-add-zone">
