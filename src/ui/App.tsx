@@ -1709,7 +1709,7 @@ function GithubSaveSheet({ save, onClose, onRestore }: {
     try {
       const repository = `${user.trim()}/${repo.trim()}`;
       const sourceDataPath = getDataPathFromFilename(filename.trim() || 'index.html');
-      const payload = buildPortableData(save);
+      const payload = buildPortableData(save, readManualTotals());
       const stamp = new Date().toLocaleString();
 
       setStatus('Sending public/data.json...');
