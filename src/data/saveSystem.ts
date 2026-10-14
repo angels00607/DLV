@@ -168,6 +168,7 @@ export function upsertSyncedItems(save: SavePayload, categoryId: CategoryId, inc
   const byName = new Map(items.map((item) => [item.name.toLowerCase(), item]));
 
   for (const item of incoming) {
+    if (next.deletedIds[categoryId]?.[item.id]) continue;
     const existing = byName.get(item.name.toLowerCase());
     if (!existing) {
       const id = next.nextId[categoryId] ?? getNextId(items);
