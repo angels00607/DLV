@@ -1,3 +1,4 @@
+const PREMIUM_SHOP_ICON = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACTklEQVR4AZyUTWhTQRDH/7Mm2lrrBwhW9Cw9eYnY5GROaZWCIl4UwY+7UGqCIiIFhR5a9FD1LCIIWgWhSO2lgSJ+XdST9NRLsYIXLWmrTXb8z0vea9KamDjMvN2dnf29ebuzz6EiBzPZjlQm15/sy50/fGzwQMXdchMADdbh5Lo6jJBwxXl3LdE7sJf9ljUAtsX8PgVOiEdOvT8LSM9mjSfwHxIAw3Ue/usy5AvHc8x2N9uWNQCuFN08oO+cc6fKBP0mojvL/daeAfDz1GhBvIx74Eg7tBuQn6D0ZC4nkn3ZtO0xh01pALTIAnTaiT4RJ50CcCh7xLlbgDze6nCvWXAEjEtxOwKRkwoNTliBHXR1AXKORrAMW9bp9FAMdaQKGO9VlTuEHELlk5npD6wJwbjErCd+tRVu1qvVCCge37l2kUbV5977cXYqY/bWtIsvver8phepo9mB9fUaAUux0izXzDOrXep1UWM0YD999bTbvigm8WdJ3q7w4CJguXQwB6Cbn/XIMiA8xXFDrcQM2+WwwAgYlA7wEWVh6cCsPPr3c6aSECJgsMbjNdu/7RvddXWB+//QErKIGiCLb5o35AYn7PqxaUpnbF0YWQO0t2xZ3nbXu9JxBozRFmiNlPN639aFQTVAc+bzQ8X3L2/Ptq10DKr3/fQ1AOurJY8PjIl0AzCcMXD7785PBuaP4zT9T2nV+8vs8KA6O86vOxTzVJlBzd5OjuaXvF7g5p/h9CSN4I3Z0d8YaAGhWSZvpkYmVnX1oh2ceh0zXzgftn8AAAD//+OO7h0AAAAGSURBVAMAVmPdtZ0IsjgAAAAASUVORK5CYII=';
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { readCloudConfiguration, readOwnCloudSnapshot } from '../cloud/readOnlySnapshot';
 import { getValidCloudSession, loadCloudSession, signInCloud, signOutCloud, signUpCloud } from '../cloud/auth';
@@ -753,6 +754,7 @@ export function App() {
         name: item.name.trim(),
         meta: item.meta?.trim() ?? '',
         meta2: item.meta2?.trim() ?? '',
+        premiumShop: item.premiumShop === true,
       },
     ];
     next.nextId[activeView] = nextId + 1;
@@ -1607,6 +1609,7 @@ function AddItemRow({
 }) {
   const [name, setName] = useState('');
   const [owned, setOwned] = useState(false);
+  const [premiumShop, setPremiumShop] = useState(false);
   const [universe, setUniverse] = useState('');
   const [zone, setZone] = useState<string>(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone);
   const [newZone, setNewZone] = useState('');
@@ -1625,7 +1628,7 @@ function AddItemRow({
 
   function submit() {
     if (!name.trim() || !universe.trim() || !zone.trim() || duplicate) return;
-    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone }, owned);
+    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone, premiumShop }, owned);
     setNotice(`Added ${name.trim()}`);
     setName('');
     nameInput.current?.focus();
@@ -1647,10 +1650,10 @@ function AddItemRow({
           {zones.map((value) => <option key={value} value={value}>{formatZoneLabel(value)}</option>)}
         </select>
       </label>
-      <label className="quick-add-owned">
-        <input type="checkbox" checked={owned} onChange={(event) => setOwned(event.target.checked)} />
-        Owned
-      </label>
+      <div className="quick-add-flags">
+        <label className="quick-add-flag"><input type="checkbox" checked={owned} onChange={(event) => setOwned(event.target.checked)} /> Owned</label>
+        <label className="quick-add-flag"><input type="checkbox" checked={premiumShop} onChange={(event) => setPremiumShop(event.target.checked)} /> Premium Shop</label>
+      </div>
       {creatingZone ? (
         <div className="quick-add-zone">
           <input value={newZone} onChange={(event) => setNewZone(event.target.value)} placeholder="New expansion / zone" />
@@ -1961,6 +1964,7 @@ function ItemCard({
           )}
         </span>
         </button>
+        {item.premiumShop && <span className="premium-shop-row"><img src={PREMIUM_SHOP_ICON} alt="" /> Premium Shop</span>}
         {ingredients.length > 0 && (
           <span className="ingredient-preview" aria-label={`Recipe: ${ingredients.join(', ')}`}>
             {ingredients.map((ingredient, index) => (
@@ -2127,6 +2131,7 @@ function EditSheet({
           <span>Universe / zone</span>
           <input autoCapitalize="words" value={draft.meta2 ?? ''} onChange={(event) => setDraft({ ...draft, meta2: event.target.value })} />
         </label>
+        <label className="edit-premium-shop"><input type="checkbox" checked={draft.premiumShop === true} onChange={(event) => setDraft({ ...draft, premiumShop: event.target.checked })} /> Premium Shop</label>
         {categoryLabel === 'Meals' && (
           <label>
             <span>Recipe stars</span>
