@@ -2052,3 +2052,12 @@ h1 {
 .cloud-preparation-status { border:1px solid var(--line); border-radius:12px; padding:12px; background:var(--surface-strong); }
 .cloud-preparation-status strong { display:block; margin-bottom:6px; }
 .cloud-preparation-status p { margin:6px 0 0; font-size:.84rem; color:var(--muted); line-height:1.45; }
+
+/* Compact add-item flags and Premium Shop indicator. */
+.quick-add-flags { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 12px 20px; }
+.quick-add .quick-add-flag { display: inline-flex; align-items: center; gap: 7px; font-size: .8rem; }
+.quick-add .quick-add-flag input { width: 17px; height: 17px; min-width: 17px; min-height: 17px; padding: 0; margin: 0; accent-color: var(--plum); }
+.premium-shop-row { display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: .75rem; color: var(--muted); font-weight: 650; }
+.premium-shop-row img { width: 20px; height: 20px; object-fit: contain; }
+.edit-form .edit-premium-shop { display: flex; align-items: center; gap: 8px; }
+.edit-form .edit-premium-shop input { width: 18px; height: 18px; min-height: 18px; }

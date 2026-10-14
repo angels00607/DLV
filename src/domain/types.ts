@@ -18,6 +18,7 @@ export interface GameItem {
   image?: string;
   sourceUrl?: string;
   updatedAt?: string;
+  premiumShop?: boolean;
 }
 
 export type GameDatabase = Partial<Record<CategoryId, GameItem[]>>;
