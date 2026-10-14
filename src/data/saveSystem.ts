@@ -43,8 +43,11 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     const checklist = id === 'meals' || id === 'crafting';
     const identity = (item: GameItem) => [item.name, item.meta ?? '', item.meta2 ?? ''].map((value) => value.trim().toLocaleLowerCase()).join('\\u0000');
     const known = new Set(localItems.map(identity));
+    // Deleted bundled items must not be restored during initialization.
+    const deletedDefaultIds = next.deletedIds[id] ?? {};
     let nextAvailableId = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
     for (const item of checklist ? (defaultData[id] ?? []) : collectionMode ? [] : (defaultData[id] ?? [])) {
+      if (deletedDefaultIds[item.id]) continue;
       if (checklist) {
         if (known.has(identity(item))) continue;
         // Preserve the original ID only when it is free; never replace a user's item.
