@@ -1,3 +1,4 @@
+const EVENT_ICON = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAErklEQVR4AaxWbUxbVRi+t6V8lwFtV6Dtxod8bPIRQEAQZCQTP5a4xSETNuMguD8bzGB0I9l+LYoJiiBjqNkgToziFmDTTZyEVecY2WgRHAp0cUALrEChpaVrKe2Vh+SS9lra/bDJ03PO+z7nfd6Te855D4tg/K5c+Z1bWlFT+Wz+MWVcxlvUnsKqrjP130QzaBtDmp+664gyMbvMBn7Vh807CcbPQailpcW7u0/+Qo9UfppDEsrYKMnXwyPjGX237zfcujUUxJhLgD+pVueB7+vlqZSECW6AP/SHohYJ2PMdhEpKSkwGgymfJChV4f68j0oPvHQ0Lze57a+RhyKd0RhpPxF98LulAwXon6g8VH6yvKgoKT7qB4iFhwu3wE5jQwjZ2WcRsV00tXdvtp7r67MI8sOJKRH8WBmAPrC6at3KC+YaJCE8dU5O4mIwL8AIvvKRRgg/4mLMwqDiREP1tz/+PVbf3KEYGZs8BAcNvfFxEDfA/+mOa71fNl68OnymrnUQQB9Y0OmzaS7dBgT4bak9d+ka/M3fyXrKqz57jYVvckPaf3JSpZbodAbhqsXqLQzhB/bJh3lIYkGz5IsA8Gk0OgkTJEH6aRb0/t29gwKslMmf0+ozR8dUdazlZXO4J4dDBQcGEF5engSH48EmSSJoYOBBZXNbV6N6Xpvn7+dDwucMSELAD+T23JRVf9z0fT2Tj7iLi/ow1sjYhAmBMIEGspyd1+6efqQpZpGkmLZv1iI58FXTc29aV62hTJ4Hh23a2AxMJyYDTPtmY3CxYrTOOBtCFEEtm81mlY2i3AI8wB0XMWnRdSGzeYXg+vsuJCVGf5qWGnPcHQ4Xv3g0KzPeLW8rL7DdQciyaqU4HPaMMITX1VBd0e4KZW+8fBeTXXHgS4nhXqdIcgZcYH1F6NislDdad2j/6fbbtWcvfTA4qHC7SexjbQjZGzfrI/jPPf2lFEGK6y90Fm7Gc2Z3KYQD+0nT5WTgVPWF/LrzHaeMRpMI50YxOlGAEw8fgCScCdA2l0K4GDs7pY1nmy5fvNs/eh7XE84ctrDJYk2/Jxurhx+4+kvffjqos9al0Pi4WhcRGfYFd+2uwxWFg0wHgZhlxSJWzmh2BPMCHxAc1nXa56x1KYTbOy89tC03J7Fgm1iotKxtT/sgLBbLijKCcnL6+EGFvY/ZdykEMmpO4Su7bvp4eUptNhsbYsD62eP6zmt1+q+QELiu4FYIk6XyP/moO8uPTRgSbA/2zNriKL3eyBeLBP+529ZJjL8nEpLLRvi4NP18vFQJ8ZHv4+ZA2Z6b1+onJ2b30cWNEdth+ERC2ZlJpsy0nTXFB/JfzUnmn8PJP3Jwz+vPP5fwzjMpsTKHiJsMHITYJCXGi4cJ44rZIAgLbkarWvKUwD80PhESHbe919fP5zfaBjuNBRN3BzTxPVFMWU9FhC2vWCykdskQJZMravru3G91i7VXEV5G4PX8KvscLROwm0zmImyg9XokkoTcEwRy7yxq9X5TM/MJStVcmltMz+UrARfc2Vlt6uTa8wCbJi5mWysrJpT8Jzs3pSw9Jfawv7/3sf8LHE92RVZG/Ls4g/t2Z733LwAAAP//y0BxOQAAAAZJREFUAwBw1SxkJfHyxgAAAABJRU5ErkJggg==';
 const PREMIUM_SHOP_ICON = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACTklEQVR4AZyUTWhTQRDH/7Mm2lrrBwhW9Cw9eYnY5GROaZWCIl4UwY+7UGqCIiIFhR5a9FD1LCIIWgWhSO2lgSJ+XdST9NRLsYIXLWmrTXb8z0vea9KamDjMvN2dnf29ebuzz6EiBzPZjlQm15/sy50/fGzwQMXdchMADdbh5Lo6jJBwxXl3LdE7sJf9ljUAtsX8PgVOiEdOvT8LSM9mjSfwHxIAw3Ue/usy5AvHc8x2N9uWNQCuFN08oO+cc6fKBP0mojvL/daeAfDz1GhBvIx74Eg7tBuQn6D0ZC4nkn3ZtO0xh01pALTIAnTaiT4RJ50CcCh7xLlbgDze6nCvWXAEjEtxOwKRkwoNTliBHXR1AXKORrAMW9bp9FAMdaQKGO9VlTuEHELlk5npD6wJwbjErCd+tRVu1qvVCCge37l2kUbV5977cXYqY/bWtIsvver8phepo9mB9fUaAUux0izXzDOrXep1UWM0YD999bTbvigm8WdJ3q7w4CJguXQwB6Cbn/XIMiA8xXFDrcQM2+WwwAgYlA7wEWVh6cCsPPr3c6aSECJgsMbjNdu/7RvddXWB+//QErKIGiCLb5o35AYn7PqxaUpnbF0YWQO0t2xZ3nbXu9JxBozRFmiNlPN639aFQTVAc+bzQ8X3L2/Ptq10DKr3/fQ1AOurJY8PjIl0AzCcMXD7785PBuaP4zT9T2nV+8vs8KA6O86vOxTzVJlBzd5OjuaXvF7g5p/h9CSN4I3Z0d8YaAGhWSZvpkYmVnX1oh2ceh0zXzgftn8AAAD//+OO7h0AAAAGSURBVAMAVmPdtZ0IsjgAAAAASUVORK5CYII=';
 import { ChangeEvent, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { readCloudConfiguration, readOwnCloudSnapshot } from '../cloud/readOnlySnapshot';
@@ -755,6 +756,7 @@ export function App() {
         meta: item.meta?.trim() ?? '',
         meta2: item.meta2?.trim() ?? '',
         premiumShop: item.premiumShop === true,
+        event: item.event === true,
       },
     ];
     next.nextId[activeView] = nextId + 1;
@@ -1395,8 +1397,9 @@ function UniverseItemsWithPremium({ items, categoryId, save, onOwned, onChecked,
   onOwned: (item: GameItem) => void; onChecked: (item: GameItem) => void;
   onEdit: (item: GameItem) => void; onDelete: (item: GameItem) => void;
 }) {
-  const regular = items.filter((item) => item.premiumShop !== true);
+  const regular = items.filter((item) => item.premiumShop !== true && item.event !== true);
   const premium = items.filter((item) => item.premiumShop === true);
+  const events = items.filter((item) => item.event === true && item.premiumShop !== true);
   const renderItems = (entries: GameItem[]) => (
     <AlphabeticalCollection categoryId={categoryId} items={entries} directItemsLimit={20} pageSize={20}
       save={save} onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
@@ -1406,8 +1409,14 @@ function UniverseItemsWithPremium({ items, categoryId, save, onOwned, onChecked,
       {regular.length > 0 ? renderItems(regular) : <p className="empty-collection">No regular items in this universe.</p>}
       {premium.length > 0 && (
         <details className="word-accordion premium-shop-accordion">
-          <summary>Premium Shop ({premium.length})</summary>
+          <summary><img src={PREMIUM_SHOP_ICON} alt="" width={20} height={20} style={{ verticalAlign: 'middle', marginRight: 8 }} />Premium Shop ({premium.length})</summary>
           {renderItems(premium)}
+        </details>
+      )}
+      {events.length > 0 && (
+        <details className="word-accordion event-accordion">
+          <summary><img src={EVENT_ICON} alt="" width={26} height={26} style={{ verticalAlign: 'middle', marginRight: 8 }} />Event ({events.length})</summary>
+          {renderItems(events)}
         </details>
       )}
     </>
@@ -1642,6 +1651,7 @@ function AddItemRow({
   const [name, setName] = useState('');
   const [owned, setOwned] = useState(false);
   const [premiumShop, setPremiumShop] = useState(false);
+  const [event, setEvent] = useState(false);
   const [universe, setUniverse] = useState('');
   const [zone, setZone] = useState<string>(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone);
   const [newZone, setNewZone] = useState('');
@@ -1660,7 +1670,7 @@ function AddItemRow({
 
   function submit() {
     if (!name.trim() || !universe.trim() || !zone.trim() || duplicate) return;
-    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone, premiumShop }, owned);
+    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone, premiumShop, event }, owned);
     setNotice(`Added ${name.trim()}`);
     setName('');
     nameInput.current?.focus();
@@ -1684,7 +1694,8 @@ function AddItemRow({
       </label>
       <div className="quick-add-flags">
         <label className="quick-add-flag"><input type="checkbox" checked={owned} onChange={(event) => setOwned(event.target.checked)} /> Owned</label>
-        <label className="quick-add-flag"><input type="checkbox" checked={premiumShop} onChange={(event) => setPremiumShop(event.target.checked)} /> Premium Shop</label>
+        <label className="quick-add-flag"><input type="checkbox" checked={premiumShop} onChange={(change) => { setPremiumShop(change.target.checked); if (change.target.checked) setEvent(false); }} /> Premium Shop</label>
+        <label className="quick-add-flag"><input type="checkbox" checked={event} onChange={(change) => { setEvent(change.target.checked); if (change.target.checked) setPremiumShop(false); }} /> Event</label>
       </div>
       {creatingZone ? (
         <div className="quick-add-zone">
@@ -1996,7 +2007,6 @@ function ItemCard({
           )}
         </span>
         </button>
-        {item.premiumShop && <span className="premium-shop-row"><img src={PREMIUM_SHOP_ICON} alt="" /> Premium Shop</span>}
         {ingredients.length > 0 && (
           <span className="ingredient-preview" aria-label={`Recipe: ${ingredients.join(', ')}`}>
             {ingredients.map((ingredient, index) => (
@@ -2163,7 +2173,8 @@ function EditSheet({
           <span>Universe / zone</span>
           <input autoCapitalize="words" value={draft.meta2 ?? ''} onChange={(event) => setDraft({ ...draft, meta2: event.target.value })} />
         </label>
-        <label className="edit-premium-shop"><input type="checkbox" checked={draft.premiumShop === true} onChange={(event) => setDraft({ ...draft, premiumShop: event.target.checked })} /> Premium Shop</label>
+        <label className="edit-premium-shop"><input type="checkbox" checked={draft.premiumShop === true} onChange={(event) => setDraft({ ...draft, premiumShop: event.target.checked, event: event.target.checked ? false : draft.event })} /> Premium Shop</label>
+        <label className="edit-premium-shop"><input type="checkbox" checked={draft.event === true} onChange={(event) => setDraft({ ...draft, event: event.target.checked, premiumShop: event.target.checked ? false : draft.premiumShop })} /> Event</label>
         {categoryLabel === 'Meals' && (
           <label>
             <span>Recipe stars</span>
