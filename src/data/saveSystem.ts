@@ -41,23 +41,37 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     // Meals and Crafting retain the complete bundled checklist even in owned-only mode.
     // Match by name + universe + zone to avoid overwriting custom entries or reusing IDs.
     const checklist = id === 'meals' || id === 'crafting';
-    const mergeBundledClothing = id === 'clothing';
+    const mergeBundledCatalog = id === 'clothing' || id === 'furniture';
     const identity = (item: GameItem) => [item.name, item.meta ?? '', item.meta2 ?? ''].map((value) => value.trim().toLocaleLowerCase()).join('\\u0000');
     const known = new Set(localItems.map(identity));
+    const furnitureOccurrences = new Map<string, number>();
+    if (id === 'furniture') {
+      for (const item of localItems) furnitureOccurrences.set(identity(item), (furnitureOccurrences.get(identity(item)) ?? 0) + 1);
+    }
+    const defaultOccurrences = new Map<string, number>();
     // Deleted bundled items must not be restored during initialization.
     const deletedDefaultIds = next.deletedIds[id] ?? {};
     let nextAvailableId = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
-    for (const item of checklist || mergeBundledClothing ? (defaultData[id] ?? []) : collectionMode ? [] : (defaultData[id] ?? [])) {
+    for (const item of checklist || mergeBundledCatalog ? (defaultData[id] ?? []) : collectionMode ? [] : (defaultData[id] ?? [])) {
       if (deletedDefaultIds[item.id]) continue;
-      if (mergeBundledClothing) {
-        // Add only new bundled IDs; preserve existing user-edited items and owned state.
-        if (localById.has(item.id)) continue;
-        // Also avoid importing an item the user already added manually.
-        if (known.has(identity(item))) continue;
-        localItems.push({ ...item });
-        localById.set(item.id, item);
-        known.add(identity(item));
-        nextAvailableId = Math.max(nextAvailableId, item.id + 1);
+      if (mergeBundledCatalog) {
+        const key = identity(item);
+        const occurrence = (defaultOccurrences.get(key) ?? 0) + 1;
+        defaultOccurrences.set(key, occurrence);
+        // Furniture may legitimately contain multiple items with identical names.
+        // Preserve those distinct occurrences while avoiding repeated imports.
+        if (id === 'furniture') {
+          if (localById.has(item.id)) continue;
+          if (occurrence <= (furnitureOccurrences.get(key) ?? 0)) continue;
+        } else {
+          if (localById.has(item.id) || known.has(key)) continue;
+        }
+        const newId = localById.has(item.id) ? nextAvailableId++ : item.id;
+        const added = { ...item, id: newId };
+        localItems.push(added);
+        localById.set(newId, added);
+        known.add(key);
+        nextAvailableId = Math.max(nextAvailableId, newId + 1);
         continue;
       }
       if (checklist) {
