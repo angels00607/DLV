@@ -1,0 +1,29 @@
+name: Validate imported Clothing catalog
+on:
+  push:
+    branches: [codex/clothing-wiki-snapshot-import]
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - name: Check catalog integrity without accessing wiki
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('public/data.json').read_text())
+          items=data['data']['clothing']
+          ids=[x['id'] for x in items]
+          assert len(ids)==len(set(ids)), 'Duplicate IDs'
+          assert len(items)>=1700, 'Import incomplete'
+          assert all(x['name'].strip() for x in items), 'Empty name'
+          assert sum(bool(x.get('premiumShop')) for x in items)>=450, 'Missing premium flags'
+          print(f'Validated {len(items)} clothing items')
+          PY
