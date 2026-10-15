@@ -1466,7 +1466,7 @@ function SubcategoryGrid({
       <div className="universe-compact-list">
         {matching.map(([group, items]) => {
           const progress = getUniverseDisplayProgress(group, items, save, categoryId, manualTotals, activeZone);
-          const inline = items.length < 15;
+          const inline = true; // Every universe expands in place, regardless of item count.
           const isExpanded = inline && expanded === group;
           return (
             <div key={group} className="universe-compact-entry">
