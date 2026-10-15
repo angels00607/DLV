@@ -19,6 +19,7 @@ export interface GameItem {
   sourceUrl?: string;
   updatedAt?: string;
   premiumShop?: boolean;
+  event?: boolean;
 }
 
 export type GameDatabase = Partial<Record<CategoryId, GameItem[]>>;
