@@ -2061,3 +2061,17 @@ h1 {
 .premium-shop-row img { width: 20px; height: 20px; object-fit: contain; }
 .edit-form .edit-premium-shop { display: flex; align-items: center; gap: 8px; }
 .edit-form .edit-premium-shop input { width: 18px; height: 18px; min-height: 18px; }
+
+/* Keep Premium Shop and Event icons directly beside their labels. */
+.word-accordion.premium-shop-accordion > summary,
+.word-accordion.event-accordion > summary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.word-accordion.premium-shop-accordion > summary img,
+.word-accordion.event-accordion > summary img {
+  flex: 0 0 auto;
+  margin-right: 0 !important;
+}
