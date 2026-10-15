@@ -41,13 +41,25 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     // Meals and Crafting retain the complete bundled checklist even in owned-only mode.
     // Match by name + universe + zone to avoid overwriting custom entries or reusing IDs.
     const checklist = id === 'meals' || id === 'crafting';
+    const mergeBundledClothing = id === 'clothing';
     const identity = (item: GameItem) => [item.name, item.meta ?? '', item.meta2 ?? ''].map((value) => value.trim().toLocaleLowerCase()).join('\\u0000');
     const known = new Set(localItems.map(identity));
     // Deleted bundled items must not be restored during initialization.
     const deletedDefaultIds = next.deletedIds[id] ?? {};
     let nextAvailableId = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
-    for (const item of checklist ? (defaultData[id] ?? []) : collectionMode ? [] : (defaultData[id] ?? [])) {
+    for (const item of checklist || mergeBundledClothing ? (defaultData[id] ?? []) : collectionMode ? [] : (defaultData[id] ?? [])) {
       if (deletedDefaultIds[item.id]) continue;
+      if (mergeBundledClothing) {
+        // Add only new bundled IDs; preserve existing user-edited items and owned state.
+        if (localById.has(item.id)) continue;
+        // Also avoid importing an item the user already added manually.
+        if (known.has(identity(item))) continue;
+        localItems.push({ ...item });
+        localById.set(item.id, item);
+        known.add(identity(item));
+        nextAvailableId = Math.max(nextAvailableId, item.id + 1);
+        continue;
+      }
       if (checklist) {
         if (known.has(identity(item))) continue;
         // Preserve the original ID only when it is free; never replace a user's item.
