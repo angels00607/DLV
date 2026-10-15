@@ -1390,6 +1390,30 @@ function ChoiceSheet({
   );
 }
 
+function UniverseItemsWithPremium({ items, categoryId, save, onOwned, onChecked, onEdit, onDelete }: {
+  items: GameItem[]; categoryId: CategoryId; save: SavePayload;
+  onOwned: (item: GameItem) => void; onChecked: (item: GameItem) => void;
+  onEdit: (item: GameItem) => void; onDelete: (item: GameItem) => void;
+}) {
+  const regular = items.filter((item) => item.premiumShop !== true);
+  const premium = items.filter((item) => item.premiumShop === true);
+  const renderItems = (entries: GameItem[]) => (
+    <AlphabeticalCollection categoryId={categoryId} items={entries} directItemsLimit={20} pageSize={20}
+      save={save} onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
+  );
+  return (
+    <>
+      {regular.length > 0 ? renderItems(regular) : <p className="empty-collection">No regular items in this universe.</p>}
+      {premium.length > 0 && (
+        <details className="word-accordion premium-shop-accordion">
+          <summary>Premium Shop ({premium.length})</summary>
+          {renderItems(premium)}
+        </details>
+      )}
+    </>
+  );
+}
+
 function SubcategoryGrid({
   groups, activeGroup, save, categoryId, manualTotals, activeZone, onSelect, onCreate, onRename, onOwned, onChecked, onEdit, onDelete, renderActiveGroup,
 }: {
@@ -1423,7 +1447,10 @@ function SubcategoryGrid({
           <button type="button" className="universe-rename-button" onClick={() => onRename(activeGroup)} aria-label={`Rename ${activeGroup}`}><Edit3 size={16}/> Rename</button>
           <span>{progress.done}/{progress.total} collected</span>
         </div>
-        {renderActiveGroup()}
+        {(categoryId === 'clothing' || categoryId === 'furniture') ? (
+          <UniverseItemsWithPremium items={selected[1]} categoryId={categoryId} save={save}
+            onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
+        ) : renderActiveGroup()}
       </section>
     );
   }
@@ -1455,8 +1482,13 @@ function SubcategoryGrid({
               {isExpanded && (
                 <div id={`universe-inline-${categoryId}-${groups.findIndex(([name]) => name === group)}`} className="universe-inline-items">
                   {items.length ? (
-                    <ItemCards categoryId={categoryId} items={[...items].sort((a, b) => a.name.localeCompare(b.name))}
-                      save={save} onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
+                    (categoryId === 'clothing' || categoryId === 'furniture') ? (
+                      <UniverseItemsWithPremium items={items} categoryId={categoryId} save={save}
+                        onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
+                    ) : (
+                      <ItemCards categoryId={categoryId} items={[...items].sort((a, b) => a.name.localeCompare(b.name))}
+                        save={save} onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
+                    )
                   ) : <p className="empty-collection">No items in this universe yet.</p>}
                 </div>
               )}
