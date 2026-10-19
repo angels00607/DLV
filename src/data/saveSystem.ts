@@ -35,6 +35,16 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     next.customUniverses ??= {};
     next.customUniverses[id] ??= [];
 
+    if (id === 'furniture') {
+      const normalize = (item: GameItem) => {
+        if (['GENERAL', 'NON-DISNEY RELATEDd'].includes((item.meta ?? '').trim())) item.meta = 'NON-DISNEY RELATED';
+      };
+      (next.data[id] ?? []).forEach(normalize);
+      (defaultData[id] ?? []).forEach(normalize);
+      next.customUniverses[id] = (next.customUniverses[id] ?? [])
+        .map((name) => ['GENERAL', 'NON-DISNEY RELATEDd'].includes(name.trim()) ? 'NON-DISNEY RELATED' : name)
+        .filter((name, index, all) => all.indexOf(name) === index);
+    }
     const localItems = next.data[id] ?? [];
     const localById = new Map(localItems.map((item) => [item.id, item]));
 
