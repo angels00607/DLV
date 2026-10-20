@@ -1021,6 +1021,7 @@ export function App() {
               manualTotals={manualTotals} activeZone={activeZone}
               onSelect={selectSubcategory}
               onRename={(group) => renameUniverse(categoryId, group)}
+              onRemove={removeEmptyUniverse}
               onCreate={() => { setNewUniverseZone(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone); setNewUniverseOpen(true); }}
               onOwned={toggleOwned}
               onChecked={toggleChecked}
@@ -1424,7 +1425,7 @@ function UniverseItemsWithPremium({ items, categoryId, save, onOwned, onChecked,
 }
 
 function SubcategoryGrid({
-  groups, activeGroup, save, categoryId, manualTotals, activeZone, onSelect, onCreate, onRename, onOwned, onChecked, onEdit, onDelete, renderActiveGroup,
+  groups, activeGroup, save, categoryId, manualTotals, activeZone, onSelect, onCreate, onRename, onRemove, onOwned, onChecked, onEdit, onDelete, renderActiveGroup,
 }: {
   groups: Array<[string, GameItem[]]>;
   activeGroup: string;
@@ -1435,6 +1436,7 @@ function SubcategoryGrid({
   onSelect: (group: string) => void;
   onCreate: () => void;
   onRename: (group: string) => void;
+  onRemove: (category: CategoryId, zone: string, universe: string) => void;
   onOwned: (item: GameItem) => void;
   onChecked: (item: GameItem) => void;
   onEdit: (item: GameItem) => void;
@@ -1498,7 +1500,7 @@ function SubcategoryGrid({
                       <ItemCards categoryId={categoryId} items={[...items].sort((a, b) => a.name.localeCompare(b.name))}
                         save={save} onOwned={onOwned} onChecked={onChecked} onEdit={onEdit} onDelete={onDelete} />
                     )
-                  ) : <p className="empty-collection">No items in this universe yet.</p>}
+                   ) : <div className="empty-collection"><p>No items in this universe yet.</p>{(save.customUniverses?.[categoryId] ?? []).filter((entry) => entry.name === group && (activeZone === "all" || normalizeZone(entry.zone) === normalizeZone(activeZone))).map((entry) => <button key={entry.zone} type="button" className="universe-remove-button" onClick={() => onRemove(categoryId, entry.zone, group)}><Trash2 size={15}/> Delete empty universe ({formatZoneLabel(entry.zone)})</button>)}</div>}
                 </div>
               )}
             </div>

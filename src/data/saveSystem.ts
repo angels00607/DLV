@@ -41,9 +41,13 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
       };
       (next.data[id] ?? []).forEach(normalize);
       (defaultData[id] ?? []).forEach(normalize);
-      next.customUniverses[id] = (next.customUniverses[id] ?? [])
-        .map((name) => ['GENERAL', 'NON-DISNEY RELATEDd'].includes(name.trim()) ? 'NON-DISNEY RELATED' : name)
-        .filter((name, index, all) => all.indexOf(name) === index);
+      next.customUniverses[id] = Array.from(new Map(
+        (next.customUniverses[id] ?? []).map((entry) => {
+          const name = ['GENERAL', 'NON-DISNEY RELATEDd'].includes(entry.name.trim())
+            ? 'NON-DISNEY RELATED' : entry.name;
+          return { ...entry, name };
+        }).map((entry) => [JSON.stringify([entry.name, entry.zone]), entry]),
+      ).values());
     }
     const localItems = next.data[id] ?? [];
     const localById = new Map(localItems.map((item) => [item.id, item]));
