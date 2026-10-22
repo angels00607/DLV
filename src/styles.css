@@ -2096,3 +2096,9 @@ h1 {
 .item-acquisition-row { display:grid; grid-template-columns:1fr; gap:3px; width:100%; min-width:0; margin-top:7px; padding-top:7px; border-top:1px solid var(--line); }
 .item-acquisition-label { display:block; color:var(--muted); font-size:.68rem; font-weight:750; letter-spacing:.015em; }
 .item-acquisition-value { display:block; min-width:0; white-space:normal; overflow-wrap:anywhere; word-break:normal; line-height:1.4; font-size:.78rem; color:var(--plum); }
+
+/* Universe pencil opens accessible rename/delete actions without hiding the row. */
+.universe-edit-actions { display:flex; flex-wrap:wrap; gap:8px; padding:8px 12px 12px; }
+.universe-edit-actions button { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:40px; padding:8px 12px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); font-size:.8rem; font-weight:650; cursor:pointer; }
+.universe-edit-actions .universe-edit-delete { color:#a32836; border-color:#dcaab0; }
+@media (max-width:420px) { .universe-edit-actions button { flex:1 1 100%; } }
