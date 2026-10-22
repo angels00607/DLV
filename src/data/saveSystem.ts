@@ -101,11 +101,8 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
       if (!localById.has(item.id) && !next.deletedIds[id]?.[item.id]) {
         localItems.push({ ...item });
       } else {
-        const existing = localById.get(item.id);
-        if (existing) {
-          existing.meta2 = item.meta2 ?? existing.meta2 ?? '';
-          existing.stars = item.stars ?? existing.stars;
-        }
+        // The user's saved item is authoritative. Never reapply bundled defaults
+        // over edited zone, stars or any other field during app startup.
       }
     }
 
