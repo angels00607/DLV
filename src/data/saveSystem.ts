@@ -1,4 +1,5 @@
 import { CATEGORIES } from '../domain/categories';
+import { reconcileGeneralClothing } from './generalClothingAvailability';
 import type { CategoryId, GameItem, SavePayload } from '../domain/types';
 
 export const STORAGE_KEY = 'dlv_guide_v6';
@@ -50,6 +51,8 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
       ).values());
     }
     if (id === 'clothing') {
+      (next.data[id] ?? []).forEach(reconcileGeneralClothing);
+      (defaultData[id] ?? []).forEach(reconcileGeneralClothing);
       // Consolidate legacy OTHER (GENERAL) into GENERAL without changing item IDs
       // or losing ownership, checklist and edited acquisition fields.
       const unify = (item: GameItem) => {
