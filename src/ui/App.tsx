@@ -698,12 +698,17 @@ export function App() {
     updateSave(next);
   }
 
-  function updateItem(updatedItem: GameItem, ingredients?: string[]) {
+  function updateItem(updatedItem: GameItem, ingredients?: string[], owned?: boolean) {
     if (!save || activeView === 'home') return;
     const next = structuredClone(save);
     next.data[activeView] = (next.data[activeView] ?? []).map((item) =>
       item.id === updatedItem.id ? { ...item, ...updatedItem } : item,
     );
+    if (owned !== undefined) {
+      next.owned[activeView] ??= {};
+      if (owned) next.owned[activeView]![updatedItem.id] = 'owned';
+      else delete next.owned[activeView]![updatedItem.id];
+    }
     if (activeView === 'crafting' || activeView === 'meals') {
       next.ingredients[activeView] ??= {};
       const cleanedIngredients = (ingredients ?? []).map((ingredient) => ingredient.trim()).filter(Boolean);
@@ -1230,6 +1235,7 @@ export function App() {
           supportsRecipe={categoryById[activeView].supportsIngredients === true}
           categoryLabel={categoryById[activeView].label}
           initialIngredients={save.ingredients[activeView]?.[editingItem.id] ?? []}
+          initialOwned={save.owned[activeView]?.[editingItem.id] === 'owned'}
           onClose={() => setEditingItem(null)}
           onSave={updateItem}
         />
@@ -2090,6 +2096,7 @@ function EditSheet({
   supportsRecipe,
   categoryLabel,
   initialIngredients,
+  initialOwned,
   onClose,
   onSave,
 }: {
@@ -2097,18 +2104,21 @@ function EditSheet({
   supportsRecipe: boolean;
   categoryLabel: string;
   initialIngredients: string[];
+  initialOwned: boolean;
   onClose: () => void;
-  onSave: (item: GameItem, ingredients?: string[]) => void;
+  onSave: (item: GameItem, ingredients?: string[], owned?: boolean) => void;
 }) {
   const [draft, setDraft] = useState<GameItem>(item);
+  const [ownedDraft, setOwnedDraft] = useState(initialOwned);
   const [ingredients, setIngredients] = useState<string[]>(initialIngredients);
   const [focusedIngredient, setFocusedIngredient] = useState<number | null>(null);
   const [highlightedSuggestion, setHighlightedSuggestion] = useState(0);
 
   useEffect(() => {
     setDraft(item);
+    setOwnedDraft(initialOwned);
     setIngredients(initialIngredients);
-  }, [item, initialIngredients]);
+  }, [item, initialIngredients, initialOwned]);
 
   function updateIngredient(index: number, value: string) {
     setIngredients((current) => current.map((ingredient, ingredientIndex) =>
@@ -2138,7 +2148,7 @@ function EditSheet({
         className="sheet-card edit-form"
         onSubmit={(event) => {
           event.preventDefault();
-          if (draft.name.trim()) onSave({ ...draft, name: draft.name.trim() }, supportsRecipe ? ingredients : undefined);
+          if (draft.name.trim()) onSave({ ...draft, name: draft.name.trim() }, supportsRecipe ? ingredients : undefined, ownedDraft);
         }}
       >
         <div className="sheet-head">
@@ -2162,8 +2172,12 @@ function EditSheet({
           <span>Universe / zone</span>
           <input autoCapitalize="words" value={draft.meta2 ?? ''} onChange={(event) => setDraft({ ...draft, meta2: event.target.value })} />
         </label>
+        <fieldset className="acquisition-fieldset"><legend>Owned or not</legend><label className="quick-add-flag"><input type="checkbox" checked={ownedDraft} onChange={(e) => setOwnedDraft(e.target.checked)} /> Owned</label></fieldset>
+        <fieldset className="acquisition-fieldset"><legend>Special availability</legend>
         <label className="edit-premium-shop"><input type="checkbox" checked={draft.premiumShop === true} onChange={(event) => setDraft({ ...draft, premiumShop: event.target.checked, event: event.target.checked ? false : draft.event })} /> Premium Shop</label>
         <label className="edit-premium-shop"><input type="checkbox" checked={draft.event === true} onChange={(event) => setDraft({ ...draft, event: event.target.checked, premiumShop: event.target.checked ? false : draft.premiumShop })} /> Event</label>
+        </fieldset>
+        <WhereToGetFields values={draft.whereToGet ?? []} other={draft.whereToGetOther ?? ''} onValues={(values) => setDraft({ ...draft, whereToGet: values })} onOther={(other) => setDraft({ ...draft, whereToGetOther: other })} />
         {categoryLabel === 'Meals' && (
           <label>
             <span>Recipe stars</span>
