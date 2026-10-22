@@ -147,8 +147,10 @@ export function loadSave(defaults: Partial<SavePayload>): SavePayload {
       },
       defaults,
     );
-  } catch {
-    return ensureCategoryShape(EMPTY_SAVE, defaults);
+  } catch (error) {
+    // Never silently replace corrupted or unreadable user data with defaults.
+    // A later persistence effect would overwrite the only recovery copy.
+    throw new Error('Unable to read your saved collection. Local data has NOT been reset.', { cause: error });
   }
 }
 
