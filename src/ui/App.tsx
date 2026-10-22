@@ -2652,9 +2652,21 @@ function readManualTotals(): Record<string, number> {
   try {
     const parsed: unknown = JSON.parse(localStorage.getItem(MANUAL_TOTALS_KEY) ?? '{}');
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
-    return Object.fromEntries(Object.entries(parsed).filter(([, value]) =>
+    const valid = Object.fromEntries(Object.entries(parsed).filter(([, value]) =>
       typeof value === 'number' && Number.isSafeInteger(value) && value >= 0,
     )) as Record<string, number>;
+    // Legacy group totals belong to one consolidated Clothing > GENERAL group.
+    for (const [key, value] of Object.entries(valid)) {
+      try {
+        const parts: unknown = JSON.parse(key);
+        if (!Array.isArray(parts) || parts.length !== 3 ||
+            parts[0] !== 'clothing' || String(parts[2]).trim().toUpperCase() !== 'OTHER (GENERAL)') continue;
+        const mergedKey = JSON.stringify(['clothing', parts[1], 'GENERAL']);
+        valid[mergedKey] = (valid[mergedKey] ?? 0) + value;
+        delete valid[key];
+      } catch { /* Preserve unrelated legacy keys unchanged. */ }
+    }
+    return valid;
   } catch { return {}; }
 }
 function getProgress(items: GameItem[], save: SavePayload | null, categoryId: CategoryId, manualTotal?: number) {
