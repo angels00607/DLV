@@ -337,9 +337,35 @@ test('all 35 requested Clothing zones migrate once, retaining every other field'
       }
     }
     assert.deepEqual(collection, before);
-    assert.equal(migrated.catalogMigrationVersion, 2);
+    assert.ok(migrated.catalogMigrationVersion >= 2);
     migrated.data.clothing.find(item => item.id === 100).meta2 = 'ETERNITY ISLE';
     const again = ensureCategoryShape(migrated, {});
     assert.equal(again.data.clothing.find(item => item.id === 100).meta2, 'ETERNITY ISLE');
+  } finally { globalThis.localStorage = previous; }
+});
+
+const { EXPANSION_CLOTHING_ZONES } = await import('../src/data/expansionClothingZones.ts');
+test('17 Eternity Isle and 19 Wishblossom clothing zones migrate once without other changes', () => {
+  const previous = globalThis.localStorage;
+  globalThis.localStorage = { getItem: () => null };
+  try {
+    const collection = fixture();
+    collection.catalogMigrationVersion = 2;
+    collection.data.clothing = Object.keys(EXPANSION_CLOTHING_ZONES).map((name, index) => ({ id: index + 300, name, meta: 'Keep universe', meta2: 'DREAMLIGHT VALLEY', event: true, premiumShop: false, whereToGet: ['Other'], whereToGetOther: 'Keep source' }));
+    collection.data.clothing.push({ id: 999, name: 'Bookish Book Bag', meta2: 'STORYBOOK VALE' });
+    const original = structuredClone(collection);
+    const migrated = ensureCategoryShape(collection, {});
+    assert.equal(Object.values(EXPANSION_CLOTHING_ZONES).filter(z => z === 'ETERNITY ISLE').length, 17);
+    assert.equal(Object.values(EXPANSION_CLOTHING_ZONES).filter(z => z === 'WISHBLOSSOM MOUNTAINS').length, 19);
+    for (const item of migrated.data.clothing) {
+      const old = original.data.clothing.find(entry => entry.id === item.id);
+      assert.deepEqual({ ...item, meta2: old.meta2 }, old);
+      assert.equal(item.meta2, EXPANSION_CLOTHING_ZONES[item.name] ?? old.meta2);
+    }
+    assert.deepEqual(collection, original);
+    assert.equal(migrated.catalogMigrationVersion, 3);
+    const edited = migrated.data.clothing.find(item => item.name === '3D Glasses');
+    edited.meta2 = 'STORYBOOK VALE';
+    assert.equal(ensureCategoryShape(migrated, {}).data.clothing.find(item => item.id === edited.id).meta2, 'STORYBOOK VALE');
   } finally { globalThis.localStorage = previous; }
 });

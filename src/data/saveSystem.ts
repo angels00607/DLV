@@ -1,3 +1,4 @@
+import { correctExpansionClothingZone } from './expansionClothingZones.ts';
 import { correctStorybookClothingZone } from './storybookClothingZones.ts';
 import { validateSave } from './validateSave.ts';
 import { CATEGORIES } from '../domain/categories.ts';
@@ -56,6 +57,8 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
       ).values());
     }
     if (id === 'clothing') {
+      if ((save.catalogMigrationVersion ?? 0) < 3) (next.data[id] ?? []).forEach(correctExpansionClothingZone);
+      (defaultData[id] ?? []).forEach(correctExpansionClothingZone);
       // Apply this user-requested zone correction once to existing device saves.
       if ((save.catalogMigrationVersion ?? 0) < 2) (next.data[id] ?? []).forEach(correctStorybookClothingZone);
       (defaultData[id] ?? []).forEach(correctStorybookClothingZone);
@@ -154,7 +157,7 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
     next.nextId[id] = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
   });
 
-  next.catalogMigrationVersion = Math.max(save.catalogMigrationVersion ?? 0, 2);
+  next.catalogMigrationVersion = Math.max(save.catalogMigrationVersion ?? 0, 3);
   return next;
 }
 
