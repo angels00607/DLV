@@ -22,6 +22,7 @@ export interface GameItem {
   event?: boolean;
   whereToGet?: string[];
   whereToGetOther?: string;
+  friendshipQuestCharacter?: string;
 }
 
 export type GameDatabase = Partial<Record<CategoryId, GameItem[]>>;
