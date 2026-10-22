@@ -630,25 +630,45 @@ export function App() {
 
   function removeEmptyUniverse(category: CategoryId, zone: string, universe: string) {
     if (!save) return;
-    const isCustom = (save.customUniverses?.[category] ?? []).some((entry) =>
-      entry.name === universe && normalizeZone(entry.zone) === normalizeZone(zone));
-    const hasItems = (save.data[category] ?? []).some((item) =>
-      (item.meta || 'Other') === universe && normalizeZone(item.meta2) === normalizeZone(zone));
-    if (!isCustom || hasItems) return;
-    if (!window.confirm(`Delete empty universe "${universe}" from ${formatZoneLabel(zone)}? This cannot be undone.`)) return;
+    const allItems = save.data[category] ?? [];
+    const matching = allItems.filter((item) => (item.meta || 'Other') === universe &&
+      (zone === 'all' || normalizeZone(item.meta2) === normalizeZone(zone)));
+    const customEntries = (save.customUniverses?.[category] ?? []).filter((entry) =>
+      entry.name === universe && (zone === 'all' || normalizeZone(entry.zone) === normalizeZone(zone)));
+    if (!matching.length && !customEntries.length) return;
+    const location = zone === 'all' ? 'all zones' : formatZoneLabel(zone);
+    const warning = matching.length
+      ? `Delete universe "${universe}" from ${location} AND its ${matching.length} item(s)? All collection statuses and item details in this universe will be permanently removed. Export a backup first if needed. This cannot be undone.`
+      : `Delete empty universe "${universe}" from ${location}? This cannot be undone.`;
+    if (!window.confirm(warning)) return;
+    // Require an additional explicit confirmation before deleting any item data.
+    if (matching.length && window.prompt(`Type DELETE to confirm removal of ${matching.length} item(s) from "${universe}".`) !== 'DELETE') return;
+    const ids = new Set(matching.map((item) => item.id));
     const next = structuredClone(save);
-    next.customUniverses![category] = next.customUniverses![category]!.filter((entry) =>
-      !(entry.name === universe && normalizeZone(entry.zone) === normalizeZone(zone)));
+    next.data[category] = allItems.filter((item) => !ids.has(item.id));
+    next.customUniverses ??= {};
+    next.customUniverses[category] = (next.customUniverses[category] ?? []).filter((entry) =>
+      !(entry.name === universe && (zone === 'all' || normalizeZone(entry.zone) === normalizeZone(zone))));
+    next.deletedIds[category] ??= {};
+    for (const id of ids) {
+      next.deletedIds[category]![id] = true;
+      delete next.checked[category]?.[id];
+      delete next.owned[category]?.[id];
+      delete next.ingredients[category]?.[id];
+    }
     updateSave(next);
     setManualTotals((current) => {
       const updated = { ...current };
-      delete updated[universeTotalKey(category, zone, universe)];
+      for (const key of Object.keys(updated)) {
+        if (key === universeTotalKey(category, zone, universe) ||
+          (zone === 'all' && [...customEntries.map((entry) => entry.zone), ...matching.map((item) => item.meta2 ?? '')].some((entryZone) =>
+            key === universeTotalKey(category, entryZone, universe)))) delete updated[key];
+      }
       localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(updated));
       return updated;
     });
     if (activeView === category && activeGroup === universe) setActiveGroup('all');
   }
-
 
   function setCategoryTotal(category: CategoryId, zone: string, universe: string, value: number | null) {
     setManualTotals((current) => {
@@ -1442,6 +1462,7 @@ function SubcategoryGrid({
 }) {
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [editingGroup, setEditingGroup] = useState<string | null>(null);
   const matching = groups.filter(([name]) => normalizeText(name).includes(normalizeText(query)));
   const selected = groups.find(([name]) => name === activeGroup);
 
@@ -1486,7 +1507,11 @@ function SubcategoryGrid({
                 <span className="universe-compact-progress">{progress.done}/{progress.total}</span>
                 <ChevronDown className={isExpanded ? 'universe-chevron-open' : ''} size={17} aria-hidden="true" />
               </button>
-              <button type="button" className="universe-inline-pencil" onClick={() => onRename(group)} aria-label={`Rename ${group}`} title={`Rename ${group}`}><Edit3 size={16}/></button>
+              <button type="button" className="universe-inline-pencil" onClick={() => setEditingGroup(editingGroup === group ? null : group)} aria-label={`Edit ${group}`} aria-expanded={editingGroup === group} title={`Edit ${group}`}><Edit3 size={16}/></button>
+              {editingGroup === group && <div className="universe-edit-actions">
+                <button type="button" onClick={() => { setEditingGroup(null); onRename(group); }}><Edit3 size={15}/> Rename universe</button>
+                <button type="button" className="universe-edit-delete" onClick={() => { setEditingGroup(null); onRemove(categoryId, activeZone, group); }}><Trash2 size={15}/> Delete universe</button>
+              </div>}
               {isExpanded && (
                 <div id={`universe-inline-${categoryId}-${groups.findIndex(([name]) => name === group)}`} className="universe-inline-items">
                   {items.length ? (
