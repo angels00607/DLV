@@ -503,8 +503,15 @@ export function App() {
     fetchDefaultData().then((defaults) => setSave(loadSave(defaults)));
   }, []);
 
+  const [saveError, setSaveError] = useState('');
   useEffect(() => {
-    if (save) persistSave(save);
+    if (!save) return;
+    try {
+      persistSave(save);
+      setSaveError('');
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Local save failed.');
+    }
   }, [save]);
 
   useEffect(() => {
