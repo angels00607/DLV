@@ -314,3 +314,32 @@ test('duplicate IDs and invalid item fields cannot overwrite a cloud backup', as
     assert.equal(calls, 0);
   } finally { globalThis.fetch = previous; }
 });
+
+const { STORYBOOK_CLOTHING_NAMES } = await import('../src/data/storybookClothingZones.ts');
+test('all 35 requested Clothing zones migrate once, retaining every other field', () => {
+  const previous = globalThis.localStorage;
+  globalThis.localStorage = { getItem: () => null };
+  try {
+    const collection = fixture();
+    collection.catalogMigrationVersion = 1;
+    collection.data.clothing = STORYBOOK_CLOTHING_NAMES.map((name, id) => ({ id: 100 + id, name, meta: 'Original universe', meta2: 'DREAMLIGHT VALLEY', event: true, premiumShop: false, whereToGet: ['Other'], whereToGetOther: 'Keep source' }));
+    const unrelated = { id: 999, name: 'Unlisted clothing', meta2: 'DREAMLIGHT VALLEY' };
+    collection.data.clothing.push(unrelated);
+    const before = structuredClone(collection);
+    const migrated = ensureCategoryShape(collection, {});
+    assert.equal(STORYBOOK_CLOTHING_NAMES.length, 35);
+    for (const item of migrated.data.clothing) {
+      const old = before.data.clothing.find(entry => entry.id === item.id);
+      if (item.id === 999) assert.deepEqual(item, old);
+      else {
+        assert.equal(item.meta2, 'STORYBOOK VALE');
+        assert.deepEqual({ ...item, meta2: old.meta2 }, old);
+      }
+    }
+    assert.deepEqual(collection, before);
+    assert.equal(migrated.catalogMigrationVersion, 2);
+    migrated.data.clothing.find(item => item.id === 100).meta2 = 'ETERNITY ISLE';
+    const again = ensureCategoryShape(migrated, {});
+    assert.equal(again.data.clothing.find(item => item.id === 100).meta2, 'ETERNITY ISLE');
+  } finally { globalThis.localStorage = previous; }
+});
