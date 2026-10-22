@@ -517,7 +517,17 @@ export function App() {
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchDefaultData().then((defaults) => setSave(loadSave(defaults)));
+    let cancelled = false;
+    fetchDefaultData()
+      .then((defaults) => {
+        if (!cancelled) setSave(loadSave(defaults));
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setSaveError(error instanceof Error ? error.message : 'Could not load your collection.');
+        }
+      });
+    return () => { cancelled = true; };
   }, []);
 
   const [saveError, setSaveError] = useState('');
@@ -759,8 +769,21 @@ export function App() {
       if (cleanedIngredients.length) next.ingredients[activeView]![updatedItem.id] = cleanedIngredients;
       else delete next.ingredients[activeView]![updatedItem.id];
     }
-    updateSave(next);
-    setEditingItem(null);
+    // Verify the complete edited record is durable before closing the editor.
+    try {
+      persistSave(next);
+      const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') as SavePayload | null;
+      const storedItem = persisted?.data[activeView]?.find((entry) => entry.id === updatedItem.id);
+      if (!storedItem || JSON.stringify(storedItem) !== JSON.stringify(next.data[activeView]?.find((entry) => entry.id === updatedItem.id))) {
+        throw new Error('Edited item could not be verified in local storage.');
+      }
+      updateSave(next);
+      setSaveError('');
+      setEditingItem(null);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Edited item could not be saved.');
+      window.alert('Unable to save this edit. Your editor will stay open. Export a backup before closing the app.');
+    }
   }
 
   function deleteItem(item: GameItem) {
@@ -859,9 +882,17 @@ export function App() {
 
   async function importFile(event: ChangeEvent<HTMLInputElement>) {
     if (!save || !event.target.files?.[0]) return;
-    const imported = await readImportedFile(event.target.files[0]);
-    updateSave(mergeImportedSave(save, imported));
-    event.target.value = '';
+    try {
+      const imported = await readImportedFile(event.target.files[0]);
+      if (!window.confirm('Importing a collection can replace your recent edits. Export a full JSON backup first. Continue?')) return;
+      const next = mergeImportedSave(save, imported);
+      persistSave(next);
+      updateSave(next);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : 'Collection import failed.');
+    } finally {
+      event.target.value = '';
+    }
   }
 
   return (

@@ -18,7 +18,7 @@ function cloneSave(payload: SavePayload): SavePayload {
   return JSON.parse(JSON.stringify(payload)) as SavePayload;
 }
 
-function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>): SavePayload {
+export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>): SavePayload {
   const next = cloneSave(save);
   const defaultData = defaults.data ?? {};
   const defaultOwned = defaults.owned ?? {};
@@ -69,6 +69,9 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     for (const item of checklist || mergeBundledCatalog ? (defaultData[id] ?? []) : collectionMode ? [] : (defaultData[id] ?? [])) {
       if (deletedDefaultIds[item.id]) continue;
       if (mergeBundledCatalog) {
+        // A bundled item's stable ID survives edits to its zone, group or name.
+        // Do not re-add the catalog copy after the user has moved or renamed it.
+        if (localById.has(item.id)) continue;
         const key = identity(item);
         const occurrence = (defaultOccurrences.get(key) ?? 0) + 1;
         defaultOccurrences.set(key, occurrence);
@@ -78,6 +81,8 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
           if (localById.has(item.id)) continue;
           if (occurrence <= (furnitureOccurrences.get(key) ?? 0)) continue;
         } else {
+          // Stable IDs take precedence over mutable name/universe/zone.
+          // A user moving a bundled clothing item must not resurrect its old copy.
           if (localById.has(item.id) || known.has(key)) continue;
         }
         const newId = localById.has(item.id) ? nextAvailableId++ : item.id;
@@ -101,11 +106,8 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
       if (!localById.has(item.id) && !next.deletedIds[id]?.[item.id]) {
         localItems.push({ ...item });
       } else {
-        const existing = localById.get(item.id);
-        if (existing) {
-          existing.meta2 = item.meta2 ?? existing.meta2 ?? '';
-          existing.stars = item.stars ?? existing.stars;
-        }
+        // The user's saved item is authoritative. Never reapply bundled defaults
+        // over edited zone, stars or any other field during app startup.
       }
     }
 
@@ -145,8 +147,10 @@ export function loadSave(defaults: Partial<SavePayload>): SavePayload {
       },
       defaults,
     );
-  } catch {
-    return ensureCategoryShape(EMPTY_SAVE, defaults);
+  } catch (error) {
+    // Never silently replace corrupted or unreadable user data with defaults.
+    // A later persistence effect would overwrite the only recovery copy.
+    throw new Error('Unable to read your saved collection. Local data has NOT been reset.', { cause: error });
   }
 }
 
