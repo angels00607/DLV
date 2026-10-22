@@ -126,3 +126,32 @@ test('malformed local entries cannot reach the cloud RPC', async () => {
     assert.equal(calls, 0);
   } finally { globalThis.fetch = previous; }
 });
+
+test('all edited fields survive a cloud JSON backup round trip', () => {
+  const collection = fixture();
+  collection.data.characters[0] = {
+    id: 1, name: 'Arendellian Riding Helmet', meta: 'Frozen',
+    meta2: 'WISHBLOSSOM MOUNTAINS', event: true, premiumShop: false,
+    whereToGet: ['Friendship Quest', 'Other'],
+    whereToGetOther: 'Special reward',
+    friendshipQuestCharacter: 'Anna', stars: 5,
+    image: 'custom-image', sourceUrl: 'https://example.org/item',
+  };
+  collection.ingredients.characters = { '1': ['ingredient A'] };
+  const original = createMigrationBackup(collection, { 'clothing:Frozen': 22 }, true);
+  const restored = parseMigrationBackup(JSON.stringify(original));
+  assert.deepEqual(restored.collection, collection);
+  assert.equal(compareCollections(original, restored).identical, true);
+  restored.collection.data.characters[0].meta2 = 'DREAMLIGHT VALLEY';
+  assert.equal(compareCollections(original, restored).identical, false);
+});
+
+test('cloud comparison ignores JSON object key order but detects nested field changes', () => {
+  const first = backup();
+  const reversed = JSON.parse(JSON.stringify(first));
+  reversed.collection = Object.fromEntries(Object.entries(reversed.collection).reverse());
+  reversed.collection.data.characters[0] = { name: 'Test Character', id: 1 };
+  assert.equal(compareCollections(first, reversed).identical, true);
+  reversed.collection.data.characters[0].event = true;
+  assert.equal(compareCollections(first, reversed).identical, false);
+});
