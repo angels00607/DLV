@@ -2080,3 +2080,13 @@ h1 {
 .tab-bar button[aria-label="Add an item"],
 .tab-bar button[aria-label="Choose a collection to add an item"] { background: var(--soft); color: var(--plum); font-weight: 800; }
 .tab-bar button:focus-visible { outline: 3px solid var(--plum); outline-offset: 2px; }
+
+/* Item acquisition: independent optional checkbox groups. */
+.acquisition-fieldset { min-width:0; display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; border:1px solid var(--line); border-radius:14px; padding:12px; margin:8px 0; }
+.acquisition-fieldset legend { font-size:.83rem; font-weight:750; padding:0 5px; color:var(--ink); }
+.acquisition-fieldset legend small { font-weight:400; color:var(--muted); }
+.acquisition-fieldset .quick-add-flag, .acquisition-fieldset .edit-premium-shop { display:inline-flex; align-items:center; gap:7px; min-height:36px; }
+.acquisition-fieldset input[type="checkbox"] { width:18px; height:18px; accent-color:var(--plum); }
+.acquisition-fieldset .where-other { flex-basis:100%; display:grid; gap:6px; }
+.acquisition-fieldset .where-other input { width:100%; }
+.item-acquisition { color:var(--plum); overflow-wrap:anywhere; }

@@ -678,8 +678,7 @@ export function App() {
     const next = structuredClone(save);
     next.owned[categoryId] ??= {};
     const current = next.owned[categoryId]?.[item.id];
-    if (current === 'owned') next.owned[categoryId]![item.id] = 'missing';
-    else if (current === 'missing') delete next.owned[categoryId]![item.id];
+    if (current === 'owned') delete next.owned[categoryId]![item.id];
     else next.owned[categoryId]![item.id] = 'owned';
     updateSave(next);
   }
@@ -699,12 +698,17 @@ export function App() {
     updateSave(next);
   }
 
-  function updateItem(updatedItem: GameItem, ingredients?: string[]) {
+  function updateItem(updatedItem: GameItem, ingredients?: string[], owned?: boolean) {
     if (!save || activeView === 'home') return;
     const next = structuredClone(save);
     next.data[activeView] = (next.data[activeView] ?? []).map((item) =>
       item.id === updatedItem.id ? { ...item, ...updatedItem } : item,
     );
+    if (owned !== undefined) {
+      next.owned[activeView] ??= {};
+      if (owned) next.owned[activeView]![updatedItem.id] = 'owned';
+      else delete next.owned[activeView]![updatedItem.id];
+    }
     if (activeView === 'crafting' || activeView === 'meals') {
       next.ingredients[activeView] ??= {};
       const cleanedIngredients = (ingredients ?? []).map((ingredient) => ingredient.trim()).filter(Boolean);
@@ -757,11 +761,13 @@ export function App() {
         meta2: item.meta2?.trim() ?? '',
         premiumShop: item.premiumShop === true,
         event: item.event === true,
+        whereToGet: item.whereToGet ?? [],
+        whereToGetOther: item.whereToGetOther ?? '',
       },
     ];
     next.nextId[activeView] = nextId + 1;
     next.owned[activeView] ??= {};
-    next.owned[activeView]![nextId] = owned ? 'owned' : 'missing';
+    if (owned) next.owned[activeView]![nextId] = 'owned';
     if (activeView === 'meals' || activeView === 'crafting') {
       next.checked[activeView] ??= {};
       next.checked[activeView]![nextId] = owned;
@@ -1229,6 +1235,7 @@ export function App() {
           supportsRecipe={categoryById[activeView].supportsIngredients === true}
           categoryLabel={categoryById[activeView].label}
           initialIngredients={save.ingredients[activeView]?.[editingItem.id] ?? []}
+          initialOwned={save.owned[activeView]?.[editingItem.id] === 'owned'}
           onClose={() => setEditingItem(null)}
           onSave={updateItem}
         />
@@ -1646,13 +1653,12 @@ function AddItemRow({
   const [event, setEvent] = useState(false);
   const [universe, setUniverse] = useState('');
   const [zone, setZone] = useState<string>(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone);
-  const [newZone, setNewZone] = useState('');
-  const [creatingZone, setCreatingZone] = useState(false);
-  const [addedZones, setAddedZones] = useState<string[]>([]);
+  const [whereToGet, setWhereToGet] = useState<string[]>([]);
+  const [whereToGetOther, setWhereToGetOther] = useState('');
   const [notice, setNotice] = useState('');
   const nameInput = useRef<HTMLInputElement>(null);
   const universes = Array.from(new Set(existingItems.map((item) => item.meta?.trim()).filter((x): x is string => !!x))).sort();
-  const zones = Array.from(new Set([...ZONE_OPTIONS, ...existingItems.map((item) => item.meta2?.trim() ?? '').filter(Boolean), ...addedZones]));
+  const zones = Array.from(new Set([...ZONE_OPTIONS, ...existingItems.map((item) => item.meta2?.trim() ?? '').filter(Boolean) ]));
   const duplicate = existingItems.some((item) => normalizeText(item.name) === normalizeText(name.trim()) &&
     normalizeText(item.meta ?? '') === normalizeText(universe.trim()) && normalizeZone(item.meta2) === normalizeZone(zone));
 
@@ -1662,9 +1668,11 @@ function AddItemRow({
 
   function submit() {
     if (!name.trim() || !universe.trim() || !zone.trim() || duplicate) return;
-    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone, premiumShop, event }, owned);
+    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone, premiumShop, event, whereToGet, whereToGetOther: whereToGet.includes('Other') ? whereToGetOther.trim() : '' }, owned);
     setNotice(`Added ${name.trim()}`);
     setName('');
+    setWhereToGet([]);
+    setWhereToGetOther('');
     nameInput.current?.focus();
   }
 
@@ -1684,22 +1692,9 @@ function AddItemRow({
           {zones.map((value) => <option key={value} value={value}>{formatZoneLabel(value)}</option>)}
         </select>
       </label>
-      <div className="quick-add-flags">
-        <label className="quick-add-flag"><input type="checkbox" checked={owned} onChange={(event) => setOwned(event.target.checked)} /> Owned</label>
-        <label className="quick-add-flag"><input type="checkbox" checked={premiumShop} onChange={(change) => { setPremiumShop(change.target.checked); if (change.target.checked) setEvent(false); }} /> Premium Shop</label>
-        <label className="quick-add-flag"><input type="checkbox" checked={event} onChange={(change) => { setEvent(change.target.checked); if (change.target.checked) setPremiumShop(false); }} /> Event</label>
-      </div>
-      {creatingZone ? (
-        <div className="quick-add-zone">
-          <input value={newZone} onChange={(event) => setNewZone(event.target.value)} placeholder="New expansion / zone" />
-          <button type="button" disabled={!newZone.trim()} onClick={() => {
-            const value = newZone.trim().toUpperCase();
-            if (!zones.includes(value)) setAddedZones((current) => [...current, value]);
-            setZone(value); setNewZone(''); setCreatingZone(false);
-          }}>Save zone</button>
-          <button type="button" onClick={() => setCreatingZone(false)}>Cancel</button>
-        </div>
-      ) : <button type="button" className="quick-add-secondary" onClick={() => setCreatingZone(true)}>+ Add a zone</button>}
+      <fieldset className="acquisition-fieldset"><legend>Owned or not</legend><label className="quick-add-flag"><input type="checkbox" checked={owned} onChange={(e) => setOwned(e.target.checked)} /> Owned</label></fieldset>
+      <fieldset className="acquisition-fieldset"><legend>Special availability</legend><label className="quick-add-flag"><input type="checkbox" checked={premiumShop} onChange={(e) => { setPremiumShop(e.target.checked); if (e.target.checked) setEvent(false); }} /> Premium Shop</label><label className="quick-add-flag"><input type="checkbox" checked={event} onChange={(e) => { setEvent(e.target.checked); if (e.target.checked) setPremiumShop(false); }} /> Event</label></fieldset>
+      <WhereToGetFields values={whereToGet} other={whereToGetOther} onValues={setWhereToGet} onOther={setWhereToGetOther} />
       {duplicate && <p role="alert">This item already exists in this universe and zone.</p>}
       {notice && <p role="status">{notice}</p>}
       <button type="button" className="quick-add-submit" disabled={!name.trim() || !universe.trim() || !zone.trim() || duplicate}
@@ -1990,6 +1985,7 @@ function ItemCard({
           ) : (
             <span>{item.meta2 || item.meta || 'Dreamlight Valley'}</span>
           )}
+          {(item.whereToGet?.length ?? 0) > 0 && <span className="item-acquisition">Where to get: {item.whereToGet!.map((value) => value === 'Other' && item.whereToGetOther?.trim() ? `Other: ${item.whereToGetOther.trim()}` : value).join(', ')}</span>}
           {stars !== undefined && (
             <span className="meal-stars" role="img" aria-label={`${stars} out of 5 stars`}>
               {Array.from({ length: 5 }, (_, index) => (
@@ -2088,11 +2084,19 @@ function HomeView({
   );
 }
 
+const WHERE_TO_GET_OPTIONS = ["Scrooge's Store", "Craftable", "Friendship Quest", "Story Quest", "Other"] as const;
+function WhereToGetFields({ values, other, onValues, onOther }: { values: string[]; other: string; onValues: (values: string[]) => void; onOther: (value: string) => void }) {
+  return <fieldset className="acquisition-fieldset"><legend>Where to get <small>(optional)</small></legend>
+    {WHERE_TO_GET_OPTIONS.map((option) => <label key={option} className="quick-add-flag"><input type="checkbox" checked={values.includes(option)} onChange={(e) => onValues(e.target.checked ? [...values, option] : values.filter((value) => value !== option))} /> {option}</label>)}
+    {values.includes('Other') && <label className="where-other">Other details (optional)<input value={other} onChange={(e) => onOther(e.target.value)} placeholder="Specify where to get it" /></label>}
+  </fieldset>;
+}
 function EditSheet({
   item,
   supportsRecipe,
   categoryLabel,
   initialIngredients,
+  initialOwned,
   onClose,
   onSave,
 }: {
@@ -2100,18 +2104,21 @@ function EditSheet({
   supportsRecipe: boolean;
   categoryLabel: string;
   initialIngredients: string[];
+  initialOwned: boolean;
   onClose: () => void;
-  onSave: (item: GameItem, ingredients?: string[]) => void;
+  onSave: (item: GameItem, ingredients?: string[], owned?: boolean) => void;
 }) {
   const [draft, setDraft] = useState<GameItem>(item);
+  const [ownedDraft, setOwnedDraft] = useState(initialOwned);
   const [ingredients, setIngredients] = useState<string[]>(initialIngredients);
   const [focusedIngredient, setFocusedIngredient] = useState<number | null>(null);
   const [highlightedSuggestion, setHighlightedSuggestion] = useState(0);
 
   useEffect(() => {
     setDraft(item);
+    setOwnedDraft(initialOwned);
     setIngredients(initialIngredients);
-  }, [item, initialIngredients]);
+  }, [item, initialIngredients, initialOwned]);
 
   function updateIngredient(index: number, value: string) {
     setIngredients((current) => current.map((ingredient, ingredientIndex) =>
@@ -2141,7 +2148,7 @@ function EditSheet({
         className="sheet-card edit-form"
         onSubmit={(event) => {
           event.preventDefault();
-          if (draft.name.trim()) onSave({ ...draft, name: draft.name.trim() }, supportsRecipe ? ingredients : undefined);
+          if (draft.name.trim()) onSave({ ...draft, name: draft.name.trim() }, supportsRecipe ? ingredients : undefined, ownedDraft);
         }}
       >
         <div className="sheet-head">
@@ -2165,8 +2172,12 @@ function EditSheet({
           <span>Universe / zone</span>
           <input autoCapitalize="words" value={draft.meta2 ?? ''} onChange={(event) => setDraft({ ...draft, meta2: event.target.value })} />
         </label>
+        <fieldset className="acquisition-fieldset"><legend>Owned or not</legend><label className="quick-add-flag"><input type="checkbox" checked={ownedDraft} onChange={(e) => setOwnedDraft(e.target.checked)} /> Owned</label></fieldset>
+        <fieldset className="acquisition-fieldset"><legend>Special availability</legend>
         <label className="edit-premium-shop"><input type="checkbox" checked={draft.premiumShop === true} onChange={(event) => setDraft({ ...draft, premiumShop: event.target.checked, event: event.target.checked ? false : draft.event })} /> Premium Shop</label>
         <label className="edit-premium-shop"><input type="checkbox" checked={draft.event === true} onChange={(event) => setDraft({ ...draft, event: event.target.checked, premiumShop: event.target.checked ? false : draft.premiumShop })} /> Event</label>
+        </fieldset>
+        <WhereToGetFields values={draft.whereToGet ?? []} other={draft.whereToGetOther ?? ''} onValues={(values) => setDraft({ ...draft, whereToGet: values })} onOther={(other) => setDraft({ ...draft, whereToGetOther: other })} />
         {categoryLabel === 'Meals' && (
           <label>
             <span>Recipe stars</span>
