@@ -146,21 +146,21 @@
         "id": 1000002,
         "name": "Jeweled Vizier Top",
         "meta": "ALADDIN",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Jeweled_Vizier_Top"
       },
       {
         "id": 1000003,
         "name": "Jeweled Vizier Trousers",
         "meta": "ALADDIN",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Jeweled_Vizier_Trousers"
       },
       {
         "id": 1000004,
         "name": "Red Vizier Loafers",
         "meta": "ALADDIN",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Red_Vizier_Loafers"
       },
       {
@@ -725,7 +725,7 @@
         "id": 1000033,
         "name": "Gaston's Pompadour",
         "meta": "BEAUTY AND THE BEAST — 1991",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Gaston%27s_Pompadour"
       },
       {
@@ -823,7 +823,7 @@
         "id": 1000048,
         "name": "Gaston's Red Leather Coat",
         "meta": "BEAUTY AND THE BEAST — 2017",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Gaston%27s_Red_Leather_Coat"
       },
       {
@@ -1593,7 +1593,7 @@
         "id": 1000122,
         "name": "Flowering Alpine Ensemble",
         "meta": "DREAMLIGHT VALLEY",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Flowering_Alpine_Ensemble"
       },
       {
@@ -1920,7 +1920,7 @@
         "id": 211,
         "name": "Arendellian Riding Helmet",
         "meta": "FROZEN",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Arendellian_Riding_Helmet",
         "premiumShop": true
       },
@@ -1928,7 +1928,7 @@
         "id": 212,
         "name": "Arendellian Riding Outfit",
         "meta": "FROZEN",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Arendellian_Riding_Outfit",
         "premiumShop": true
       },
@@ -1999,7 +1999,7 @@
         "id": 222,
         "name": "Cropped Arendellian Riding Outfit",
         "meta": "FROZEN",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Cropped_Arendellian_Riding_Outfit",
         "premiumShop": true
       },
@@ -2859,7 +2859,7 @@
         "id": 1000440,
         "name": "Dream Earrings",
         "meta": "GENERAL",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Dream_Earrings"
       },
       {
@@ -3286,7 +3286,7 @@
         "id": 1000452,
         "name": "Guardian Emblem Helmet",
         "meta": "GENERAL",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Guardian_Emblem_Helmet"
       },
       {
@@ -3620,7 +3620,7 @@
         "id": 1000456,
         "name": "Mythical Emblem Helmet",
         "meta": "GENERAL",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Mythical_Emblem_Helmet"
       },
       {
@@ -3872,7 +3872,7 @@
         "id": 1000472,
         "name": "Radiant Emblem Helmet",
         "meta": "GENERAL",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Radiant_Emblem_Helmet"
       },
       {
@@ -6569,14 +6569,14 @@
         "id": 1000257,
         "name": "Black, White, and Chic All Over Hat",
         "meta": "ONE HUNDRED AND ONE DALMATIANS",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Black,_White,_and_Chic_All_Over_Hat"
       },
       {
         "id": 1000258,
         "name": "Black, White, and Chic All Over Jacket",
         "meta": "ONE HUNDRED AND ONE DALMATIANS",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Black,_White,_and_Chic_All_Over_Jacket"
       },
       {
@@ -6602,35 +6602,35 @@
         "id": 1000259,
         "name": "3D Glasses",
         "meta": "OSWALD",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/3D_Glasses"
       },
       {
         "id": 1000260,
         "name": "Oswaldian Black and White Fedora",
         "meta": "OSWALD",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Oswaldian_Black_and_White_Fedora"
       },
       {
         "id": 1000261,
         "name": "Oswaldian Fedora",
         "meta": "OSWALD",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Oswaldian_Fedora"
       },
       {
         "id": 1000262,
         "name": "Oswaldian Zoot Suit",
         "meta": "OSWALD",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Oswaldian_Zoot_Suit"
       },
       {
         "id": 1000263,
         "name": "Trolley Conductor Hat",
         "meta": "OSWALD",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Trolley_Conductor_Hat"
       },
       {
@@ -9670,14 +9670,14 @@
         "id": 1000264,
         "name": "Pixie Engineer Outfit",
         "meta": "PETER PAN",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pixie_Engineer_Outfit"
       },
       {
         "id": 1000265,
         "name": "Pixie Goggles",
         "meta": "PETER PAN",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pixie_Goggles"
       },
       {
@@ -10139,7 +10139,7 @@
         "id": 1000287,
         "name": "Mountainous Adventure Wear",
         "meta": "SNOW WHITE",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Mountainous_Adventure_Wear"
       },
       {
@@ -10240,7 +10240,7 @@
         "id": 1000307,
         "name": "Artist's Painted Overalls",
         "meta": "TANGLED",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Artist%27s_Painted_Overalls",
         "premiumShop": true
       },
@@ -10283,7 +10283,7 @@
         "id": 1000308,
         "name": "Flynn-spired Overalls",
         "meta": "TANGLED",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Flynn-spired_Overalls",
         "premiumShop": true
       },
@@ -10291,14 +10291,14 @@
         "id": 1000302,
         "name": "Glowing Floral Gown",
         "meta": "TANGLED",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Glowing_Floral_Gown"
       },
       {
         "id": 1000303,
         "name": "Glowing Floral Suit",
         "meta": "TANGLED",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Glowing_Floral_Suit"
       },
       {
@@ -12159,21 +12159,21 @@
         "id": 1000377,
         "name": "Retro Statement Glasses",
         "meta": "WALL-E",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Retro_Statement_Glasses"
       },
       {
         "id": 1000378,
         "name": "Retro-tastic Jacket",
         "meta": "WALL-E",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Retro-tastic_Jacket"
       },
       {
         "id": 1000379,
         "name": "Retro-tastic Minidress",
         "meta": "WALL-E",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "ETERNITY ISLE",
         "sourceUrl": "https://dreamlightvalleywiki.com/Retro-tastic_Minidress"
       },
       {
@@ -12258,7 +12258,7 @@
         "id": 1000381,
         "name": "\"Only One\" Tigger Jersey",
         "meta": "WINNIE THE POOH",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/%22Only_One%22_Tigger_Jersey"
       },
       {
@@ -12407,14 +12407,14 @@
         "id": 1000400,
         "name": "Tigger-Striped Pants",
         "meta": "WINNIE THE POOH",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Tigger-Striped_Pants"
       },
       {
         "id": 1000399,
         "name": "Tiggerific Bucket Hat",
         "meta": "WINNIE THE POOH",
-        "meta2": "DREAMLIGHT VALLEY",
+        "meta2": "WISHBLOSSOM MOUNTAINS",
         "sourceUrl": "https://dreamlightvalleywiki.com/Tiggerific_Bucket_Hat"
       },
       {
