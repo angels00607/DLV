@@ -1985,7 +1985,6 @@ function ItemCard({
           ) : (
             <span>{item.meta2 || item.meta || 'Dreamlight Valley'}</span>
           )}
-          {(item.whereToGet?.length ?? 0) > 0 && <span className="item-acquisition">Where to get: {item.whereToGet!.map((value) => value === 'Other' && item.whereToGetOther?.trim() ? `Other: ${item.whereToGetOther.trim()}` : value).join(', ')}</span>}
           {stars !== undefined && (
             <span className="meal-stars" role="img" aria-label={`${stars} out of 5 stars`}>
               {Array.from({ length: 5 }, (_, index) => (
@@ -1995,6 +1994,12 @@ function ItemCard({
           )}
         </span>
         </button>
+        {(item.whereToGet?.length ?? 0) > 0 && (
+          <div className="item-acquisition-row">
+            <span className="item-acquisition-label">Where to get</span>
+            <span className="item-acquisition-value">{item.whereToGet!.map((value) => value === 'Other' && item.whereToGetOther?.trim() ? `Other: ${item.whereToGetOther.trim()}` : value).join(', ')}</span>
+          </div>
+        )}
         {ingredients.length > 0 && (
           <span className="ingredient-preview" aria-label={`Recipe: ${ingredients.join(', ')}`}>
             {ingredients.map((ingredient, index) => (
