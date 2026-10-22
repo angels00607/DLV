@@ -650,6 +650,16 @@ export function App() {
   }
 
 
+  function setCategoryTotal(category: CategoryId, zone: string, universe: string, value: number | null) {
+    setManualTotals((current) => {
+      const next = { ...current };
+      if (value === null) delete next[universeTotalKey(category, zone, universe)];
+      else next[universeTotalKey(category, zone, universe)] = Math.max(0, Math.floor(value));
+      localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(next));
+      return next;
+    });
+  }
+
   if (!save) {
     return (
       <main className="boot-screen">
