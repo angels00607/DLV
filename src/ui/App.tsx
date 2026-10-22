@@ -849,6 +849,7 @@ export function App() {
 
   return (
     <div className="app-shell">
+      {saveError && <div role="alert" className="save-failure-banner">⚠ {saveError} Export a JSON backup before closing this tab.</div>}
       <header className="top-panel">
         <div>
           <p className="eyebrow">Disney Dreamlight Valley</p>
