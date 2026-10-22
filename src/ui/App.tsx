@@ -517,7 +517,17 @@ export function App() {
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchDefaultData().then((defaults) => setSave(loadSave(defaults)));
+    let cancelled = false;
+    fetchDefaultData()
+      .then((defaults) => {
+        if (!cancelled) setSave(loadSave(defaults));
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setSaveError(error instanceof Error ? error.message : 'Could not load your collection.');
+        }
+      });
+    return () => { cancelled = true; };
   }, []);
 
   const [saveError, setSaveError] = useState('');
