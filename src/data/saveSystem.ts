@@ -1,5 +1,6 @@
-import { CATEGORIES } from '../domain/categories';
-import { reconcileGeneralClothing } from './generalClothingAvailability';
+import { validateSave } from './validateSave.ts';
+import { CATEGORIES } from '../domain/categories.ts';
+import { reconcileGeneralClothing } from './generalClothingAvailability.ts';
 import type { CategoryId, GameItem, SavePayload } from '../domain/types';
 
 export const STORAGE_KEY = 'dlv_guide_v6';
@@ -20,14 +21,17 @@ function cloneSave(payload: SavePayload): SavePayload {
 }
 
 export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>): SavePayload {
+  validateSave(save);
   const next = cloneSave(save);
-  const defaultData = defaults.data ?? {};
+  const applyLegacyMigrations = (save.catalogMigrationVersion ?? 0) < 1;
+  const defaultData = structuredClone(defaults.data ?? {});
   const defaultOwned = defaults.owned ?? {};
   const defaultChecked = defaults.checked ?? {};
   const defaultIngredients = defaults.ingredients ?? {};
 
   const collectionMode = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
   CATEGORIES.forEach(({ id }) => {
+    const initializingCategory = save.data[id] === undefined;
     next.data[id] ??= [];
     next.checked[id] ??= {};
     next.owned[id] ??= {};
@@ -40,30 +44,31 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
       const normalize = (item: GameItem) => {
         if (['GENERAL', 'NON-DISNEY RELATEDd'].includes((item.meta ?? '').trim())) item.meta = 'NON-DISNEY RELATED';
       };
-      (next.data[id] ?? []).forEach(normalize);
+      if (applyLegacyMigrations) (next.data[id] ?? []).forEach(normalize);
       (defaultData[id] ?? []).forEach(normalize);
       next.customUniverses[id] = Array.from(new Map(
         (next.customUniverses[id] ?? []).map((entry) => {
-          const name = ['GENERAL', 'NON-DISNEY RELATEDd'].includes(entry.name.trim())
+          const name = applyLegacyMigrations && ['GENERAL', 'NON-DISNEY RELATEDd'].includes(entry.name.trim())
             ? 'NON-DISNEY RELATED' : entry.name;
           return { ...entry, name };
         }).map((entry) => [JSON.stringify([entry.name, entry.zone]), entry]),
       ).values());
     }
     if (id === 'clothing') {
-      (next.data[id] ?? []).forEach(reconcileGeneralClothing);
+      // Saved records are authoritative: catalog corrections must never reset edits.
+      // Apply availability corrections only to bundled records before adding new items.
       (defaultData[id] ?? []).forEach(reconcileGeneralClothing);
       // Consolidate legacy OTHER (GENERAL) into GENERAL without changing item IDs
       // or losing ownership, checklist and edited acquisition fields.
       const unify = (item: GameItem) => {
         if ((item.meta ?? '').trim().toUpperCase() === 'OTHER (GENERAL)') item.meta = 'GENERAL';
       };
-      (next.data[id] ?? []).forEach(unify);
+      if (applyLegacyMigrations) (next.data[id] ?? []).forEach(unify);
       (defaultData[id] ?? []).forEach(unify);
       next.customUniverses[id] = Array.from(new Map(
         (next.customUniverses[id] ?? []).map((entry) => ({
           ...entry,
-          name: entry.name.trim().toUpperCase() === 'OTHER (GENERAL)' ? 'GENERAL' : entry.name,
+          name: applyLegacyMigrations && entry.name.trim().toUpperCase() === 'OTHER (GENERAL)' ? 'GENERAL' : entry.name,
         })).map((entry) => [JSON.stringify([entry.name, entry.zone]), entry]),
       ).values());
     }
@@ -112,9 +117,9 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
         continue;
       }
       if (checklist) {
-        if (known.has(identity(item))) continue;
+        if (localById.has(item.id) || known.has(identity(item))) continue;
         // Preserve the original ID only when it is free; never replace a user's item.
-        const newId = localById.has(item.id) || item.id < nextAvailableId ? nextAvailableId++ : item.id;
+        const newId = item.id;
         localItems.push({ ...item, id: newId });
         localById.set(newId, item);
         known.add(identity(item));
@@ -129,15 +134,15 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
       }
     }
 
-    for (const [itemId, value] of Object.entries(collectionMode ? {} : (defaultOwned[id] ?? {}))) {
+    for (const [itemId, value] of Object.entries(collectionMode || !initializingCategory ? {} : (defaultOwned[id] ?? {}))) {
       if (next.owned[id]?.[itemId] === undefined) next.owned[id]![itemId] = value;
     }
 
-    for (const [itemId, value] of Object.entries(collectionMode ? {} : (defaultChecked[id] ?? {}))) {
+    for (const [itemId, value] of Object.entries(collectionMode || !initializingCategory ? {} : (defaultChecked[id] ?? {}))) {
       if (next.checked[id]?.[itemId] === undefined) next.checked[id]![itemId] = value;
     }
 
-    for (const [itemId, value] of Object.entries(collectionMode ? {} : (defaultIngredients[id] ?? {}))) {
+    for (const [itemId, value] of Object.entries(collectionMode || !initializingCategory ? {} : (defaultIngredients[id] ?? {}))) {
       if (!next.ingredients[id]?.[itemId]) next.ingredients[id]![itemId] = value;
     }
 
@@ -145,6 +150,7 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
     next.nextId[id] = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
   });
 
+  next.catalogMigrationVersion = Math.max(save.catalogMigrationVersion ?? 0, 1);
   return next;
 }
 
@@ -155,6 +161,7 @@ export function loadSave(defaults: Partial<SavePayload>): SavePayload {
     const parsed = JSON.parse(raw) as Partial<SavePayload>;
     return ensureCategoryShape(
       {
+        catalogMigrationVersion: parsed.catalogMigrationVersion,
         data: parsed.data ?? {},
         checked: parsed.checked ?? {},
         nextId: parsed.nextId ?? {},
@@ -174,18 +181,19 @@ export function loadSave(defaults: Partial<SavePayload>): SavePayload {
 
 export function persistSave(save: SavePayload): void {
   try {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        data: save.data,
-        checked: save.checked,
-        nextId: save.nextId,
-        ingredients: save.ingredients,
-        owned: save.owned,
-        deletedIds: save.deletedIds,
-        customUniverses: save.customUniverses ?? {},
-      }),
-    );
+    validateSave(save);
+    const serialized = JSON.stringify({
+      catalogMigrationVersion: save.catalogMigrationVersion,
+      data: save.data,
+      checked: save.checked,
+      nextId: save.nextId,
+      ingredients: save.ingredients,
+      owned: save.owned,
+      deletedIds: save.deletedIds,
+      customUniverses: save.customUniverses ?? {},
+    });
+    localStorage.setItem(STORAGE_KEY, serialized);
+    if (localStorage.getItem(STORAGE_KEY) !== serialized) throw new Error('Local read-back mismatch.');
   } catch (error) {
     throw new Error('Local save failed. Your recent changes may not survive a reload.', { cause: error });
   }
@@ -194,7 +202,7 @@ export function persistSave(save: SavePayload): void {
 export function buildPortableData(save: SavePayload, manualTotals: Record<string, number> = {}): string {
   return JSON.stringify(
     {
-      data: Object.fromEntries(CATEGORIES.map((category) => [category.id, save.data[category.id] ?? []])),
+      data: { ...save.data, ...Object.fromEntries(CATEGORIES.map((category) => [category.id, save.data[category.id] ?? []])) },
       owned: save.owned,
       checked: save.checked,
       nextId: save.nextId,
@@ -202,6 +210,7 @@ export function buildPortableData(save: SavePayload, manualTotals: Record<string
       deletedIds: save.deletedIds,
       customUniverses: save.customUniverses ?? {},
       manualTotals,
+      catalogMigrationVersion: save.catalogMigrationVersion,
       savedAt: new Date().toISOString(),
     },
     null,
@@ -212,6 +221,7 @@ export function buildPortableData(save: SavePayload, manualTotals: Record<string
 export function mergeImportedSave(current: SavePayload, imported: Partial<SavePayload>): SavePayload {
   return ensureCategoryShape(
     {
+      catalogMigrationVersion: imported.catalogMigrationVersion ?? current.catalogMigrationVersion,
       data: imported.data ?? current.data,
       checked: imported.checked ?? current.checked,
       nextId: imported.nextId ?? current.nextId,
@@ -247,7 +257,7 @@ export function upsertSyncedItems(save: SavePayload, categoryId: CategoryId, inc
   }
 
   next.data[categoryId] = sortCatItems(categoryId, items);
-  next.nextId[categoryId] = getNextId(next.data[categoryId] ?? []);
+  next.nextId[categoryId] = Math.max(next.nextId[categoryId] ?? 1, getNextId(next.data[categoryId] ?? []));
   return next;
 }
 

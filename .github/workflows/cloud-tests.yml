@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'src/cloud/**'
+      - 'src/data/**'
+      - 'src/domain/**'
+      - 'src/ui/App.tsx'
       - 'tests/**'
       - 'package.json'
       - '.github/workflows/cloud-tests.yml'

@@ -1,3 +1,4 @@
+import { validateSave } from '../data/validateSave.ts';
 import type { SavePayload } from '../domain/types';
 
 // Phase 1: read-only transport, deliberately disconnected from application state.
@@ -56,6 +57,7 @@ export function validateCloudSnapshot(value: unknown): CloudSnapshot {
       throw new Error('Incomplete cloud collection');
     }
   }
+  validateSave(row.collection);
   const totals = row.manual_totals as Record<string, unknown>;
   if (Object.values(totals).some((number) => typeof number !== 'number' || !Number.isSafeInteger(number) || number < 0)) {
     throw new Error('Invalid cloud totals');
