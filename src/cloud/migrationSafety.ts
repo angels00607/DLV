@@ -58,7 +58,17 @@ export function compareCollections(
   const countUniverses = (save: SavePayload) => Object.values(save.customUniverses ?? {})
     .reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
   // JSON comparisons here are informational only; never auto-merge on this basis.
-  const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+  // PostgreSQL JSONB can reorder object keys. Compare every value while ignoring only key order.
+  const canonical = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(canonical);
+    if (value !== null && typeof value === 'object') {
+      return Object.fromEntries(Object.entries(value as Record<string, unknown>)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, entry]) => [key, canonical(entry)]));
+    }
+    return value;
+  };
+  const same = (a: unknown, b: unknown) => JSON.stringify(canonical(a)) === JSON.stringify(canonical(b));
   return {
     localItems: countItems(local.collection),
     remoteItems: countItems(remote.collection),
