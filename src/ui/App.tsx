@@ -284,9 +284,18 @@ export function App() {
       setCloudSession(session);
       if (!session) throw new Error('Sign in first.');
       const remote = await readOwnCloudSnapshot(config, session.access_token);
-      // Capture the persisted version so the upload cannot silently use stale React state.
+      // Persist the latest in-memory collection before uploading, then verify a byte-for-byte round trip.
+      // This includes every GameItem field (Event, Premium Shop, acquisition details, character, etc.).
+      persistSave(save);
+      const expectedLocal = JSON.stringify({
+        data: save.data, checked: save.checked, nextId: save.nextId,
+        ingredients: save.ingredients, owned: save.owned, deletedIds: save.deletedIds,
+        customUniverses: save.customUniverses ?? {},
+      });
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) throw new Error('Local collection is not saved yet. Try again.');
+      if (!stored || JSON.stringify(JSON.parse(stored)) !== expectedLocal) {
+        throw new Error('Local save verification failed. Cloud unchanged; do not close this tab.');
+      }
       const totalsStored = localStorage.getItem(MANUAL_TOTALS_KEY);
       const ownedOnly = localStorage.getItem(COLLECTION_MODE_KEY) === '1';
       const backup = createMigrationBackup(JSON.parse(stored) as SavePayload,
@@ -297,7 +306,7 @@ export function App() {
         manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
       }).identical;
       if (matches) {
-        setCloudMessage(`Already saved in cloud (revision ${remote.revision}; ${count} items). Nothing changed.`);
+        setCloudMessage(`Already saved in cloud (revision ${remote.revision}; ${count} items). All saved fields match this device.`);
         return;
       }
       // On iOS standalone web apps, triggering a download immediately before a
@@ -318,9 +327,17 @@ export function App() {
         ? await updateCloudBackup(config, session.access_token, backup, remote.revision)
         : await uploadFirstCloudBackup(config, session.access_token, backup);
       if (revision === null) throw new Error('Cloud changed during save. No data overwritten.');
+      // Do not claim success until the server returns the same full collection, including all item fields.
+      const verified = await readOwnCloudSnapshot(config, session.access_token);
+      if (!verified || verified.revision !== revision || !compareCollections(backup, {
+        ...backup, collection: verified.collection,
+        manualTotals: verified.manual_totals, ownedOnly: verified.owned_only,
+      }).identical) {
+        throw new Error('Cloud upload returned, but full field-by-field verification failed. Do not overwrite or restore your local collection; export a JSON backup and retry.');
+      }
       setCloudBaseline(null);
       setCloudPreview(`Cloud revision ${revision}; ${count} items.`);
-      setCloudMessage(`Saved successfully! Your collection is available on any signed-in device (revision ${revision}).`);
+      setCloudMessage(`Saved and verified! All collection fields match the cloud (revision ${revision}; ${count} items).`);
     } catch (error) {
       setCloudMessage(error instanceof Error ? error.message : 'Cloud save failed.');
     } finally { setCloudBusy(false); }
