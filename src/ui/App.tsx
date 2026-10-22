@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { CATEGORIES, categoryById } from '../domain/categories';
 import type { CategoryId, FilterState, GameItem, SavePayload } from '../domain/types';
+import { replaceLocalBackup } from '../data/localBackup';
 import { fetchDefaultData } from '../data/defaultData';
 import { INGREDIENT_OPTIONS } from '../data/ingredientOptions';
 import { downloadSave, readImportedFile } from '../data/manualImport';
@@ -89,11 +90,26 @@ export function App() {
   const [cloudPreview, setCloudPreview] = useState<string | null>(null);
   const [historyRevision, setHistoryRevision] = useState('');
   const startupCloudCheckStarted = useRef(false);
+  const externalStorageChange = useRef(false);
+  const [cloudSavedCollection, setCloudSavedCollection] = useState<string | null>(null);
+  useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if (event.storageArea === localStorage &&
+          (event.key === null || [STORAGE_KEY, MANUAL_TOTALS_KEY, COLLECTION_MODE_KEY].includes(event.key))) {
+        externalStorageChange.current = true;
+        setSaveError('Another tab changed this collection. Export this tab as a backup, then reload before editing or saving to cloud.');
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+  function assertCurrentDevice() {
+    if (externalStorageChange.current) throw new Error('Another tab changed the saved collection. Export this tab, then reload. Cloud unchanged.');
+  }
   // Phase 1 of automatic sync: detect the remote revision on startup without
   // ever overwriting local data or uploading changes without consent.
   useEffect(() => {
-    if (!save || !cloudSession || startupCloudCheckStarted.current ||
-        import.meta.env.VITE_DLV_TEST_MODE !== 'true') return;
+    if (!save || !cloudSession || startupCloudCheckStarted.current) return;
     const config = readCloudConfiguration();
     if (!config) return;
     startupCloudCheckStarted.current = true;
@@ -113,6 +129,7 @@ export function App() {
           ...localBackup, collection: remote.collection,
           manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
         });
+        if (comparison.identical) setCloudSavedCollection(JSON.stringify([save, manualTotals]));
         setCloudPreview(`Automatic cloud check: revision ${remote.revision}; ${comparison.identical
           ? 'this device matches the cloud.' : 'this device differs from the cloud. Review before restoring or uploading.'}`);
       } catch {
@@ -133,18 +150,8 @@ export function App() {
       if (!window.confirm('A recovery backup download was started. Confirm it is saved. Replace ALL local collection data with the selected JSON file? This will not change Supabase.')) {
         setCloudMessage('Backup import cancelled.'); return;
       }
-      const keys = [STORAGE_KEY, MANUAL_TOTALS_KEY, COLLECTION_MODE_KEY] as const;
-      const previous = keys.map(key => localStorage.getItem(key));
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(imported.collection));
-        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(imported.manualTotals));
-        localStorage.setItem(COLLECTION_MODE_KEY, imported.ownedOnly ? '1' : '0');
-      } catch (error) {
-        keys.forEach((key, i) => {
-          try { if (previous[i] === null) localStorage.removeItem(key); else localStorage.setItem(key, previous[i]!); } catch { /* downloaded recovery copy remains */ }
-        });
-        throw error;
-      }
+      assertCurrentDevice();
+      replaceLocalBackup(imported.collection, imported.manualTotals, imported.ownedOnly);
       setCloudBaseline(null);
       setSave(imported.collection);
       setManualTotals(imported.manualTotals);
@@ -175,18 +182,8 @@ export function App() {
       const latestHistory = await readOwnCloudHistory(config, session.access_token);
       const checked = latestHistory.find(entry => entry.revision === revision);
       if (!checked || checked.archived_at !== archived.archived_at) throw new Error('Archive changed. Restore cancelled.');
-      const keys = [STORAGE_KEY, MANUAL_TOTALS_KEY, COLLECTION_MODE_KEY] as const;
-      const previous = keys.map(key => localStorage.getItem(key));
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(checked.collection));
-        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(checked.manual_totals));
-        localStorage.setItem(COLLECTION_MODE_KEY, checked.owned_only ? '1' : '0');
-      } catch (error) {
-        keys.forEach((key, i) => {
-          try { if (previous[i] === null) localStorage.removeItem(key); else localStorage.setItem(key, previous[i]!); } catch { /* recovery backup was downloaded */ }
-        });
-        throw error;
-      }
+      assertCurrentDevice();
+      replaceLocalBackup(checked.collection, checked.manual_totals, checked.owned_only);
       setCloudBaseline(null);
       setSave(checked.collection);
       setManualTotals(checked.manual_totals);
@@ -231,6 +228,7 @@ export function App() {
     }
     setCloudBusy(true);
     try {
+      assertCurrentDevice();
       const session = await getValidCloudSession(config);
       setCloudSession(session);
       if (!session || session.user.id !== cloudBaseline.userId) throw new Error('Account changed. Compare again.');
@@ -279,15 +277,16 @@ export function App() {
     const config = readCloudConfiguration();
     if (!config || !save) { setCloudMessage('Cloud or local collection unavailable.'); return; }
     setCloudBusy(true);
+    setCloudMessage('Saving and verifying your complete collection...');
     try {
-      const session = await getValidCloudSession(config);
-      setCloudSession(session);
-      if (!session) throw new Error('Sign in first.');
-      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      assertCurrentDevice();
+      assertStoredTotals();
+      // Freeze local data before the first await; never overwrite newer edits with a stale React closure.
       // Persist the latest in-memory collection before uploading, then verify a byte-for-byte round trip.
       // This includes every GameItem field (Event, Premium Shop, acquisition details, character, etc.).
       persistSave(save);
       const expectedLocal = JSON.stringify({
+        catalogMigrationVersion: save.catalogMigrationVersion,
         data: save.data, checked: save.checked, nextId: save.nextId,
         ingredients: save.ingredients, owned: save.owned, deletedIds: save.deletedIds,
         customUniverses: save.customUniverses ?? {},
@@ -301,11 +300,20 @@ export function App() {
       const backup = createMigrationBackup(JSON.parse(stored) as SavePayload,
         totalsStored ? JSON.parse(totalsStored) as Record<string, number> : {}, ownedOnly);
       const count = Object.values(backup.collection.data).reduce((sum, entries) => sum + (entries?.length ?? 0), 0);
+      const session = await getValidCloudSession(config);
+      setCloudSession(session);
+      if (!session) throw new Error('Sign in first.');
+      const remote = await readOwnCloudSnapshot(config, session.access_token);
+      const localUnchanged = () => localStorage.getItem(STORAGE_KEY) === stored &&
+        localStorage.getItem(MANUAL_TOTALS_KEY) === totalsStored &&
+        (localStorage.getItem(COLLECTION_MODE_KEY) === '1') === ownedOnly;
+      if (!localUnchanged()) throw new Error('New edits were made while connecting. They remain saved on this device. Click Save my collection again to upload them.');
       const matches = remote && compareCollections(backup, {
         ...backup, collection: remote.collection,
         manualTotals: remote.manual_totals, ownedOnly: remote.owned_only,
       }).identical;
       if (matches) {
+        setCloudSavedCollection(JSON.stringify([backup.collection, backup.manualTotals]));
         setCloudMessage(`Already saved in cloud (revision ${remote.revision}; ${count} items). All saved fields match this device.`);
         return;
       }
@@ -336,8 +344,11 @@ export function App() {
         throw new Error('Cloud upload returned, but full field-by-field verification failed. Do not overwrite or restore your local collection; export a JSON backup and retry.');
       }
       setCloudBaseline(null);
+      setCloudSavedCollection(JSON.stringify([backup.collection, backup.manualTotals]));
       setCloudPreview(`Cloud revision ${revision}; ${count} items.`);
-      setCloudMessage(`Saved and verified! All collection fields match the cloud (revision ${revision}; ${count} items).`);
+      setCloudMessage(localUnchanged()
+        ? `Saved and verified! All collection fields match the cloud (revision ${revision}; ${count} items).`
+        : `Cloud revision ${revision} verified, but newer edits remain on this device. Click Save my collection again to save those edits.`);
     } catch (error) {
       setCloudMessage(error instanceof Error ? error.message : 'Cloud save failed.');
     } finally { setCloudBusy(false); }
@@ -368,21 +379,8 @@ export function App() {
       // download/confirm dialogs can fail even when the first read succeeded.
       // The user's pre-restore JSON recovery copy is retained.
       const latest = remote;
-      const previous = {
-        collection: localStorage.getItem(STORAGE_KEY),
-        totals: localStorage.getItem(MANUAL_TOTALS_KEY),
-        mode: localStorage.getItem(COLLECTION_MODE_KEY),
-      };
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(latest.collection));
-        localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(latest.manual_totals));
-        localStorage.setItem(COLLECTION_MODE_KEY, latest.owned_only ? '1' : '0');
-      } catch (error) {
-        for (const [key, value] of [[STORAGE_KEY, previous.collection], [MANUAL_TOTALS_KEY, previous.totals], [COLLECTION_MODE_KEY, previous.mode]] as const) {
-          try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch { /* backup file remains available */ }
-        }
-        throw error;
-      }
+      assertCurrentDevice();
+      replaceLocalBackup(latest.collection, latest.manual_totals, latest.owned_only);
       setCloudBaseline(null);
       setSave(latest.collection);
       setManualTotals(latest.manual_totals);
@@ -425,6 +423,7 @@ export function App() {
     setCloudBusy(true);
     setCloudPreview(null);
     try {
+      assertCurrentDevice();
       const session = await getValidCloudSession(config);
       setCloudSession(session);
       if (!session) throw new Error('Sign in first.');
@@ -519,8 +518,18 @@ export function App() {
   useEffect(() => {
     let cancelled = false;
     fetchDefaultData()
+      .catch((error) => {
+        if (localStorage.getItem(STORAGE_KEY)) return {};
+        throw error;
+      })
       .then((defaults) => {
-        if (!cancelled) setSave(loadSave(defaults));
+        if (!cancelled) {
+          const loaded = loadSave(defaults);
+          setSave(loaded);
+          assertStoredTotals();
+          // Keep the collection accessible for export even if storage is full.
+          replaceLocalBackup(loaded, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+        }
       })
       .catch((error) => {
         if (!cancelled) {
@@ -531,15 +540,7 @@ export function App() {
   }, []);
 
   const [saveError, setSaveError] = useState('');
-  useEffect(() => {
-    if (!save) return;
-    try {
-      persistSave(save);
-      setSaveError('');
-    } catch (error) {
-      setSaveError(error instanceof Error ? error.message : 'Local save failed.');
-    }
-  }, [save]);
+
 
   useEffect(() => {
     localStorage.setItem(NAV_STORAGE_KEY, JSON.stringify({ activeView, activeZone, activeGroup }));
@@ -640,25 +641,21 @@ export function App() {
         entry.name === oldName ? { ...entry, name: proposed } : entry,
       );
     }
-    setManualTotals((current) => {
-      const updated = { ...current };
-      for (const [key, value] of Object.entries(current)) {
-        // Only migrate totals whose key exactly matches a known zone and old universe.
-        const zones = new Set([
-          ...(save.data[category] ?? []).filter((item) => (item.meta || 'Other') === oldName).map((item) => normalizeZone(item.meta2)),
-          ...(save.customUniverses?.[category] ?? []).filter((entry) => entry.name === oldName).map((entry) => normalizeZone(entry.zone)),
-        ]);
-        for (const zone of zones) {
-          if (key === universeTotalKey(category, zone, oldName)) {
-            delete updated[key];
-            updated[universeTotalKey(category, zone, proposed)] = value;
-          }
+    const updated = { ...manualTotals };
+    for (const [key, value] of Object.entries(manualTotals)) {
+      // Only migrate totals whose key exactly matches a known zone and old universe.
+      const zones = new Set([
+        ...(save.data[category] ?? []).filter((item) => (item.meta || 'Other') === oldName).map((item) => normalizeZone(item.meta2)),
+        ...(save.customUniverses?.[category] ?? []).filter((entry) => entry.name === oldName).map((entry) => normalizeZone(entry.zone)),
+      ]);
+      for (const zone of zones) {
+        if (key === universeTotalKey(category, zone, oldName)) {
+          delete updated[key];
+          updated[universeTotalKey(category, zone, proposed)] = value;
         }
       }
-      localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(updated));
-      return updated;
-    });
-    updateSave(next);
+    }
+    updateSave(next, updated);
     if (activeView === category && activeGroup === oldName) setActiveGroup(proposed);
   }
 
@@ -690,40 +687,44 @@ export function App() {
       delete next.owned[category]?.[id];
       delete next.ingredients[category]?.[id];
     }
-    updateSave(next);
-    setManualTotals((current) => {
-      const updated = { ...current };
-      for (const key of Object.keys(updated)) {
-        if (key === universeTotalKey(category, zone, universe) ||
-          (zone === 'all' && [...customEntries.map((entry) => entry.zone), ...matching.map((item) => item.meta2 ?? '')].some((entryZone) =>
-            key === universeTotalKey(category, entryZone, universe)))) delete updated[key];
-      }
-      localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(updated));
-      return updated;
-    });
+    const updated = { ...manualTotals };
+    for (const key of Object.keys(updated)) {
+      if (key === universeTotalKey(category, zone, universe) ||
+        (zone === 'all' && [...customEntries.map((entry) => entry.zone), ...matching.map((item) => item.meta2 ?? '')].some((entryZone) =>
+          key === universeTotalKey(category, entryZone, universe)))) delete updated[key];
+    }
+    updateSave(next, updated);
     if (activeView === category && activeGroup === universe) setActiveGroup('all');
   }
 
   function setCategoryTotal(category: CategoryId, zone: string, universe: string, value: number | null) {
-    setManualTotals((current) => {
-      const next = { ...current };
-      if (value === null) delete next[universeTotalKey(category, zone, universe)];
-      else next[universeTotalKey(category, zone, universe)] = Math.max(0, Math.floor(value));
-      localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(next));
-      return next;
-    });
+    if (!save) return;
+    const totals = { ...manualTotals };
+    if (value === null) delete totals[universeTotalKey(category, zone, universe)];
+    else totals[universeTotalKey(category, zone, universe)] = Math.max(0, Math.floor(value));
+    updateSave(save, totals);
   }
 
   if (!save) {
     return (
       <main className="boot-screen">
         <div className="boot-mark">DLV</div>
-        <p>Preparing your guide</p>
+        <p>{saveError || 'Preparing your guide'}</p>
       </main>
     );
   }
 
-  function updateSave(next: SavePayload) {
+  function updateSave(next: SavePayload, totals = manualTotals) {
+    // Commit immediately, before a navigation, cloud save or page close can interrupt React effects.
+    try {
+      assertCurrentDevice();
+      assertStoredTotals();
+      replaceLocalBackup(next, totals, localStorage.getItem(COLLECTION_MODE_KEY) === '1');
+      setManualTotals(totals);
+      setSaveError('');
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Local save failed.');
+    }
     setSave(next);
   }
 
@@ -771,6 +772,8 @@ export function App() {
     }
     // Verify the complete edited record is durable before closing the editor.
     try {
+      assertCurrentDevice();
+      assertStoredTotals();
       persistSave(next);
       const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') as SavePayload | null;
       const storedItem = persisted?.data[activeView]?.find((entry) => entry.id === updatedItem.id);
@@ -869,10 +872,8 @@ export function App() {
       if (localStorage.getItem(COLLECTION_BACKUP_KEY) !== original) {
         throw new Error('Could not verify the backup. No changes made.');
       }
-      // Persist the converted save first; activate catalog-free mode only after success.
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(preview.collection));
-      if (localStorage.getItem(STORAGE_KEY) === null) throw new Error('Could not write the new collection.');
-      localStorage.setItem(COLLECTION_MODE_KEY, '1');
+      assertCurrentDevice();
+      replaceLocalBackup(preview.collection, manualTotals, true);
       setSave(preview.collection);
       setMigrationOpen(false);
     } catch (error) {
@@ -885,9 +886,16 @@ export function App() {
     try {
       const imported = await readImportedFile(event.target.files[0]);
       if (!window.confirm('Importing a collection can replace your recent edits. Export a full JSON backup first. Continue?')) return;
+      assertCurrentDevice();
       const next = mergeImportedSave(save, imported);
-      persistSave(next);
-      updateSave(next);
+      const portable = imported as Partial<SavePayload> & { manualTotals?: Record<string, number>; ownedOnly?: boolean };
+      const totals = portable.manualTotals ?? manualTotals;
+      if (!totals || typeof totals !== 'object' || Array.isArray(totals) ||
+          Object.values(totals).some(value => !Number.isSafeInteger(value) || value < 0)) throw new Error('Invalid imported totals.');
+      replaceLocalBackup(next, totals, portable.ownedOnly ?? (localStorage.getItem(COLLECTION_MODE_KEY) === '1'));
+      setSave(next);
+      setManualTotals(totals);
+      setCloudSavedCollection(null);
     } catch (error) {
       window.alert(error instanceof Error ? error.message : 'Collection import failed.');
     } finally {
@@ -904,6 +912,11 @@ export function App() {
           <h1>{activeView === 'home' ? 'Home' : 'Collection'}</h1>
         </div>
       </header>
+      <p role="status" className="collection-save-status">{saveError
+        ? 'Recent changes need attention. Export a recovery file before leaving.'
+        : cloudSavedCollection === JSON.stringify([save, manualTotals])
+          ? 'Saved on this device • Current collection verified in cloud'
+          : 'Saved on this device • Save my collection to verify your cloud backup'}</p>
 
       <nav className="tab-bar" aria-label="Primary">
         <button className={activeView === 'home' ? 'active' : ''} aria-current={activeView === 'home' ? 'page' : undefined} onClick={() => {
@@ -1217,7 +1230,10 @@ export function App() {
             </div>
             <section aria-label="Cloud backup" className="cloud-preparation-status">
               <strong>My cloud backup</strong>
-              <p>Save or recover your collection. Changes are not synchronized automatically yet.</p>
+              <p>All edits are saved on this device. Use Save my collection to save them to your cloud database.</p>
+              <p role="status">{cloudSavedCollection === JSON.stringify([save, manualTotals])
+                ? 'Current collection verified in cloud.'
+                : 'Cloud backup not verified for the current collection. Save my collection to verify all edits.'}</p>
               {cloudSession ? (
                 <>
                   <p>Account: {cloudSession.user.email || cloudSession.user.id}</p>
@@ -1284,7 +1300,7 @@ export function App() {
               <Download size={18} />
               Export complete pre-sync backup (including totals)
             </button>
-            <button className="action-button" onClick={() => downloadSave(save)}>
+            <button className="action-button" onClick={() => downloadSave(save, manualTotals, localStorage.getItem(COLLECTION_MODE_KEY) === '1')}>
               <Download size={18} />
               Export collection file
             </button>
@@ -1300,14 +1316,14 @@ export function App() {
       {isGithubOpen && <GithubSaveSheet save={save} onRestore={(cloudSave, totals) => {
         try {
           localStorage.setItem('dlv_before_cloud_restore_v1', localStorage.getItem(STORAGE_KEY) ?? '');
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudSave));
-          localStorage.setItem(MANUAL_TOTALS_KEY, JSON.stringify(totals));
-          localStorage.setItem(COLLECTION_MODE_KEY, '1');
+          assertCurrentDevice();
+          replaceLocalBackup(cloudSave, totals, true);
           setSave(cloudSave); setManualTotals(totals); setGithubOpen(false);
         } catch { window.alert('Restore failed. Check browser storage.'); }
       }} onClose={() => setGithubOpen(false)} />}
       {editingItem && activeView !== 'home' && (
         <EditSheet
+          key={`${activeView}:${editingItem.id}`}
           item={editingItem}
           supportsRecipe={categoryById[activeView].supportsIngredients === true}
           categoryLabel={categoryById[activeView].label}
@@ -2204,11 +2220,7 @@ function EditSheet({
   const [focusedIngredient, setFocusedIngredient] = useState<number | null>(null);
   const [highlightedSuggestion, setHighlightedSuggestion] = useState(0);
 
-  useEffect(() => {
-    setDraft(item);
-    setOwnedDraft(initialOwned);
-    setIngredients(initialIngredients);
-  }, [item, initialIngredients, initialOwned]);
+  // Draft belongs to this mounted editor. Parent/cloud rerenders must not reset unsaved input.
 
   function updateIngredient(index: number, value: string) {
     setIngredients((current) => current.map((ingredient, ingredientIndex) =>
@@ -2648,6 +2660,18 @@ function getUniverseProgress(items: GameItem[], save: SavePayload | null, catego
   }
   return { done, total, percent: total ? Math.min(100, done / total * 100) : 0 };
 }
+function assertStoredTotals(): void {
+  const raw = localStorage.getItem(MANUAL_TOTALS_KEY);
+  if (raw === null) return;
+  try {
+    const totals: unknown = JSON.parse(raw);
+    if (!totals || typeof totals !== 'object' || Array.isArray(totals) ||
+        Object.values(totals).some(value => !Number.isSafeInteger(value) || value < 0)) throw new Error('Invalid totals');
+  } catch {
+    throw new Error('Saved totals are unreadable. They have not been reset. Restore a complete backup before making more edits.');
+  }
+}
+
 function readManualTotals(): Record<string, number> {
   try {
     const parsed: unknown = JSON.parse(localStorage.getItem(MANUAL_TOTALS_KEY) ?? '{}');

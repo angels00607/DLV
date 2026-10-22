@@ -1,3 +1,4 @@
+import { validateSave } from '../data/validateSave.ts';
 import type { SavePayload } from '../domain/types';
 
 export const MIGRATION_BACKUP_SCHEMA = 'dlv-supabase-preflight-v1';
@@ -93,6 +94,8 @@ export function assertNonEmptyCloudBackup(backup: MigrationBackup): void {
     throw new Error('Invalid local collection entries. Cloud unchanged.');
   }
   const count = groups.reduce((sum, entries) => sum + entries.length, 0);
+  validateSave(backup.collection);
+  if (Object.values(backup.manualTotals).some(value => !Number.isSafeInteger(value) || value < 0)) throw new Error('Invalid backup totals.');
   if (count === 0) {
     throw new Error('Empty local collection cannot be uploaded. Recover your collection first; cloud unchanged.');
   }
