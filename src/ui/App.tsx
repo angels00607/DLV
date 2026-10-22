@@ -820,9 +820,6 @@ export function App() {
           <p className="eyebrow">Disney Dreamlight Valley</p>
           <h1>{activeView === 'home' ? 'Home' : 'Collection'}</h1>
         </div>
-        <button className="icon-button" aria-label="Open settings" onClick={() => setSettingsOpen(true)}>
-          <Settings size={21} />
-        </button>
       </header>
 
       <nav className="tab-bar" aria-label="Primary">
