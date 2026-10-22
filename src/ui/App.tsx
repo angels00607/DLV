@@ -872,9 +872,17 @@ export function App() {
 
   async function importFile(event: ChangeEvent<HTMLInputElement>) {
     if (!save || !event.target.files?.[0]) return;
-    const imported = await readImportedFile(event.target.files[0]);
-    updateSave(mergeImportedSave(save, imported));
-    event.target.value = '';
+    try {
+      const imported = await readImportedFile(event.target.files[0]);
+      if (!window.confirm('Importing a collection can replace your recent edits. Export a full JSON backup first. Continue?')) return;
+      const next = mergeImportedSave(save, imported);
+      persistSave(next);
+      updateSave(next);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : 'Collection import failed.');
+    } finally {
+      event.target.value = '';
+    }
   }
 
   return (
