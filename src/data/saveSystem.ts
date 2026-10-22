@@ -18,7 +18,7 @@ function cloneSave(payload: SavePayload): SavePayload {
   return JSON.parse(JSON.stringify(payload)) as SavePayload;
 }
 
-function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>): SavePayload {
+export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>): SavePayload {
   const next = cloneSave(save);
   const defaultData = defaults.data ?? {};
   const defaultOwned = defaults.owned ?? {};
