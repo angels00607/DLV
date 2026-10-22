@@ -69,6 +69,9 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
     for (const item of checklist || mergeBundledCatalog ? (defaultData[id] ?? []) : collectionMode ? [] : (defaultData[id] ?? [])) {
       if (deletedDefaultIds[item.id]) continue;
       if (mergeBundledCatalog) {
+        // A bundled item's stable ID survives edits to its zone, group or name.
+        // Do not re-add the catalog copy after the user has moved or renamed it.
+        if (localById.has(item.id)) continue;
         const key = identity(item);
         const occurrence = (defaultOccurrences.get(key) ?? 0) + 1;
         defaultOccurrences.set(key, occurrence);
@@ -78,6 +81,8 @@ function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePayload>):
           if (localById.has(item.id)) continue;
           if (occurrence <= (furnitureOccurrences.get(key) ?? 0)) continue;
         } else {
+          // Stable IDs take precedence over mutable name/universe/zone.
+          // A user moving a bundled clothing item must not resurrect its old copy.
           if (localById.has(item.id) || known.has(key)) continue;
         }
         const newId = localById.has(item.id) ? nextAvailableId++ : item.id;
