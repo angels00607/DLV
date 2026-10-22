@@ -2001,8 +2001,8 @@ h1 {
   .collection-pagination button { padding:8px 10px; }
 }
 
-/* Dedicated management area for manual totals, separate from browsing. */
-.tab-bar { grid-template-columns:repeat(5,minmax(0,1fr)); }
+/* Navigation stays balanced after removing the Totals tab. */
+.tab-bar { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .totals-admin-sheet .totals-admin-card { max-height: min(92dvh, 900px); overflow-y:auto; }
 .totals-admin-description { color:var(--muted); font-size:.82rem; line-height:1.45; margin: 0 0 12px; }
 .totals-admin-field { display:grid; gap:6px; margin-bottom:12px; font-size:.8rem; font-weight:650; }
@@ -2075,3 +2075,8 @@ h1 {
   flex: 0 0 auto;
   margin-right: 0 !important;
 }
+
+/* Four clear navigation actions, with Add as the primary action. */
+.tab-bar button[aria-label="Add an item"],
+.tab-bar button[aria-label="Choose a collection to add an item"] { background: var(--soft); color: var(--plum); font-weight: 800; }
+.tab-bar button:focus-visible { outline: 3px solid var(--plum); outline-offset: 2px; }
