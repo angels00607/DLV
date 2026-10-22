@@ -759,8 +759,21 @@ export function App() {
       if (cleanedIngredients.length) next.ingredients[activeView]![updatedItem.id] = cleanedIngredients;
       else delete next.ingredients[activeView]![updatedItem.id];
     }
-    updateSave(next);
-    setEditingItem(null);
+    // Verify the complete edited record is durable before closing the editor.
+    try {
+      persistSave(next);
+      const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') as SavePayload | null;
+      const storedItem = persisted?.data[activeView]?.find((entry) => entry.id === updatedItem.id);
+      if (!storedItem || JSON.stringify(storedItem) !== JSON.stringify(next.data[activeView]?.find((entry) => entry.id === updatedItem.id))) {
+        throw new Error('Edited item could not be verified in local storage.');
+      }
+      updateSave(next);
+      setSaveError('');
+      setEditingItem(null);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Edited item could not be saved.');
+      window.alert('Unable to save this edit. Your editor will stay open. Export a backup before closing the app.');
+    }
   }
 
   function deleteItem(item: GameItem) {
