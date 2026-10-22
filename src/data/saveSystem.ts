@@ -49,6 +49,21 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
         }).map((entry) => [JSON.stringify([entry.name, entry.zone]), entry]),
       ).values());
     }
+    if (id === 'clothing') {
+      // Consolidate legacy OTHER (GENERAL) into GENERAL without changing item IDs
+      // or losing ownership, checklist and edited acquisition fields.
+      const unify = (item: GameItem) => {
+        if ((item.meta ?? '').trim().toUpperCase() === 'OTHER (GENERAL)') item.meta = 'GENERAL';
+      };
+      (next.data[id] ?? []).forEach(unify);
+      (defaultData[id] ?? []).forEach(unify);
+      next.customUniverses[id] = Array.from(new Map(
+        (next.customUniverses[id] ?? []).map((entry) => ({
+          ...entry,
+          name: entry.name.trim().toUpperCase() === 'OTHER (GENERAL)' ? 'GENERAL' : entry.name,
+        })).map((entry) => [JSON.stringify([entry.name, entry.zone]), entry]),
+      ).values());
+    }
     const localItems = next.data[id] ?? [];
     const localById = new Map(localItems.map((item) => [item.id, item]));
 
