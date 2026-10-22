@@ -164,8 +164,8 @@ export function persistSave(save: SavePayload): void {
         customUniverses: save.customUniverses ?? {},
       }),
     );
-  } catch {
-    // Same behavior as the reference app: failed local saves are ignored.
+  } catch (error) {
+    throw new Error('Local save failed. Your recent changes may not survive a reload.', { cause: error });
   }
 }
 
