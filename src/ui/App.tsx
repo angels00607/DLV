@@ -783,6 +783,7 @@ export function App() {
         event: item.event === true,
         whereToGet: item.whereToGet ?? [],
         whereToGetOther: item.whereToGetOther ?? '',
+        friendshipQuestCharacter: item.friendshipQuestCharacter ?? '',
       },
     ];
     next.nextId[activeView] = nextId + 1;
@@ -1680,6 +1681,7 @@ function AddItemRow({
   const [zone, setZone] = useState<string>(activeZone === 'all' ? 'DREAMLIGHT VALLEY' : activeZone);
   const [whereToGet, setWhereToGet] = useState<string[]>([]);
   const [whereToGetOther, setWhereToGetOther] = useState('');
+  const [friendshipCharacter, setFriendshipCharacter] = useState('');
   const [notice, setNotice] = useState('');
   const nameInput = useRef<HTMLInputElement>(null);
   const universes = Array.from(new Set(existingItems.map((item) => item.meta?.trim()).filter((x): x is string => !!x))).sort();
@@ -1693,11 +1695,12 @@ function AddItemRow({
 
   function submit() {
     if (!name.trim() || !universe.trim() || !zone.trim() || duplicate) return;
-    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone, premiumShop, event, whereToGet, whereToGetOther: whereToGet.includes('Other') ? whereToGetOther.trim() : '' }, owned);
+    onAdd({ name: name.trim(), meta: universe.trim(), meta2: zone, premiumShop, event, whereToGet, whereToGetOther: whereToGet.includes('Other') ? whereToGetOther.trim() : '', friendshipQuestCharacter: whereToGet.includes('Friendship Quest') ? friendshipCharacter.trim() : '' }, owned);
     setNotice(`Added ${name.trim()}`);
     setName('');
     setWhereToGet([]);
     setWhereToGetOther('');
+    setFriendshipCharacter('');
     nameInput.current?.focus();
   }
 
@@ -1719,7 +1722,7 @@ function AddItemRow({
       </label>
       <fieldset className="acquisition-fieldset"><legend>Owned or not</legend><label className="quick-add-flag"><input type="checkbox" checked={owned} onChange={(e) => setOwned(e.target.checked)} /> Owned</label></fieldset>
       <fieldset className="acquisition-fieldset"><legend>Special availability</legend><label className="quick-add-flag"><input type="checkbox" checked={premiumShop} onChange={(e) => { setPremiumShop(e.target.checked); if (e.target.checked) setEvent(false); }} /> Premium Shop</label><label className="quick-add-flag"><input type="checkbox" checked={event} onChange={(e) => { setEvent(e.target.checked); if (e.target.checked) setPremiumShop(false); }} /> Event</label></fieldset>
-      <WhereToGetFields values={whereToGet} other={whereToGetOther} onValues={setWhereToGet} onOther={setWhereToGetOther} />
+      <WhereToGetFields values={whereToGet} other={whereToGetOther} friendshipCharacter={friendshipCharacter} onValues={setWhereToGet} onOther={setWhereToGetOther} onFriendshipCharacter={setFriendshipCharacter} />
       {duplicate && <p role="alert">This item already exists in this universe and zone.</p>}
       {notice && <p role="status">{notice}</p>}
       <button type="button" className="quick-add-submit" disabled={!name.trim() || !universe.trim() || !zone.trim() || duplicate}
@@ -2022,7 +2025,7 @@ function ItemCard({
         {(item.whereToGet?.length ?? 0) > 0 && (
           <div className="item-acquisition-row">
             <span className="item-acquisition-label">Where to get</span>
-            <span className="item-acquisition-value">{item.whereToGet!.map((value) => value === 'Other' && item.whereToGetOther?.trim() ? `Other: ${item.whereToGetOther.trim()}` : value).join(', ')}</span>
+            <span className="item-acquisition-value">{item.whereToGet!.map((value) => value === 'Other' && item.whereToGetOther?.trim() ? `Other: ${item.whereToGetOther.trim()}` : value === 'Friendship Quest' && item.friendshipQuestCharacter?.trim() ? `Friendship Quest: ${item.friendshipQuestCharacter.trim()}` : value).join(', ')}</span>
           </div>
         )}
         {ingredients.length > 0 && (
@@ -2115,9 +2118,10 @@ function HomeView({
 }
 
 const WHERE_TO_GET_OPTIONS = ["Scrooge's Store", "Craftable", "Friendship Quest", "Story Quest", "Other"] as const;
-function WhereToGetFields({ values, other, onValues, onOther }: { values: string[]; other: string; onValues: (values: string[]) => void; onOther: (value: string) => void }) {
+function WhereToGetFields({ values, other, friendshipCharacter, onValues, onOther, onFriendshipCharacter }: { values: string[]; other: string; friendshipCharacter: string; onValues: (values: string[]) => void; onOther: (value: string) => void; onFriendshipCharacter: (value: string) => void }) {
   return <fieldset className="acquisition-fieldset"><legend>Where to get <small>(optional)</small></legend>
     {WHERE_TO_GET_OPTIONS.map((option) => <label key={option} className="quick-add-flag"><input type="checkbox" checked={values.includes(option)} onChange={(e) => onValues(e.target.checked ? [...values, option] : values.filter((value) => value !== option))} /> {option}</label>)}
+    {values.includes('Friendship Quest') && <label className="where-other">Character (optional)<input value={friendshipCharacter} onChange={(e) => onFriendshipCharacter(e.target.value)} placeholder="Which character?" /></label>}
     {values.includes('Other') && <label className="where-other">Other details (optional)<input value={other} onChange={(e) => onOther(e.target.value)} placeholder="Specify where to get it" /></label>}
   </fieldset>;
 }
@@ -2207,7 +2211,7 @@ function EditSheet({
         <label className="edit-premium-shop"><input type="checkbox" checked={draft.premiumShop === true} onChange={(event) => setDraft({ ...draft, premiumShop: event.target.checked, event: event.target.checked ? false : draft.event })} /> Premium Shop</label>
         <label className="edit-premium-shop"><input type="checkbox" checked={draft.event === true} onChange={(event) => setDraft({ ...draft, event: event.target.checked, premiumShop: event.target.checked ? false : draft.premiumShop })} /> Event</label>
         </fieldset>
-        <WhereToGetFields values={draft.whereToGet ?? []} other={draft.whereToGetOther ?? ''} onValues={(values) => setDraft({ ...draft, whereToGet: values })} onOther={(other) => setDraft({ ...draft, whereToGetOther: other })} />
+        <WhereToGetFields values={draft.whereToGet ?? []} other={draft.whereToGetOther ?? ''} friendshipCharacter={draft.friendshipQuestCharacter ?? ''} onValues={(values) => setDraft({ ...draft, whereToGet: values })} onOther={(other) => setDraft({ ...draft, whereToGetOther: other })} onFriendshipCharacter={(friendshipQuestCharacter) => setDraft({ ...draft, friendshipQuestCharacter })} />
         {categoryLabel === 'Meals' && (
           <label>
             <span>Recipe stars</span>
