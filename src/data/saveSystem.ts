@@ -1,3 +1,6 @@
+import { correctWishblossomFurnitureZone } from './wishblossomFurnitureZones.ts';
+import { correctStorybookFurnitureZone } from './storybookFurnitureZones.ts';
+import { correctEternityFurnitureZone } from './eternityFurnitureZones.ts';
 import { correctExpansionClothingZone } from './expansionClothingZones.ts';
 import { correctStorybookClothingZone } from './storybookClothingZones.ts';
 import { validateSave } from './validateSave.ts';
@@ -43,6 +46,12 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
     next.customUniverses[id] ??= [];
 
     if (id === 'furniture') {
+      if ((save.catalogMigrationVersion ?? 0) < 6) (next.data[id] ?? []).forEach(correctWishblossomFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctWishblossomFurnitureZone);
+      if ((save.catalogMigrationVersion ?? 0) < 5) (next.data[id] ?? []).forEach(correctStorybookFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctStorybookFurnitureZone);
+      if ((save.catalogMigrationVersion ?? 0) < 4) (next.data[id] ?? []).forEach(correctEternityFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctEternityFurnitureZone);
       const normalize = (item: GameItem) => {
         if (['GENERAL', 'NON-DISNEY RELATEDd'].includes((item.meta ?? '').trim())) item.meta = 'NON-DISNEY RELATED';
       };
@@ -90,6 +99,12 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
     const known = new Set(localItems.map(identity));
     const furnitureOccurrences = new Map<string, number>();
     if (id === 'furniture') {
+      if ((save.catalogMigrationVersion ?? 0) < 6) (next.data[id] ?? []).forEach(correctWishblossomFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctWishblossomFurnitureZone);
+      if ((save.catalogMigrationVersion ?? 0) < 5) (next.data[id] ?? []).forEach(correctStorybookFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctStorybookFurnitureZone);
+      if ((save.catalogMigrationVersion ?? 0) < 4) (next.data[id] ?? []).forEach(correctEternityFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctEternityFurnitureZone);
       for (const item of localItems) furnitureOccurrences.set(identity(item), (furnitureOccurrences.get(identity(item)) ?? 0) + 1);
     }
     const defaultOccurrences = new Map<string, number>();
@@ -108,6 +123,12 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
         // Furniture may legitimately contain multiple items with identical names.
         // Preserve those distinct occurrences while avoiding repeated imports.
         if (id === 'furniture') {
+      if ((save.catalogMigrationVersion ?? 0) < 6) (next.data[id] ?? []).forEach(correctWishblossomFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctWishblossomFurnitureZone);
+      if ((save.catalogMigrationVersion ?? 0) < 5) (next.data[id] ?? []).forEach(correctStorybookFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctStorybookFurnitureZone);
+      if ((save.catalogMigrationVersion ?? 0) < 4) (next.data[id] ?? []).forEach(correctEternityFurnitureZone);
+      (defaultData[id] ?? []).forEach(correctEternityFurnitureZone);
           if (localById.has(item.id)) continue;
           if (occurrence <= (furnitureOccurrences.get(key) ?? 0)) continue;
         } else {
@@ -157,7 +178,7 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
     next.nextId[id] = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
   });
 
-  next.catalogMigrationVersion = Math.max(save.catalogMigrationVersion ?? 0, 3);
+  next.catalogMigrationVersion = Math.max(save.catalogMigrationVersion ?? 0, 6);
   return next;
 }
 

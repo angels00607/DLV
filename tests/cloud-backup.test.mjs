@@ -363,9 +363,72 @@ test('17 Eternity Isle and 19 Wishblossom clothing zones migrate once without ot
       assert.equal(item.meta2, EXPANSION_CLOTHING_ZONES[item.name] ?? old.meta2);
     }
     assert.deepEqual(collection, original);
-    assert.equal(migrated.catalogMigrationVersion, 3);
+    assert.ok(migrated.catalogMigrationVersion >= 3);
     const edited = migrated.data.clothing.find(item => item.name === '3D Glasses');
     edited.meta2 = 'STORYBOOK VALE';
     assert.equal(ensureCategoryShape(migrated, {}).data.clothing.find(item => item.id === edited.id).meta2, 'STORYBOOK VALE');
   } finally { globalThis.localStorage = previous; }
+});
+
+const { ETERNITY_FURNITURE_TARGETS, correctEternityFurnitureZone } = await import('../src/data/eternityFurnitureZones.ts');
+const { STORYBOOK_FURNITURE_TARGETS, correctStorybookFurnitureZone } = await import('../src/data/storybookFurnitureZones.ts');
+for (const [targets, correct, zone, size] of [
+  [ETERNITY_FURNITURE_TARGETS, correctEternityFurnitureZone, 'ETERNITY ISLE', 207],
+  [STORYBOOK_FURNITURE_TARGETS, correctStorybookFurnitureZone, 'STORYBOOK VALE', 173],
+]) {
+  test(`${zone}: furniture zone correction preserves details and distinguishes same-name variants`, () => {
+    assert.equal(targets.length, size);
+    targets.forEach((target, id) => {
+      const item = { id, name: target.name.replace(/ \(2\)$/, ''), sourceUrl: target.sourceUrl, meta: 'Keep universe', meta2: 'DREAMLIGHT VALLEY', event: true, premiumShop: false, whereToGet: ['Other'], whereToGetOther: 'Keep details' };
+      const original = structuredClone(item);
+      correct(item);
+      assert.equal(item.meta2, zone);
+      assert.deepEqual({ ...item, meta2: original.meta2 }, original);
+    });
+  });
+}
+test('furniture corrections never move unlisted same-name variants', () => {
+  const originalDesk = { id: 1, name: 'Regal Desk', sourceUrl: 'https://dreamlightvalleywiki.com/Regal_Desk', meta2: 'DREAMLIGHT VALLEY' };
+  const otherHoney = { id: 2, name: 'Decorative Honeypots', sourceUrl: 'https://dreamlightvalleywiki.com/Decorative_Honeypots_(2)', meta2: 'HONEYGLOW WOODS' };
+  correctEternityFurnitureZone(originalDesk);
+  correctStorybookFurnitureZone(otherHoney);
+  assert.equal(originalDesk.meta2, 'DREAMLIGHT VALLEY');
+  assert.equal(otherHoney.meta2, 'HONEYGLOW WOODS');
+});
+test('furniture migrations run once without restoring deleted items or modifying Clothing', () => {
+  const previous = globalThis.localStorage;
+  globalThis.localStorage = { getItem: () => null };
+  try {
+    const collection = fixture();collection.catalogMigrationVersion = 3;
+    collection.data.furniture = [
+      { id: 1, name: 'Pink Cactus Pot', meta2: 'DREAMLIGHT VALLEY' },
+      { id: 2, name: 'Sweet Blue Chandelier', meta2: 'DREAMLIGHT VALLEY' },
+    ];
+    collection.deletedIds.furniture = { 1002052: true };
+    collection.data.clothing = [{ id: 1, name: 'Pink Cactus Pot', meta2: 'DREAMLIGHT VALLEY' }];
+    const next = ensureCategoryShape(collection, {});
+    assert.equal(next.data.furniture.find(i => i.id===1).meta2, 'ETERNITY ISLE');
+    assert.equal(next.data.furniture.find(i => i.id===2).meta2, 'STORYBOOK VALE');
+    assert.deepEqual(next.deletedIds.furniture, collection.deletedIds.furniture);
+    assert.deepEqual(next.data.clothing, collection.data.clothing);
+    next.data.furniture[0].meta2='WISHBLOSSOM MOUNTAINS';
+    assert.deepEqual(ensureCategoryShape(next, {}).data.furniture, next.data.furniture);
+  } finally { globalThis.localStorage = previous; }
+});
+
+const { WISHBLOSSOM_FURNITURE_TARGETS, correctWishblossomFurnitureZone } = await import('../src/data/wishblossomFurnitureZones.ts');
+test('219 Wishblossom furniture targets preserve all fields except zone', () => {
+  assert.equal(WISHBLOSSOM_FURNITURE_TARGETS.length, 219);
+  for (const [id, target] of WISHBLOSSOM_FURNITURE_TARGETS.entries()) {
+    const item = { id, ...target, meta: 'Keep universe', meta2: 'DREAMLIGHT VALLEY', event: false, premiumShop: true };
+    const original = structuredClone(item);
+    correctWishblossomFurnitureZone(item);
+    assert.equal(item.meta2, 'WISHBLOSSOM MOUNTAINS');
+    assert.deepEqual({ ...item, meta2: original.meta2 }, original);
+  }
+});
+test('a source URL takes precedence over a similar furniture name', () => {
+  const item = { id: 1, name: 'Pink Cactus Pot', sourceUrl: 'https://dreamlightvalleywiki.com/Pink_Cactus_Pot_(2)', meta2: 'DREAMLIGHT VALLEY' };
+  correctEternityFurnitureZone(item);
+  assert.equal(item.meta2, 'DREAMLIGHT VALLEY');
 });
