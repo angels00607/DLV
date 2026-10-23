@@ -1,3 +1,4 @@
+import { correctEventFurnitureAvailability } from './eventFurnitureAvailability.ts';
 import { correctWishblossomFurnitureZone } from './wishblossomFurnitureZones.ts';
 import { correctStorybookFurnitureZone } from './storybookFurnitureZones.ts';
 import { correctEternityFurnitureZone } from './eternityFurnitureZones.ts';
@@ -46,6 +47,8 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
     next.customUniverses[id] ??= [];
 
     if (id === 'furniture') {
+      if ((save.catalogMigrationVersion ?? 0) < 7) (next.data[id] ?? []).forEach(correctEventFurnitureAvailability);
+      (defaultData[id] ?? []).forEach(correctEventFurnitureAvailability);
       if ((save.catalogMigrationVersion ?? 0) < 6) (next.data[id] ?? []).forEach(correctWishblossomFurnitureZone);
       (defaultData[id] ?? []).forEach(correctWishblossomFurnitureZone);
       if ((save.catalogMigrationVersion ?? 0) < 5) (next.data[id] ?? []).forEach(correctStorybookFurnitureZone);
@@ -178,7 +181,7 @@ export function ensureCategoryShape(save: SavePayload, defaults: Partial<SavePay
     next.nextId[id] = Math.max(next.nextId[id] ?? 1, getNextId(localItems));
   });
 
-  next.catalogMigrationVersion = Math.max(save.catalogMigrationVersion ?? 0, 6);
+  next.catalogMigrationVersion = Math.max(save.catalogMigrationVersion ?? 0, 7);
   return next;
 }
 

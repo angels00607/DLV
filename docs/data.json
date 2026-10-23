@@ -13279,7 +13279,9 @@
         "meta": "BEAUTY AND THE BEAST",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Belle%27s_Snow_Angel",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/5/5e/Belle%27s_Snow_Angel.png/112px-Belle%27s_Snow_Angel.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/5/5e/Belle%27s_Snow_Angel.png/112px-Belle%27s_Snow_Angel.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 162,
@@ -13647,7 +13649,9 @@
         "meta": "BEAUTY AND THE BEAST",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/The_Beast%27s_Snow_Angel",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/b/bc/The_Beast%27s_Snow_Angel.png/106px-The_Beast%27s_Snow_Angel.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/b/bc/The_Beast%27s_Snow_Angel.png/106px-The_Beast%27s_Snow_Angel.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 236,
@@ -13760,7 +13764,9 @@
         "meta": "CARS",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Retro_Snack_Bar",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/a/a8/Retro_Snack_Bar.png/120px-Retro_Snack_Bar.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/a/a8/Retro_Snack_Bar.png/120px-Retro_Snack_Bar.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 266,
@@ -13768,7 +13774,9 @@
         "meta": "CARS",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/V8_Cafe_Tiles",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/2/25/V8_Cafe_Tiles.png/120px-V8_Cafe_Tiles.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/2/25/V8_Cafe_Tiles.png/120px-V8_Cafe_Tiles.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 267,
@@ -13776,7 +13784,9 @@
         "meta": "CARS",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/V8_Cafe_Wallpaper",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/c/cd/V8_Cafe_Wallpaper.png/120px-V8_Cafe_Wallpaper.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/c/cd/V8_Cafe_Wallpaper.png/120px-V8_Cafe_Wallpaper.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3593,
@@ -14156,7 +14166,9 @@
         "meta": "DINOSAUR",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Dinosaur_Egg",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/a/a1/Dinosaur_Egg.png/115px-Dinosaur_Egg.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/a/a1/Dinosaur_Egg.png/115px-Dinosaur_Egg.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 357,
@@ -14220,7 +14232,9 @@
         "meta": "DISNEY",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pooh%27s_Popcorn_Bucket",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/e/e7/Pooh%27s_Popcorn_Bucket.png/81px-Pooh%27s_Popcorn_Bucket.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/e/e7/Pooh%27s_Popcorn_Bucket.png/81px-Pooh%27s_Popcorn_Bucket.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3558,
@@ -14228,7 +14242,9 @@
         "meta": "DISNEY",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Slinky_Dog_Popcorn_Bucket",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/3/37/Slinky_Dog_Popcorn_Bucket.png/86px-Slinky_Dog_Popcorn_Bucket.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/3/37/Slinky_Dog_Popcorn_Bucket.png/86px-Slinky_Dog_Popcorn_Bucket.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3552,
@@ -14854,7 +14870,9 @@
         "id": 2000,
         "name": "\"Don't Put 'Em All in One Basket\" Basket",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2004,
@@ -15004,7 +15022,9 @@
         "id": 2049,
         "name": "Basic Ironwork Sign",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2050,
@@ -15082,7 +15102,9 @@
         "id": 2072,
         "name": "Billboard in Lights",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2075,
@@ -15538,7 +15560,9 @@
         "id": 3317,
         "name": "Blue Egg Lamppost",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2184,
@@ -15856,7 +15880,9 @@
         "id": 3553,
         "name": "Curved Ancient Stadium Walkway",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2295,
@@ -16006,7 +16032,9 @@
         "id": 2336,
         "name": "Decorative Tulip Bouquet",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2341,
@@ -16096,13 +16124,17 @@
         "id": 3311,
         "name": "Egg Banner",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2366,
         "name": "Egg-cellent Balloons",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2373,
@@ -16126,7 +16158,9 @@
         "id": 2381,
         "name": "Fancy Gift Box",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2383,
@@ -16150,7 +16184,9 @@
         "id": 2394,
         "name": "Flower Shop Front",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3384,
@@ -16360,7 +16396,9 @@
         "id": 3318,
         "name": "Green Egg Lamppost",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2494,
@@ -16384,7 +16422,9 @@
         "id": 2506,
         "name": "Hanging Egg Chair",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2513,
@@ -16432,7 +16472,9 @@
         "id": 2523,
         "name": "Holiday Market Bench",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2524,
@@ -16450,13 +16492,17 @@
         "id": 2526,
         "name": "Holiday Market Stall",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2529,
         "name": "Horse Hitching Post",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2532,
@@ -16654,13 +16700,17 @@
         "id": 2594,
         "name": "Large Round Gift Box",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2597,
         "name": "Large Square Gift Box",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2598,
@@ -16714,7 +16764,9 @@
         "id": 3388,
         "name": "Lava Creek",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3389,
@@ -16798,13 +16850,17 @@
         "id": 2641,
         "name": "Lucky Clover Archway",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2642,
         "name": "Lucky Shamrock Banner",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2646,
@@ -16852,7 +16908,9 @@
         "id": 2674,
         "name": "Mickey's Halloween Candy Bowl",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2678,
@@ -16942,7 +17000,9 @@
         "id": 3581,
         "name": "Neon CD Demo Player",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3580,
@@ -16966,7 +17026,9 @@
         "id": 2704,
         "name": "North Pole Crafting Station",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2705,
@@ -16996,7 +17058,9 @@
         "id": 3556,
         "name": "Olympic Golden Cornucopia",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2719,
@@ -17080,7 +17144,9 @@
         "id": 2744,
         "name": "Over Easy Chair",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2745,
@@ -17224,7 +17290,9 @@
         "id": 3321,
         "name": "Pastel Egg Cooking Station",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3397,
@@ -17290,7 +17358,9 @@
         "id": 2794,
         "name": "Pile of Gifts",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2795,
@@ -17350,7 +17420,9 @@
         "id": 2819,
         "name": "Potted Spring Egg Tree",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2820,
@@ -17368,7 +17440,9 @@
         "id": 2821,
         "name": "Pumpkin Stack",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2822,
@@ -17386,7 +17460,9 @@
         "id": 3319,
         "name": "Purple Egg Lamppost",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2829,
@@ -17464,7 +17540,9 @@
         "id": 3322,
         "name": "Red Egg Lamppost",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2851,
@@ -17482,13 +17560,17 @@
         "id": 2857,
         "name": "Red Retro Diner Bench",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2858,
         "name": "Red Retro Diner Chair",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2860,
@@ -17530,13 +17612,17 @@
         "id": 2876,
         "name": "Retro Diner Table",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2877,
         "name": "Retro Drive-In Sign",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2878,
@@ -17548,7 +17634,9 @@
         "id": 2879,
         "name": "Retro Roadtrip Luggage",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2881,
@@ -17632,7 +17720,9 @@
         "id": 2898,
         "name": "Round Gift Box",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 2902,
@@ -17884,19 +17974,25 @@
         "id": 3014,
         "name": "Spring Egg Bounty",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3015,
         "name": "Spring Stall",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3016,
         "name": "Spring Tableware",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3018,
@@ -17920,7 +18016,9 @@
         "id": 3022,
         "name": "Square Gift Box",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3023,
@@ -18010,13 +18108,17 @@
         "id": 3064,
         "name": "Tall Round Gift Box",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3065,
         "name": "Tall Square Gift Box",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3067,
@@ -18118,7 +18220,9 @@
         "id": 3104,
         "name": "Tulip Lamp",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3105,
@@ -18154,7 +18258,9 @@
         "id": 3422,
         "name": "Volcanic Rock",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3119,
@@ -18574,7 +18680,9 @@
         "id": 3324,
         "name": "Willow Tree",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3233,
@@ -18586,13 +18694,17 @@
         "id": 3250,
         "name": "Winter Lodge Wallpaper",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3251,
         "name": "Winter Lodge Wood",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3266,
@@ -18706,7 +18818,9 @@
         "id": 3320,
         "name": "Yellow Egg Lamppost",
         "meta": "NON-DISNEY RELATED",
-        "meta2": "DREAMLIGHT VALLEY"
+        "meta2": "DREAMLIGHT VALLEY",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3306,
@@ -18795,7 +18909,9 @@
         "meta": "HERCULES",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Olympic_Golden_Cornucopia",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/7/73/Olympic_Golden_Cornucopia.png/120px-Olympic_Golden_Cornucopia.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/7/73/Olympic_Golden_Cornucopia.png/120px-Olympic_Golden_Cornucopia.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 617,
@@ -18836,7 +18952,9 @@
         "meta": "INSIDE OUT",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Lance_Slashblade_Statue",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/a/af/Lance_Slashblade_Statue.png/66px-Lance_Slashblade_Statue.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/a/af/Lance_Slashblade_Statue.png/66px-Lance_Slashblade_Statue.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 648,
@@ -18860,7 +18978,9 @@
         "meta": "LADY AND THE TRAMP",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Clothesline",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/8/8f/Clothesline.png/120px-Clothesline.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/8/8f/Clothesline.png/120px-Clothesline.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 653,
@@ -19071,7 +19191,9 @@
         "meta": "LADY AND THE TRAMP",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Telephone_Pole",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/7/7c/Telephone_Pole.png/61px-Telephone_Pole.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/7/7c/Telephone_Pole.png/61px-Telephone_Pole.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 3427,
@@ -19785,7 +19907,9 @@
         "meta": "MICKEY & FRIENDS",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Mickey_Mouse_Pumpkin",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/1/1e/Mickey_Mouse_Pumpkin.png/120px-Mickey_Mouse_Pumpkin.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/1/1e/Mickey_Mouse_Pumpkin.png/120px-Mickey_Mouse_Pumpkin.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 850,
@@ -20897,7 +21021,9 @@
         "meta": "ONE HUNDRED AND ONE DALMATIANS",
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/De_Vil_Rotary_Phone",
-        "image": "https://dreamlightvalleywiki.com/images/thumb/0/01/De_Vil_Rotary_Phone.png/118px-De_Vil_Rotary_Phone.png"
+        "image": "https://dreamlightvalleywiki.com/images/thumb/0/01/De_Vil_Rotary_Phone.png/118px-De_Vil_Rotary_Phone.png",
+        "event": true,
+        "premiumShop": false
       },
       {
         "id": 1114,
@@ -25011,7 +25137,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Honey_Lemon_Gaming_Chair",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/09/Honey_Lemon_Gaming_Chair.png/71px-Honey_Lemon_Gaming_Chair.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1000913,
@@ -25020,7 +25147,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Neon_Koi_Lantern",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/ad/Neon_Koi_Lantern.png/89px-Neon_Koi_Lantern.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1000914,
@@ -25029,7 +25157,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/San_Fransokyo_Square_Archway",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/71/San_Fransokyo_Square_Archway.png/95px-San_Fransokyo_Square_Archway.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1000915,
@@ -25128,7 +25257,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/The_V8_Cafe",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e4/The_V8_Cafe.png/100px-The_V8_Cafe.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1000926,
@@ -26352,7 +26482,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Adventureland_Entry_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/22/Adventureland_Entry_Arch.png/120px-Adventureland_Entry_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001062,
@@ -26361,7 +26492,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Adventureland_Lamppost",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/3a/Adventureland_Lamppost.png/93px-Adventureland_Lamppost.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001063,
@@ -26370,7 +26502,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Cinderella_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/0e/Cinderella_Popcorn_Bucket.png/120px-Cinderella_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001064,
@@ -26379,7 +26512,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Figment_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/4b/Figment_Popcorn_Bucket.png/88px-Figment_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001065,
@@ -26388,7 +26522,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Fuente_de_la_Fortuna",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/cf/Fuente_de_la_Fortuna.png/117px-Fuente_de_la_Fortuna.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001066,
@@ -26397,7 +26532,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Haunted_Armor",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/99/Haunted_Armor.png/66px-Haunted_Armor.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001067,
@@ -26406,7 +26542,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Jungle_Cruise_Entrance",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/52/Jungle_Cruise_Entrance.png/69px-Jungle_Cruise_Entrance.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001068,
@@ -26415,7 +26552,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Metallic_Mickey_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/ec/Metallic_Mickey_Popcorn_Bucket.png/120px-Metallic_Mickey_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001069,
@@ -26424,7 +26562,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Stitch_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/09/Stitch_Popcorn_Bucket.png/89px-Stitch_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001070,
@@ -26703,7 +26842,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pixie_Hollow_Garden_Gnome",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/3f/Pixie_Hollow_Garden_Gnome.png/64px-Pixie_Hollow_Garden_Gnome.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001101,
@@ -26811,7 +26951,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Dreamlight_Gaming_Chair",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/9c/Dreamlight_Gaming_Chair.png/73px-Dreamlight_Gaming_Chair.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001113,
@@ -27027,7 +27168,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Manta_Ray_Mobile",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/be/Manta_Ray_Mobile.png/120px-Manta_Ray_Mobile.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001137,
@@ -27846,7 +27988,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Gold_and_Marble_Pillar",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/91/Gold_and_Marble_Pillar.png/65px-Gold_and_Marble_Pillar.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001228,
@@ -27855,7 +27998,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Golden_Olympian_Tree",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/4a/Golden_Olympian_Tree.png/84px-Golden_Olympian_Tree.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001229,
@@ -27864,7 +28008,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Small_Gold_and_Marble_Pillar",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/67/Small_Gold_and_Marble_Pillar.png/65px-Small_Gold_and_Marble_Pillar.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001230,
@@ -28179,7 +28324,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Memorable_Rug",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d9/Memorable_Rug.png/120px-Memorable_Rug.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001265,
@@ -29241,7 +29387,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Art_Deco_Minnie_Poster",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/60/Art_Deco_Minnie_Poster.png/75px-Art_Deco_Minnie_Poster.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001383,
@@ -29763,7 +29910,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Monstrous_Grand_Piano",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/6f/Monstrous_Grand_Piano.png/86px-Monstrous_Grand_Piano.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001441,
@@ -30186,7 +30334,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Decorative_Screen_Divider",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/2c/Decorative_Screen_Divider.png/120px-Decorative_Screen_Divider.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001488,
@@ -30195,7 +30344,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Imperial_Crafting_Station",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/dc/Imperial_Crafting_Station.png/99px-Imperial_Crafting_Station.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001489,
@@ -30204,7 +30354,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Imperial_Gong",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/29/Imperial_Gong.png/93px-Imperial_Gong.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001490,
@@ -30213,7 +30364,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Magnolia_Bloom_Piles",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d9/Magnolia_Bloom_Piles.png/120px-Magnolia_Bloom_Piles.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001491,
@@ -30222,7 +30374,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Patterned_Wood",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/77/Patterned_Wood.png/120px-Patterned_Wood.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001492,
@@ -30231,7 +30384,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Potted_Magnolia",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/18/Potted_Magnolia.png/46px-Potted_Magnolia.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001493,
@@ -30240,7 +30394,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Spring_Bamboo_Fountain",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e0/Spring_Bamboo_Fountain.png/88px-Spring_Bamboo_Fountain.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001494,
@@ -31068,7 +31223,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Fishing_Trinkets_Light_Fixture",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/90/Fishing_Trinkets_Light_Fixture.png/120px-Fishing_Trinkets_Light_Fixture.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001586,
@@ -31167,7 +31323,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pirate_Ship_Chair",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/13/Pirate_Ship_Chair.png/77px-Pirate_Ship_Chair.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001597,
@@ -31176,7 +31333,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pirate_Ship_Deck",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/c1/Pirate_Ship_Deck.png/120px-Pirate_Ship_Deck.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001598,
@@ -31185,7 +31343,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pirate_Ship_Table",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/b0/Pirate_Ship_Table.png/120px-Pirate_Ship_Table.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001599,
@@ -31194,7 +31353,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pirate_Ship_Wheel",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/76/Pirate_Ship_Wheel.png/104px-Pirate_Ship_Wheel.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001600,
@@ -31203,7 +31363,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pirate_Throne",
         "image": "https://dreamlightvalleywiki.com/images/thumb/f/fc/Pirate_Throne.png/67px-Pirate_Throne.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001601,
@@ -32193,7 +32354,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Terror-rific_Tree",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/92/Terror-rific_Tree.png/108px-Terror-rific_Tree.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001711,
@@ -32643,7 +32805,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/The_Black_Cauldron_(2)",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/33/The_Black_Cauldron_%282%29.png/120px-The_Black_Cauldron_%282%29.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001761,
@@ -33507,7 +33670,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Coral_Reef_Gazebo",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/ab/Coral_Reef_Gazebo.png/77px-Coral_Reef_Gazebo.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001857,
@@ -33516,7 +33680,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Natural_Coral_Reef_Sculpture",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/2c/Natural_Coral_Reef_Sculpture.png/103px-Natural_Coral_Reef_Sculpture.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001858,
@@ -33525,7 +33690,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Small_Natural_Coral_Reef_Sculpture",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/7a/Small_Natural_Coral_Reef_Sculpture.png/77px-Small_Natural_Coral_Reef_Sculpture.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001859,
@@ -33795,7 +33961,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Art_Deco",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e8/Art_Deco.png/120px-Art_Deco.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001889,
@@ -33804,7 +33971,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Bayou_Fireflies",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/30/Bayou_Fireflies.png/120px-Bayou_Fireflies.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001890,
@@ -33813,7 +33981,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Feathery_Vase",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/29/Feathery_Vase.png/120px-Feathery_Vase.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001891,
@@ -33822,7 +33991,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Golden_Art_Deco_Wallpaper",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/63/Golden_Art_Deco_Wallpaper.png/120px-Golden_Art_Deco_Wallpaper.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001892,
@@ -33831,7 +34001,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Orange_Water_Lily",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/a7/Orange_Water_Lily.png/120px-Orange_Water_Lily.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001893,
@@ -34407,7 +34578,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Candy_Cane_Door",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/9c/Candy_Cane_Door.png/75px-Candy_Cane_Door.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001957,
@@ -34416,7 +34588,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Clawed_Foot_Tub",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/53/Clawed_Foot_Tub.png/120px-Clawed_Foot_Tub.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001958,
@@ -34425,7 +34598,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Dapper_Snowman",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/60/Dapper_Snowman.png/84px-Dapper_Snowman.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001959,
@@ -34434,7 +34608,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Halloween_Town_Fence",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/c6/Halloween_Town_Fence.png/120px-Halloween_Town_Fence.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001960,
@@ -34443,7 +34618,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Halloween_Town_Fence_Corner",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/5f/Halloween_Town_Fence_Corner.png/86px-Halloween_Town_Fence_Corner.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001961,
@@ -34452,7 +34628,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Halloween_Town_Gravestone",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/94/Halloween_Town_Gravestone.png/74px-Halloween_Town_Gravestone.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001962,
@@ -34461,7 +34638,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Halloween_Town_Graveyard_Statue",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/25/Halloween_Town_Graveyard_Statue.png/77px-Halloween_Town_Graveyard_Statue.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001963,
@@ -34470,7 +34648,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Halloween_Town_Small_Fence",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e0/Halloween_Town_Small_Fence.png/90px-Halloween_Town_Small_Fence.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1001964,
@@ -34857,7 +35036,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Tall_Toy_Block_Stack",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d7/Tall_Toy_Block_Stack.png/70px-Tall_Toy_Block_Stack.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002007,
@@ -34866,7 +35046,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Toy_Block_Archway",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/9a/Toy_Block_Archway.png/95px-Toy_Block_Archway.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002008,
@@ -34875,7 +35056,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Toy_Block_Pillar",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/77/Toy_Block_Pillar.png/71px-Toy_Block_Pillar.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002009,
@@ -34884,7 +35066,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Toy_Block_Stack",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d6/Toy_Block_Stack.png/90px-Toy_Block_Stack.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002010,
@@ -34893,7 +35076,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Woody_and_Buzz_Ice_Sculptures",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/61/Woody_and_Buzz_Ice_Sculptures.png/90px-Woody_and_Buzz_Ice_Sculptures.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002011,
@@ -34956,7 +35140,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/4*Town_Neon_Stage",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/ec/4%2ATown_Neon_Stage.png/70px-4%2ATown_Neon_Stage.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002018,
@@ -34965,7 +35150,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Grinning_Red_Panda_Pillar",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/22/Grinning_Red_Panda_Pillar.png/64px-Grinning_Red_Panda_Pillar.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002019,
@@ -35919,7 +36105,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Sycamore_Tree",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/5d/Sycamore_Tree.png/117px-Sycamore_Tree.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002125,
@@ -41562,7 +41749,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Large_Round_Gift_Box",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/eb/Large_Round_Gift_Box.png/120px-Large_Round_Gift_Box.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1002752,
@@ -49941,7 +50129,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/%22Don%27t_Put_%27Em_All_in_One_Basket%22_Basket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/bd/%22Don%27t_Put_%27Em_All_in_One_Basket%22_Basket.png/120px-%22Don%27t_Put_%27Em_All_in_One_Basket%22_Basket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003683,
@@ -49950,7 +50139,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Adventureland_Trash_Bins",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/30/Adventureland_Trash_Bins.png/120px-Adventureland_Trash_Bins.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003684,
@@ -49959,7 +50149,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Ancient_Stadium_Walkway",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/a9/Ancient_Stadium_Walkway.png/120px-Ancient_Stadium_Walkway.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003685,
@@ -49968,7 +50159,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Ancient_Stadium_Wall",
         "image": "https://dreamlightvalleywiki.com/images/thumb/f/f5/Ancient_Stadium_Wall.png/76px-Ancient_Stadium_Wall.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003686,
@@ -49977,7 +50169,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Basic_Ironwork_Sign",
         "image": "https://dreamlightvalleywiki.com/images/thumb/f/f5/Basic_Ironwork_Sign.png/61px-Basic_Ironwork_Sign.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003687,
@@ -49986,7 +50179,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Batty_Tree",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/a8/Batty_Tree.png/66px-Batty_Tree.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003688,
@@ -49995,7 +50189,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Beige_Hanging_Wicker_Basket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/43/Beige_Hanging_Wicker_Basket.png/56px-Beige_Hanging_Wicker_Basket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003689,
@@ -50004,7 +50199,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Bewitched_Garden_Tools",
         "image": "https://dreamlightvalleywiki.com/images/thumb/f/fc/Bewitched_Garden_Tools.png/76px-Bewitched_Garden_Tools.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003690,
@@ -50013,7 +50209,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Billboard_in_Lights",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/a2/Billboard_in_Lights.png/79px-Billboard_in_Lights.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003691,
@@ -50022,7 +50219,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Blue_Egg_Lamppost",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/49/Blue_Egg_Lamppost.png/61px-Blue_Egg_Lamppost.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003692,
@@ -50031,7 +50229,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Bonfire_Pit",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/0f/Bonfire_Pit.png/120px-Bonfire_Pit.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003693,
@@ -50040,7 +50239,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Bright_Balloon_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e3/Bright_Balloon_Arch.png/120px-Bright_Balloon_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003694,
@@ -50049,7 +50249,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Bright_Balloon_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/2b/Bright_Balloon_Bouquet.png/42px-Bright_Balloon_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003695,
@@ -50058,7 +50259,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Bright_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/54/Bright_Popcorn_Bucket.png/113px-Bright_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003696,
@@ -50067,7 +50269,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Bronze_and_Crystal",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/51/Bronze_and_Crystal.png/120px-Bronze_and_Crystal.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003697,
@@ -50076,7 +50279,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Cap_Mushrooms",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d8/Cap_Mushrooms.png/120px-Cap_Mushrooms.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003698,
@@ -50085,7 +50289,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Carnivorous_Plant",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/c1/Carnivorous_Plant.png/79px-Carnivorous_Plant.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003699,
@@ -50094,7 +50299,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Chomping_Chest",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/a1/Chomping_Chest.png/111px-Chomping_Chest.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003700,
@@ -50103,7 +50309,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Curved_Ancient_Stadium_Walkway",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/ba/Curved_Ancient_Stadium_Walkway.png/120px-Curved_Ancient_Stadium_Walkway.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003701,
@@ -50112,7 +50319,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Dazzle_Balloon_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d5/Dazzle_Balloon_Arch.png/120px-Dazzle_Balloon_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003702,
@@ -50121,7 +50329,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Dazzle_Balloon_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/1e/Dazzle_Balloon_Bouquet.png/43px-Dazzle_Balloon_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003703,
@@ -50130,7 +50339,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Dazzle_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/95/Dazzle_Popcorn_Bucket.png/113px-Dazzle_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003704,
@@ -50139,7 +50349,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Decorative_Magic_Seal",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d6/Decorative_Magic_Seal.png/120px-Decorative_Magic_Seal.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003705,
@@ -50148,7 +50359,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Decorative_Picnic_Basket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/05/Decorative_Picnic_Basket.png/120px-Decorative_Picnic_Basket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003706,
@@ -50157,7 +50369,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Decorative_Tulip_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e7/Decorative_Tulip_Bouquet.png/60px-Decorative_Tulip_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003707,
@@ -50166,7 +50379,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/DMK_10th_Anniversary_Hat_Stand",
         "image": "https://dreamlightvalleywiki.com/images/thumb/8/81/DMK_10th_Anniversary_Hat_Stand.png/70px-DMK_10th_Anniversary_Hat_Stand.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003708,
@@ -50175,7 +50389,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Dug_Pupcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/0c/Dug_Pupcorn_Bucket.png/101px-Dug_Pupcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003709,
@@ -50184,7 +50399,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Eerie_Basement_Door",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/90/Eerie_Basement_Door.png/120px-Eerie_Basement_Door.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003710,
@@ -50193,7 +50409,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Egg_Banner",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/70/Egg_Banner.png/120px-Egg_Banner.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003711,
@@ -50202,7 +50419,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Egg-cellent_Balloons",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/93/Egg-cellent_Balloons.png/66px-Egg-cellent_Balloons.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003712,
@@ -50211,7 +50429,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Enchanted_Frost",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d0/Enchanted_Frost.png/120px-Enchanted_Frost.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003713,
@@ -50220,7 +50439,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Enchanted_Frost_Wallpaper",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/16/Enchanted_Frost_Wallpaper.png/120px-Enchanted_Frost_Wallpaper.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003714,
@@ -50229,7 +50449,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Fancy_Gift_Box",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e9/Fancy_Gift_Box.png/120px-Fancy_Gift_Box.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003715,
@@ -50238,7 +50459,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Floral_Alpine_Signpost",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/c7/Floral_Alpine_Signpost.png/67px-Floral_Alpine_Signpost.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003716,
@@ -50247,7 +50469,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Flower_Shop_Front",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/6e/Flower_Shop_Front.png/118px-Flower_Shop_Front.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003717,
@@ -50256,7 +50479,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Friendly_Jack-O%27%E2%80%94Lantern",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/08/Friendly_Jack-O%27%E2%80%94Lantern.png/105px-Friendly_Jack-O%27%E2%80%94Lantern.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003718,
@@ -50265,7 +50489,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Gleam_Balloon_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/8/84/Gleam_Balloon_Arch.png/120px-Gleam_Balloon_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003719,
@@ -50274,7 +50499,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Gleam_Balloon_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/13/Gleam_Balloon_Bouquet.png/41px-Gleam_Balloon_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003720,
@@ -50283,7 +50509,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Gleam_Celebration_Banner",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/16/Gleam_Celebration_Banner.png/120px-Gleam_Celebration_Banner.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003721,
@@ -50292,7 +50519,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Gleam_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/48/Gleam_Popcorn_Bucket.png/112px-Gleam_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003722,
@@ -50301,7 +50529,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Glow_Balloon_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d8/Glow_Balloon_Arch.png/120px-Glow_Balloon_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003723,
@@ -50310,7 +50539,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Glow_Balloon_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/45/Glow_Balloon_Bouquet.png/44px-Glow_Balloon_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003724,
@@ -50319,7 +50549,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Glow_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/9d/Glow_Popcorn_Bucket.png/113px-Glow_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003725,
@@ -50328,7 +50559,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Green_Egg_Lamppost",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/6b/Green_Egg_Lamppost.png/61px-Green_Egg_Lamppost.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003726,
@@ -50337,7 +50569,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Green_Witch%27s_Glass_Window",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/11/Green_Witch%27s_Glass_Window.png/114px-Green_Witch%27s_Glass_Window.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003727,
@@ -50346,7 +50579,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Hanging_Egg_Chair",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/28/Hanging_Egg_Chair.png/93px-Hanging_Egg_Chair.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003728,
@@ -50355,7 +50589,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Happy_Jack-O%27%E2%80%94Lantern",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/21/Happy_Jack-O%27%E2%80%94Lantern.png/112px-Happy_Jack-O%27%E2%80%94Lantern.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003729,
@@ -50364,7 +50599,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Haunted_Well",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/19/Haunted_Well.png/120px-Haunted_Well.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003730,
@@ -50373,7 +50609,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Holiday_Market_Bench",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/14/Holiday_Market_Bench.png/120px-Holiday_Market_Bench.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003731,
@@ -50382,7 +50619,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Holiday_Market_Stall",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/18/Holiday_Market_Stall.png/120px-Holiday_Market_Stall.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003732,
@@ -50391,7 +50629,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Horse_Hitching_Post",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/7c/Horse_Hitching_Post.png/61px-Horse_Hitching_Post.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003733,
@@ -50400,7 +50639,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Horse_Topiary",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/92/Horse_Topiary.png/93px-Horse_Topiary.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003734,
@@ -50409,7 +50649,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Illuminate_Balloon_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/2e/Illuminate_Balloon_Arch.png/120px-Illuminate_Balloon_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003735,
@@ -50418,7 +50659,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Illuminate_Balloon_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/8/84/Illuminate_Balloon_Bouquet.png/39px-Illuminate_Balloon_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003736,
@@ -50427,7 +50669,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Illuminate_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/8/86/Illuminate_Popcorn_Bucket.png/112px-Illuminate_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003737,
@@ -50436,7 +50679,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Lake_Dock",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/be/Lake_Dock.png/120px-Lake_Dock.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003738,
@@ -50445,7 +50689,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Lake_Dock_Boat_Port",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/cb/Lake_Dock_Boat_Port.png/120px-Lake_Dock_Boat_Port.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003739,
@@ -50454,7 +50699,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Lake_Dock_Corner",
         "image": "https://dreamlightvalleywiki.com/images/thumb/f/f1/Lake_Dock_Corner.png/120px-Lake_Dock_Corner.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003740,
@@ -50463,7 +50709,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Large_Round_Gift_Box_(2)",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/15/Large_Round_Gift_Box_%282%29.png/120px-Large_Round_Gift_Box_%282%29.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003741,
@@ -50472,7 +50719,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Large_Square_Gift_Box",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/63/Large_Square_Gift_Box.png/120px-Large_Square_Gift_Box.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003742,
@@ -50481,7 +50729,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Lava_Creek",
         "image": "https://dreamlightvalleywiki.com/images/thumb/8/80/Lava_Creek.png/120px-Lava_Creek.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003743,
@@ -50490,7 +50739,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Lucky_Clover_Archway",
         "image": "https://dreamlightvalleywiki.com/images/thumb/d/d3/Lucky_Clover_Archway.png/120px-Lucky_Clover_Archway.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003744,
@@ -50499,7 +50749,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Lucky_Shamrock_Banner",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/58/Lucky_Shamrock_Banner.png/66px-Lucky_Shamrock_Banner.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003745,
@@ -50508,7 +50759,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Mickey%27s_Halloween_Candy_Bowl",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/5f/Mickey%27s_Halloween_Candy_Bowl.png/120px-Mickey%27s_Halloween_Candy_Bowl.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003746,
@@ -50517,7 +50769,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Mine_Cart_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/f/fd/Mine_Cart_Popcorn_Bucket.png/120px-Mine_Cart_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003747,
@@ -50526,7 +50779,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Minnie_Mouse_Neon_Sign",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/7b/Minnie_Mouse_Neon_Sign.png/120px-Minnie_Mouse_Neon_Sign.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003748,
@@ -50535,7 +50789,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Mischievous_Jack-O%27%E2%80%94Lantern",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/44/Mischievous_Jack-O%27%E2%80%94Lantern.png/113px-Mischievous_Jack-O%27%E2%80%94Lantern.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003749,
@@ -50544,7 +50799,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Mossy_Witch_Texture",
         "image": "https://dreamlightvalleywiki.com/images/thumb/8/80/Mossy_Witch_Texture.png/120px-Mossy_Witch_Texture.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003750,
@@ -50553,7 +50809,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Mossy_Witch_Wallpaper",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/ba/Mossy_Witch_Wallpaper.png/120px-Mossy_Witch_Wallpaper.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003751,
@@ -50562,7 +50819,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Neon_CD_Demo_Player",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/14/Neon_CD_Demo_Player.png/70px-Neon_CD_Demo_Player.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003752,
@@ -50571,7 +50829,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/New_Year%27s_Community_Lanterns",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/7f/New_Year%27s_Community_Lanterns.png/120px-New_Year%27s_Community_Lanterns.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003753,
@@ -50580,7 +50839,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/North_Pole_Crafting_Station",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/c8/North_Pole_Crafting_Station.png/120px-North_Pole_Crafting_Station.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003754,
@@ -50589,7 +50849,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Observatory_Window",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e3/Observatory_Window.png/64px-Observatory_Window.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003755,
@@ -50598,7 +50859,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Outdoor_Lounge_Chair",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/39/Outdoor_Lounge_Chair.png/103px-Outdoor_Lounge_Chair.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003756,
@@ -50607,7 +50869,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Over_Easy_Chair",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/5c/Over_Easy_Chair.png/88px-Over_Easy_Chair.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003757,
@@ -50616,7 +50879,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Palm_Print_Wallpaper",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/55/Palm_Print_Wallpaper.png/120px-Palm_Print_Wallpaper.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003758,
@@ -50625,7 +50889,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pastel_Egg_Cooking_Station",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/a7/Pastel_Egg_Cooking_Station.png/88px-Pastel_Egg_Cooking_Station.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003759,
@@ -50634,7 +50899,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pile_of_Gifts",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/a9/Pile_of_Gifts.png/120px-Pile_of_Gifts.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003760,
@@ -50643,7 +50909,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pirate_Mast",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/be/Pirate_Mast.png/57px-Pirate_Mast.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003761,
@@ -50652,7 +50919,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Potted_Spring_Egg_Tree",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e0/Potted_Spring_Egg_Tree.png/69px-Potted_Spring_Egg_Tree.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003762,
@@ -50661,7 +50929,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Pumpkin_Stack",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/11/Pumpkin_Stack.png/73px-Pumpkin_Stack.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003763,
@@ -50670,7 +50939,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Purple_Egg_Lamppost",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/71/Purple_Egg_Lamppost.png/61px-Purple_Egg_Lamppost.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003764,
@@ -50679,7 +50949,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Radiate_Balloon_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/45/Radiate_Balloon_Arch.png/120px-Radiate_Balloon_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003765,
@@ -50688,7 +50959,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Radiate_Balloon_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/45/Radiate_Balloon_Bouquet.png/43px-Radiate_Balloon_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003766,
@@ -50697,7 +50969,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Radiate_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/91/Radiate_Popcorn_Bucket.png/113px-Radiate_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003767,
@@ -50706,7 +50979,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Red_Egg_Lamppost",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/ef/Red_Egg_Lamppost.png/61px-Red_Egg_Lamppost.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003768,
@@ -50715,7 +50989,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Red_Retro_Diner_Bench",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e4/Red_Retro_Diner_Bench.png/109px-Red_Retro_Diner_Bench.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003769,
@@ -50724,7 +50999,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Red_Retro_Diner_Chair",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/72/Red_Retro_Diner_Chair.png/66px-Red_Retro_Diner_Chair.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003770,
@@ -50733,7 +51009,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Red_Valentine_Petals",
         "image": "https://dreamlightvalleywiki.com/images/thumb/2/28/Red_Valentine_Petals.png/117px-Red_Valentine_Petals.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003771,
@@ -50742,7 +51019,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Retro_Diner_Table",
         "image": "https://dreamlightvalleywiki.com/images/thumb/8/88/Retro_Diner_Table.png/120px-Retro_Diner_Table.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003772,
@@ -50751,7 +51029,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Retro_Drive-In_Sign",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/0e/Retro_Drive-In_Sign.png/78px-Retro_Drive-In_Sign.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003773,
@@ -50760,7 +51039,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Retro_Roadtrip_Luggage",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/71/Retro_Roadtrip_Luggage.png/120px-Retro_Roadtrip_Luggage.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003774,
@@ -50769,7 +51049,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Round_Gift_Box",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/6c/Round_Gift_Box.png/102px-Round_Gift_Box.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003775,
@@ -50778,7 +51059,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Round_Rainbow_Garden",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e7/Round_Rainbow_Garden.png/119px-Round_Rainbow_Garden.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003776,
@@ -50787,7 +51069,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Shimmer_Balloon_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/8/88/Shimmer_Balloon_Arch.png/120px-Shimmer_Balloon_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003777,
@@ -50796,7 +51079,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Shimmer_Balloon_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/60/Shimmer_Balloon_Bouquet.png/44px-Shimmer_Balloon_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003778,
@@ -50805,7 +51089,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Shimmer_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/9c/Shimmer_Popcorn_Bucket.png/113px-Shimmer_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003779,
@@ -50814,7 +51099,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Shine_Balloon_Arch",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/46/Shine_Balloon_Arch.png/120px-Shine_Balloon_Arch.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003780,
@@ -50823,7 +51109,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Shine_Balloon_Bouquet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/1/1c/Shine_Balloon_Bouquet.png/43px-Shine_Balloon_Bouquet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003781,
@@ -50832,7 +51119,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Shine_Popcorn_Bucket",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/5f/Shine_Popcorn_Bucket.png/113px-Shine_Popcorn_Bucket.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003782,
@@ -50841,7 +51129,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Sizzling_BBQ_Cooking_Station",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/ba/Sizzling_BBQ_Cooking_Station.png/113px-Sizzling_BBQ_Cooking_Station.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003783,
@@ -50850,7 +51139,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Skewed_Checkered_Tiles",
         "image": "https://dreamlightvalleywiki.com/images/thumb/b/b2/Skewed_Checkered_Tiles.png/120px-Skewed_Checkered_Tiles.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003784,
@@ -50859,7 +51149,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Spring_Egg_Bounty",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/49/Spring_Egg_Bounty.png/102px-Spring_Egg_Bounty.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003785,
@@ -50868,7 +51159,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Spring_Stall",
         "image": "https://dreamlightvalleywiki.com/images/thumb/7/7b/Spring_Stall.png/85px-Spring_Stall.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003786,
@@ -50877,7 +51169,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Spring_Tableware",
         "image": "https://dreamlightvalleywiki.com/images/thumb/f/fe/Spring_Tableware.png/120px-Spring_Tableware.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003787,
@@ -50886,7 +51179,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Square_Gift_Box",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/31/Square_Gift_Box.png/106px-Square_Gift_Box.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003788,
@@ -50895,7 +51189,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Stargazer%27s_Chandelier",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/e6/Stargazer%27s_Chandelier.png/86px-Stargazer%27s_Chandelier.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003789,
@@ -50904,7 +51199,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Summer_Crafting_Station",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/4f/Summer_Crafting_Station.png/120px-Summer_Crafting_Station.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003790,
@@ -50913,7 +51209,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Tall_Round_Gift_Box",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/c4/Tall_Round_Gift_Box.png/65px-Tall_Round_Gift_Box.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003791,
@@ -50922,7 +51219,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Tall_Square_Gift_Box",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/58/Tall_Square_Gift_Box.png/75px-Tall_Square_Gift_Box.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003792,
@@ -50931,7 +51229,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Tulip_Lamp",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/cc/Tulip_Lamp.png/72px-Tulip_Lamp.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003793,
@@ -50940,7 +51239,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Vintage_Cooler",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/6c/Vintage_Cooler.png/103px-Vintage_Cooler.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003794,
@@ -50949,7 +51249,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Volcanic_Rock_(2)",
         "image": "https://dreamlightvalleywiki.com/images/thumb/a/ad/Volcanic_Rock_%282%29.png/120px-Volcanic_Rock_%282%29.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003795,
@@ -50958,7 +51259,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Wicker_Companion_Home",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/9c/Wicker_Companion_Home.png/120px-Wicker_Companion_Home.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003796,
@@ -50967,7 +51269,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Wicker_Lantern",
         "image": "https://dreamlightvalleywiki.com/images/thumb/6/64/Wicker_Lantern.png/93px-Wicker_Lantern.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003797,
@@ -50976,7 +51279,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Willow_Tree",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/5b/Willow_Tree.png/120px-Willow_Tree.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003798,
@@ -50985,7 +51289,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Winter_Carpet",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/09/Winter_Carpet.png/120px-Winter_Carpet.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003799,
@@ -50994,7 +51299,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Winter_Chocolate_Fountain",
         "image": "https://dreamlightvalleywiki.com/images/thumb/f/fc/Winter_Chocolate_Fountain.png/78px-Winter_Chocolate_Fountain.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003800,
@@ -51003,7 +51309,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Winter_Crystal_Chandelier",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/3a/Winter_Crystal_Chandelier.png/89px-Winter_Crystal_Chandelier.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003801,
@@ -51012,7 +51319,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Winter_Crystal_Crafting_Station",
         "image": "https://dreamlightvalleywiki.com/images/thumb/9/9a/Winter_Crystal_Crafting_Station.png/120px-Winter_Crystal_Crafting_Station.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003802,
@@ -51021,7 +51329,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Winter_Crystal_Piano",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/ed/Winter_Crystal_Piano.png/97px-Winter_Crystal_Piano.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003803,
@@ -51030,7 +51339,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Winter_Lodge_Wallpaper",
         "image": "https://dreamlightvalleywiki.com/images/thumb/3/3b/Winter_Lodge_Wallpaper.png/120px-Winter_Lodge_Wallpaper.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003804,
@@ -51039,7 +51349,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Winter_Lodge_Wood",
         "image": "https://dreamlightvalleywiki.com/images/thumb/e/ee/Winter_Lodge_Wood.png/120px-Winter_Lodge_Wood.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003805,
@@ -51048,7 +51359,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Winter_Stained_Glass_Window",
         "image": "https://dreamlightvalleywiki.com/images/thumb/5/50/Winter_Stained_Glass_Window.png/60px-Winter_Stained_Glass_Window.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003806,
@@ -51057,7 +51369,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Witch%27s_Bookcase",
         "image": "https://dreamlightvalleywiki.com/images/thumb/4/4e/Witch%27s_Bookcase.png/84px-Witch%27s_Bookcase.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003807,
@@ -51066,7 +51379,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Wooden_Potion_Cupboard",
         "image": "https://dreamlightvalleywiki.com/images/thumb/0/0c/Wooden_Potion_Cupboard.png/120px-Wooden_Potion_Cupboard.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003808,
@@ -51075,7 +51389,8 @@
         "meta2": "DREAMLIGHT VALLEY",
         "sourceUrl": "https://dreamlightvalleywiki.com/Yellow_Egg_Lamppost",
         "image": "https://dreamlightvalleywiki.com/images/thumb/c/cf/Yellow_Egg_Lamppost.png/61px-Yellow_Egg_Lamppost.png",
-        "premiumShop": false
+        "premiumShop": false,
+        "event": true
       },
       {
         "id": 1003809,

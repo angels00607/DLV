@@ -432,3 +432,54 @@ test('a source URL takes precedence over a similar furniture name', () => {
   correctEternityFurnitureZone(item);
   assert.equal(item.meta2, 'DREAMLIGHT VALLEY');
 });
+
+const { EVENT_FURNITURE_TARGETS, correctEventFurnitureAvailability } = await import('../src/data/eventFurnitureAvailability.ts');
+test('all 206 requested Event targets change availability only', () => {
+  assert.equal(EVENT_FURNITURE_TARGETS.length, 206);
+  assert.equal(new Set(EVENT_FURNITURE_TARGETS.map(t => t.name)).size, 206);
+  for (const [id, target] of EVENT_FURNITURE_TARGETS.entries()) {
+    for (const sourceUrl of [undefined, ...target.sources]) {
+      const item = { id, name: target.name, ...(sourceUrl ? { sourceUrl } : {}), event: false, premiumShop: true, meta: 'Keep universe', meta2: 'Keep zone', whereToGet: ['Other'], whereToGetOther: 'Keep details' };
+      const before = structuredClone(item);
+      correctEventFurnitureAvailability(item);
+      assert.deepEqual(item, { ...before, event: true, premiumShop: false });
+    }
+  }
+});
+test('Event source matching preserves unlisted homonyms and handles encoded URLs', () => {
+  const other = { id: 1, name: 'Bonfire Pit', sourceUrl: 'https://dreamlightvalleywiki.com/Bonfire_Pit_(2)', meta2: 'STORYBOOK VALE' };
+  const before = structuredClone(other);
+  correctEventFurnitureAvailability(other);
+  assert.deepEqual(other, before);
+  const cauldron = { id: 2, name: 'Renamed by user', sourceUrl: 'https://dreamlightvalleywiki.com/The_Black_Cauldron_%282%29?test=1#top' };
+  correctEventFurnitureAvailability(cauldron);
+  assert.equal(cauldron.event, true);
+  assert.equal(cauldron.name, 'Renamed by user');
+});
+test('Event migration persists through backup and preserves later edits and deletions', () => {
+  const previous = globalThis.localStorage;
+  globalThis.localStorage = { getItem: () => null };
+  try {
+    const collection = fixture();
+    collection.catalogMigrationVersion = 6;
+    collection.data.furniture = [{ id: 1, name: "Belle's Snow Angel", meta2: 'Keep zone', premiumShop: true }];
+    collection.data.clothing = [{ id: 1, name: "Belle's Snow Angel", event: false }];
+    collection.deletedIds.furniture = { 2: true };
+    const defaults = { data: { furniture: [{ id: 2, name: 'Oogie Boogie Dice Tree' }, { id: 3, name: 'Neon Koi Lantern' }] } };
+    const before = structuredClone(collection);
+    const next = ensureCategoryShape(collection, defaults);
+    assert.deepEqual(collection, before);
+    assert.equal(next.catalogMigrationVersion, 7);
+    assert.equal(next.data.furniture.find(i => i.id === 1).event, true);
+    assert.equal(next.data.furniture.find(i => i.id === 1).premiumShop, false);
+    assert.equal(next.data.furniture.find(i => i.id === 1).meta2, 'Keep zone');
+    assert.equal(next.data.furniture.some(i => i.id === 2), false);
+    assert.equal(next.data.furniture.find(i => i.id === 3).event, true);
+    assert.deepEqual(next.data.clothing, collection.data.clothing);
+    assert.deepEqual(next.deletedIds.furniture, collection.deletedIds.furniture);
+    const restored = parseMigrationBackup(JSON.stringify(createMigrationBackup(next, { furniture: 9 }, true)));
+    assert.deepEqual(restored.collection, next);
+    next.data.furniture[0].event = false;
+    assert.equal(ensureCategoryShape(next, defaults).data.furniture[0].event, false);
+  } finally { globalThis.localStorage = previous; }
+});
